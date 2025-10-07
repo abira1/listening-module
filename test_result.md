@@ -262,17 +262,20 @@ frontend:
         agent: "testing"
         comment: "CRITICAL TEST PASSED: Comprehensive testing confirmed the refresh loop bug has been SUCCESSFULLY FIXED! ✅ Admin login works with credentials admin@example.com/password ✅ Test management page loads without 'Failed to load tests' error ✅ MOST IMPORTANTLY: Clicking test names navigates cleanly to question manager (/admin/tests/{examId}/questions) without any refresh loops ✅ URL remains completely stable during navigation ✅ Question manager loads with 4 sections, Add Question buttons, and upload audio section ✅ All navigation between admin pages is stable. The critical refresh loop issue that was blocking users from editing tests has been completely resolved."
   
-  - task: "IELTS Listening Practice Test 1"
+  - task: "IELTS Listening Practice Test 1 - Permanent Implementation"
     implemented: true
     working: true
-    file: "/app/frontend/src/components/ListeningTest.jsx"
+    file: "/app/backend/init_ielts_test.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "main"
         comment: "Created complete IELTS Listening test with 40 questions. Exam ID: 8f1f5182-1747-41f2-b1cb-34c78dd68831. Features: Audio playback (31:24 + 2min review = 33:24 total), Timer countdown, 4 question types (short_answer, multiple_choice, map_labeling, diagram_labeling), Images for Section 2 (ferry map) and Section 4 (reactor diagram), Section navigation, Answer collection, Submission to database via /api/submissions endpoint. Script created at /app/scripts/create_ielts_test.py. Backend submission endpoints added. Test is published and accessible on homepage."
+      - working: true
+        agent: "main"
+        comment: "Made IELTS test PERMANENT in codebase: Created /app/backend/init_ielts_test.py with fixed exam ID 'ielts-listening-practice-test-1'. Test auto-initializes on startup. Created /app/listening_tracks/ directory for audio storage. Implemented file upload endpoint POST /api/upload-audio with multipart/form-data support. Files stored with UUID naming. Mounted static file serving at /listening_tracks/. Updated AudioService.js to upload files to backend. Added comprehensive README.md with audio file management instructions. All audio formats supported: MP3, WAV, M4A, OGG, FLAC. Created .gitignore for listening_tracks to exclude audio files from git."
       - working: true
         agent: "testing"
         comment: "🎉 IELTS LISTENING PRACTICE TEST 1 BACKEND TESTING COMPLETED SUCCESSFULLY! All 11 critical test scenarios passed flawlessly: ✅ Exam appears in published exams list ✅ Exam details verified (audio_url: https://audio.jukehost.co.uk/F9irt6LcsYuP93ulaMo42JfXBEcABytV, duration: 2004 seconds, question_count: 40) ✅ Full exam structure with 4 sections and 40 questions verified ✅ Section 1: 10 short_answer questions (indices 1-10) ✅ Section 2: 6 map_labeling questions with images (11-16) + 4 multiple_choice (17-20) ✅ Section 3: 7 multiple_choice questions (21-25, 29-30) + 3 short_answer (26-28) ✅ Section 4: 5 diagram_labeling questions with images (31-35) + 5 short_answer (36-40) ✅ Test submission creation with 40 sample answers ✅ Submission retrieval working correctly ✅ Exam submissions listing functional ✅ Submission count increments properly. The IELTS Listening Practice Test 1 backend is fully operational and ready for production use!"
