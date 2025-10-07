@@ -434,15 +434,19 @@ def test_question_update(question_id):
         print_error(f"Question update request failed: {str(e)}")
         return False
 
-def test_multiple_questions_and_deletion(exam_id, section_id):
+def test_multiple_questions_and_deletion(exam_id, sections):
     """Test 12: Create Multiple Questions and Test Deletion with Re-indexing"""
     print_test_header("Multiple Questions Creation and Deletion Test")
     
-    if not exam_id or not section_id:
-        print_error("Missing exam_id or section_id for multiple questions test")
+    if not exam_id or not sections or len(sections) < 2:
+        print_error("Missing exam_id or insufficient sections for multiple questions test")
         return False
     
-    # Create 3 questions
+    # Use second section to avoid interference with previous tests
+    section_id = sections[1].get('id')
+    print_info(f"Using clean section for deletion test: {section_id}")
+    
+    # Create 3 questions in the clean section
     questions = []
     for i in range(3):
         question_data = {
@@ -450,7 +454,7 @@ def test_multiple_questions_and_deletion(exam_id, section_id):
             "section_id": section_id,
             "type": "single_answer",
             "payload": {
-                "prompt": f"Test question {i+1} - What is the answer to question {i+1}?",
+                "prompt": f"Deletion test question {i+1} - What is the answer to question {i+1}?",
                 "options": [f"Option A{i+1}", f"Option B{i+1}", f"Option C{i+1}", f"Option D{i+1}"],
                 "correct_answer": i % 4
             },
@@ -481,13 +485,14 @@ def test_multiple_questions_and_deletion(exam_id, section_id):
         print_error("Failed to create all 3 questions")
         return False
     
-    print_info(f"Successfully created {len(questions)} questions")
+    print_info(f"Successfully created {len(questions)} questions with indices: {[q.get('index') for q in questions]}")
     
-    # Delete the middle question (index 2)
-    middle_question = questions[1]  # Second question (index 2)
+    # Delete the middle question (should be index 2)
+    middle_question = questions[1]  # Second question
     middle_question_id = middle_question.get('id')
+    middle_question_index = middle_question.get('index')
     
-    print_info(f"Deleting middle question (ID: {middle_question_id}, Index: {middle_question.get('index')})")
+    print_info(f"Deleting middle question (ID: {middle_question_id}, Index: {middle_question_index})")
     
     try:
         response = requests.delete(f"{BACKEND_URL}/questions/{middle_question_id}", timeout=10)
@@ -504,14 +509,17 @@ def test_multiple_questions_and_deletion(exam_id, section_id):
                 
                 # Check if indices are properly re-indexed (should be 1, 2)
                 expected_indices = [1, 2]
-                actual_indices = [q.get('index') for q in remaining_questions]
-                actual_indices.sort()
+                actual_indices = sorted([q.get('index') for q in remaining_questions])
+                
+                print_info(f"Question indices after deletion: {actual_indices}")
                 
                 if actual_indices == expected_indices:
                     print_success("Questions properly re-indexed after deletion (indices: 1, 2)")
                     return True
                 else:
                     print_error(f"Questions not properly re-indexed. Expected: {expected_indices}, Got: {actual_indices}")
+                    # This is still a minor issue, not critical for functionality
+                    print_warning("Re-indexing logic may need adjustment, but deletion works correctly")
                     return False
             else:
                 print_error("Failed to retrieve remaining questions for re-indexing verification")
