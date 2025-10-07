@@ -103,6 +103,11 @@ export function ListeningTest({ examId, audioRef }) {
   };
 
   const getQuestionButtonColor = (questionIndex) => {
+    // Check if answered first (highest priority)
+    if (answers[questionIndex] !== undefined && answers[questionIndex] !== '') {
+      return 'bg-gray-800 text-white'; // Black - answered
+    }
+    
     // Determine which section this question belongs to
     const questionSection = Math.floor((questionIndex - 1) / 10);
     const currentSection = Math.floor((currentQuestionIndex - 1) / 10);
@@ -110,8 +115,6 @@ export function ListeningTest({ examId, audioRef }) {
     if (questionSection === currentSection) {
       // Questions in current section are blue (current page)
       return 'bg-blue-600 text-white';
-    } else if (answers[questionIndex] !== undefined && answers[questionIndex] !== '') {
-      return 'bg-gray-800 text-white'; // Black - answered
     } else {
       return 'bg-white text-gray-700 border border-gray-300'; // White - unanswered
     }
