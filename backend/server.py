@@ -431,6 +431,66 @@ async def get_exam_with_sections_and_questions(exam_id: str):
         logger.error(f"Error fetching full exam data: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch exam data")
 
+# Submission Routes
+@api_router.post("/submissions", response_model=Submission)
+async def create_submission(submission_data: SubmissionCreate):
+    try:
+        # Check if exam exists
+        exam = await db.exams.find_one({"id": submission_data.exam_id}, {"_id": 0})
+        if not exam:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        submission_id = generate_id()
+        now = get_timestamp()
+        
+        new_submission = {
+            "id": submission_id,
+            "exam_id": submission_data.exam_id,
+            "user_id_or_session": submission_data.user_id_or_session or f"anonymous_{generate_id()}",
+            "started_at": submission_data.started_at or now,
+            "finished_at": submission_data.finished_at or now,
+            "answers": submission_data.answers,
+            "progress_percent": submission_data.progress_percent,
+            "last_playback_time": 0,
+        }
+        
+        await db.submissions.insert_one({**new_submission, "_id": submission_id})
+        
+        # Update exam submission count
+        await db.exams.update_one(
+            {"id": submission_data.exam_id},
+            {"$inc": {"submission_count": 1}, "$set": {"updated_at": get_timestamp()}}
+        )
+        
+        return Submission(**new_submission)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating submission: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create submission")
+
+@api_router.get("/submissions/{submission_id}", response_model=Submission)
+async def get_submission(submission_id: str):
+    try:
+        submission = await db.submissions.find_one({"id": submission_id}, {"_id": 0})
+        if not submission:
+            raise HTTPException(status_code=404, detail="Submission not found")
+        return Submission(**submission)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching submission: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch submission")
+
+@api_router.get("/exams/{exam_id}/submissions", response_model=List[Submission])
+async def get_exam_submissions(exam_id: str):
+    try:
+        submissions = await db.submissions.find({"exam_id": exam_id}, {"_id": 0}).to_list(1000)
+        return [Submission(**submission) for submission in submissions]
+    except Exception as e:
+        logger.error(f"Error fetching submissions: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch submissions")
+
 # Legacy status endpoints
 @api_router.get("/")
 async def root():
