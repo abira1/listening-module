@@ -246,6 +246,18 @@ frontend:
       - working: true
         agent: "testing"
         comment: "CRITICAL TEST PASSED: Comprehensive testing confirmed the refresh loop bug has been SUCCESSFULLY FIXED! ✅ Admin login works with credentials admin@example.com/password ✅ Test management page loads without 'Failed to load tests' error ✅ MOST IMPORTANTLY: Clicking test names navigates cleanly to question manager (/admin/tests/{examId}/questions) without any refresh loops ✅ URL remains completely stable during navigation ✅ Question manager loads with 4 sections, Add Question buttons, and upload audio section ✅ All navigation between admin pages is stable. The critical refresh loop issue that was blocking users from editing tests has been completely resolved."
+  
+  - task: "IELTS Listening Practice Test 1"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/ListeningTest.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Created complete IELTS Listening test with 40 questions. Exam ID: 8f1f5182-1747-41f2-b1cb-34c78dd68831. Features: Audio playback (31:24 + 2min review = 33:24 total), Timer countdown, 4 question types (short_answer, multiple_choice, map_labeling, diagram_labeling), Images for Section 2 (ferry map) and Section 4 (reactor diagram), Section navigation, Answer collection, Submission to database via /api/submissions endpoint. Script created at /app/scripts/create_ielts_test.py. Backend submission endpoints added. Test is published and accessible on homepage."
 
 metadata:
   created_by: "main_agent"
