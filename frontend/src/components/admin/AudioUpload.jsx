@@ -45,7 +45,7 @@ export function AudioUpload() {
     };
 
     loadExam();
-  }, [examId, navigate, showToast]);
+  }, [examId, navigate]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
