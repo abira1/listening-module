@@ -234,13 +234,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Firebase Connection Issue"
-    - "Exam Creation Functionality"
-  stuck_tasks:
-    - "Test Management Interface"
-    - "Firebase Integration"
-  test_all: false
-  test_priority: "stuck_first"
+    - "Complete Exam Creation Flow"
+    - "Question CRUD Operations"
+    - "Publishing Workflow"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
