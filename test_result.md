@@ -244,6 +244,18 @@ frontend:
         agent: "testing"
         comment: "COMPREHENSIVE SUBMISSION API TESTING COMPLETED: All submission endpoints working perfectly! ✅ POST /api/submissions creates submission with 40 sample answers ✅ GET /api/submissions/{id} retrieves submission correctly ✅ GET /api/exams/{exam_id}/submissions lists all exam submissions ✅ Exam submission_count increments properly after submission creation. All submission workflows are fully functional."
   
+  - task: "Audio File Upload System"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented complete audio file upload system: POST /api/upload-audio endpoint with FastAPI UploadFile, multipart/form-data support. Files stored in /app/listening_tracks/ with UUID naming. Static file serving mounted at /listening_tracks/. Supports MP3, WAV, M4A, OGG, FLAC formats. File type validation and size reporting. Updated AudioService.js to use real backend upload (removed mock URL.createObjectURL). Files persist across restarts. Added comprehensive documentation in /app/listening_tracks/README.md and main README.md. Tested successfully with curl upload."
+  
   - task: "Refresh Loop Bug Fix"
     implemented: true
     working: true
