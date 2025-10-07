@@ -64,12 +64,12 @@ export function TestManagement() {
 
     if (window.confirm('Are you sure you want to delete this test? This action cannot be undone.')) {
       try {
-        await FirebaseService.deleteExam(testId);
+        await BackendService.deleteExam(testId);
         setExams(exams.filter((exam) => exam.id !== testId));
         showToast('Test deleted successfully', 'success');
       } catch (error) {
         console.error('Error deleting test:', error);
-        showToast('Failed to delete test', 'error');
+        showToast(error.message || 'Failed to delete test', 'error');
       }
     }
   };
