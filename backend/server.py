@@ -307,6 +307,90 @@ async def create_question(question_data: QuestionCreate):
         logger.error(f"Error creating question: {e}")
         raise HTTPException(status_code=500, detail="Failed to create question")
 
+@api_router.get("/questions/{question_id}", response_model=Question)
+async def get_question(question_id: str):
+    try:
+        question = await db.questions.find_one({"id": question_id}, {"_id": 0})
+        if not question:
+            raise HTTPException(status_code=404, detail="Question not found")
+        return Question(**question)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching question: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch question")
+
+@api_router.put("/questions/{question_id}", response_model=Question)
+async def update_question(question_id: str, question_data: Dict[str, Any]):
+    try:
+        # Check if question exists
+        question = await db.questions.find_one({"id": question_id}, {"_id": 0})
+        if not question:
+            raise HTTPException(status_code=404, detail="Question not found")
+        
+        # Update question
+        result = await db.questions.update_one(
+            {"id": question_id}, 
+            {"$set": question_data}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Question not found")
+        
+        # Also update exam's updated_at timestamp
+        await db.exams.update_one(
+            {"id": question["exam_id"]},
+            {"$set": {"updated_at": get_timestamp()}}
+        )
+        
+        updated_question = await db.questions.find_one({"id": question_id}, {"_id": 0})
+        return Question(**updated_question)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating question: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update question")
+
+@api_router.delete("/questions/{question_id}")
+async def delete_question(question_id: str):
+    try:
+        # Check if question exists
+        question = await db.questions.find_one({"id": question_id}, {"_id": 0})
+        if not question:
+            raise HTTPException(status_code=404, detail="Question not found")
+        
+        if question.get("is_demo", False):
+            raise HTTPException(status_code=400, detail="Demo questions cannot be deleted")
+        
+        # Delete question
+        await db.questions.delete_one({"id": question_id})
+        
+        # Update question count on exam and timestamp
+        await db.exams.update_one(
+            {"id": question["exam_id"]},
+            {"$inc": {"question_count": -1}, "$set": {"updated_at": get_timestamp()}}
+        )
+        
+        # Re-index remaining questions in the section
+        remaining_questions = await db.questions.find(
+            {"section_id": question["section_id"]}, 
+            {"_id": 0}
+        ).sort("index", 1).to_list(1000)
+        
+        for idx, q in enumerate(remaining_questions, 1):
+            if q["index"] != idx:
+                await db.questions.update_one(
+                    {"id": q["id"]}, 
+                    {"$set": {"index": idx}}
+                )
+        
+        return {"message": "Question deleted successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting question: {e}")
+        raise HTTPException(status_code=500, detail="Failed to delete question")
+
 @api_router.get("/sections/{section_id}/questions", response_model=List[Question])
 async def get_section_questions(section_id: str):
     try:
