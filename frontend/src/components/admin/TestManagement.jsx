@@ -284,14 +284,14 @@ function CreateExamModal({ onClose, onExamCreated }) {
 
     setIsSubmitting(true);
     try {
-      const newExam = await FirebaseService.createExam({ ...formData, is_demo: false });
+      const newExam = await BackendService.createExam({ ...formData, is_demo: false });
       setIsSuccess(true);
       setTimeout(() => {
         onExamCreated(newExam);
       }, 1000);
     } catch (error) {
       console.error('Error creating exam:', error);
-      setErrors({ submit: 'Failed to create exam. Please try again.' });
+      setErrors({ submit: error.message || 'Failed to create exam. Please try again.' });
       setIsSubmitting(false);
     }
   };
