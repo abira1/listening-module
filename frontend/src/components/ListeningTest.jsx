@@ -10,7 +10,7 @@ export function ListeningTest({ examId, audioRef }) {
   useEffect(() => {
     const loadExamData = async () => {
       try {
-        const data = await FirebaseService.getExamWithSectionsAndQuestions(examId);
+        const data = await BackendService.getExamWithSectionsAndQuestions(examId);
         setExamData(data);
         setLoading(false);
       } catch (error) {
