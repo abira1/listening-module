@@ -108,6 +108,9 @@ class SubmissionCreate(BaseModel):
     exam_id: str
     user_id_or_session: Optional[str] = None
     answers: Dict[str, Any] = {}
+    started_at: Optional[str] = None
+    finished_at: Optional[str] = None
+    progress_percent: int = 100
 
 class Submission(BaseModel):
     model_config = ConfigDict(extra="ignore")
