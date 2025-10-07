@@ -11,7 +11,7 @@ export function Homepage() {
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const publishedExams = await FirebaseService.getPublishedExams();
+        const publishedExams = await BackendService.getPublishedExams();
         setExams(publishedExams);
         setLoading(false);
       } catch (error) {
