@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Index codebase and make sure the exam creation works properly from admin panel"
+user_problem_statement: "Create IELTS Listening Practice Test 1 with 40 questions, audio playback (31:24 + 2 min review), all question types (short answer, multiple choice, map labeling, diagram labeling), timer, and answer submission to database"
 
 backend:
   - task: "FastAPI Backend Server"
