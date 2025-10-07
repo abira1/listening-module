@@ -265,6 +265,8 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Codebase indexed. IELTS Listening Test Platform identified. Admin login works but Firebase connection has issues preventing exam loading/creation. Need to investigate Firebase connectivity and configuration."
+  - agent: "main"
+    message: "✅ IELTS Listening Practice Test 1 CREATED: Complete test with 40 questions across 4 sections implemented. Features: (1) Audio playback with 31:24 duration + 2 minutes review time, (2) All question types: short_answer, multiple_choice, map_labeling with ferry map image, diagram_labeling with nuclear reactor diagram, (3) Real-time countdown timer showing remaining time, (4) Section navigation with progress tracking, (5) Answer submission to database via POST /api/submissions, (6) Exam accessible on homepage at /exam/8f1f5182-1747-41f2-b1cb-34c78dd68831. Test is published and ready for public access."
   - agent: "testing"
     message: "Backend API testing completed successfully! All 8 test scenarios passed - the FastAPI backend is fully functional and ready to replace Firebase. Exam creation, retrieval, publishing, and section management all working correctly. The backend can handle the full exam lifecycle. Frontend should be updated to use these API endpoints instead of Firebase."
   - agent: "main"
