@@ -210,6 +210,21 @@ frontend:
       - working: true
         agent: "main"
         comment: "Replaced Firebase with FastAPI backend. All components updated to use BackendService. Exam creation, retrieval, and publishing working correctly"
+      - working: true
+        agent: "main"
+        comment: "Enhanced BackendService with complete question CRUD operations. All endpoints now functional."
+  
+  - task: "Question CRUD Operations"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented missing question endpoints: GET /questions/{id}, PUT /questions/{id}, DELETE /questions/{id}. Delete operation includes automatic re-indexing of remaining questions. Updated BackendService to use these endpoints."
 
 metadata:
   created_by: "main_agent"
