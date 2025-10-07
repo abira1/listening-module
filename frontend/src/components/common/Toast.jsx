@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { CheckCircle, XCircle, X } from 'lucide-react';
 
 export function Toast({ message, type, onClose, duration = 3000 }) {
@@ -43,17 +43,17 @@ export function Toast({ message, type, onClose, duration = 3000 }) {
 export function useToast() {
   const [toasts, setToasts] = useState([]);
 
-  const showToast = (message, type = 'success') => {
+  const showToast = useCallback((message, type = 'success') => {
     const id = Math.random().toString(36).substring(2, 9);
     setToasts((prev) => [...prev, { id, message, type }]);
     return id;
-  };
+  }, []);
 
-  const removeToast = (id) => {
+  const removeToast = useCallback((id) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  };
+  }, []);
 
-  const ToastContainer = () => (
+  const ToastContainer = useCallback(() => (
     <>
       {toasts.map((toast) => (
         <Toast
@@ -64,7 +64,7 @@ export function useToast() {
         />
       ))}
     </>
-  );
+  ), [toasts, removeToast]);
 
   return { showToast, removeToast, ToastContainer };
 }
