@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Search, Filter, Edit, Trash2, Copy, Upload, MoreHorizontal, Volume2, PlayIcon, PauseIcon, Loader, AlertCircle, CheckCircle } from 'lucide-react';
-import { FirebaseService } from '../../services/FirebaseService';
+import { BackendService } from '../../services/BackendService';
 import { useToast } from '../common/Toast';
 
 export function TestManagement() {
