@@ -592,6 +592,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+async def startup_db():
+    """Initialize IELTS test on startup"""
+    await init_ielts_test()
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
