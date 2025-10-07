@@ -242,8 +242,8 @@ export function TestManagement() {
             setExams([...exams, newExam]);
             setShowCreateModal(false);
             setNewlyCreatedExamId(newExam.id);
-            showToast('Test created successfully!', 'success');
-            navigate(`/admin/tests/${newExam.id}/questions`);
+            showToast('Test created successfully! Click "Manage Questions" to add questions.', 'success');
+            // Don't automatically navigate - let user choose next action
           }}
         />
       )}
