@@ -170,7 +170,15 @@ export function ListeningTest({ examId, audioRef }) {
 
   const getCurrentSectionData = () => {
     if (!examData) return null;
-    return examData.sections.find((s) => s.index === currentSection);
+    const currentQuestion = getCurrentQuestion();
+    if (!currentQuestion) return null;
+    // Find which section this question belongs to
+    for (const section of examData.sections) {
+      if (section.questions.some((q) => q.index === currentQuestionIndex)) {
+        return section;
+      }
+    }
+    return null;
   };
 
   const renderQuestion = (question) => {
