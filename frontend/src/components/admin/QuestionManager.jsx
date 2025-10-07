@@ -55,7 +55,7 @@ export function QuestionManager() {
     if (examId) {
       loadExamData();
     }
-  }, [examId, refreshKey, showToast]);
+  }, [examId, refreshKey]);
 
   const handleBack = () => {
     navigate('/admin/tests');
