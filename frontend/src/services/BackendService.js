@@ -223,34 +223,37 @@ export const BackendService = {
     }
   },
 
-  // Submission operations (placeholder for future implementation)
+  // Submission operations
   createSubmission: async (submissionData) => {
     try {
-      // Note: We need to implement this endpoint in the backend
-      throw new Error('Submission creation not implemented');
+      const response = await api.post('/submissions', submissionData);
+      return response.data;
     } catch (error) {
       console.error('Error creating submission:', error);
       throw new Error('Failed to create submission');
     }
   },
 
-  updateSubmission: async (submissionId, submissionData) => {
+  getSubmission: async (submissionId) => {
     try {
-      // Note: We need to implement this endpoint in the backend
-      throw new Error('Submission update not implemented');
+      const response = await api.get(`/submissions/${submissionId}`);
+      return response.data;
     } catch (error) {
-      console.error('Error updating submission:', error);
-      throw new Error('Failed to update submission');
+      if (error.response?.status === 404) {
+        return null;
+      }
+      console.error('Error fetching submission:', error);
+      throw new Error('Failed to fetch submission');
     }
   },
 
-  getSubmission: async (submissionId) => {
+  getExamSubmissions: async (examId) => {
     try {
-      // Note: We need to implement this endpoint in the backend
-      throw new Error('Submission lookup not implemented');
+      const response = await api.get(`/exams/${examId}/submissions`);
+      return response.data;
     } catch (error) {
-      console.error('Error fetching submission:', error);
-      throw new Error('Failed to fetch submission');
+      console.error('Error fetching exam submissions:', error);
+      throw new Error('Failed to fetch exam submissions');
     }
   },
 };
