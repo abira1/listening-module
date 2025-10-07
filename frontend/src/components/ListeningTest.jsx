@@ -444,52 +444,94 @@ export function ListeningTest({ examId, audioRef }) {
       </main>
 
       {/* Footer Navigation */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 py-3 px-6 shadow-lg">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-gray-700">
-              Section {currentSection} of {totalSections}
-            </span>
-            <div className="flex gap-2">
-              {examData.sections.map((section) => (
+      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg">
+        {/* Question Number Navigation */}
+        <div className="border-b border-gray-200 py-3 px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-medium text-gray-700">
+                Questions {startQuestionIndex}-{endQuestionIndex}
+              </span>
+              <div className="flex items-center gap-2">
                 <button
-                  key={section.id}
-                  onClick={() => setCurrentSection(section.index)}
-                  className={`px-3 py-1 rounded text-sm font-medium ${
-                    currentSection === section.index
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
+                  onClick={() => setCurrentQuestionGroup(Math.max(0, currentQuestionGroup - 1))}
+                  disabled={currentQuestionGroup === 0}
+                  className="p-1 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="Previous section"
                 >
-                  {section.index}
+                  <ChevronLeft className="w-5 h-5" />
                 </button>
-              ))}
+                <button
+                  onClick={() => setCurrentQuestionGroup(Math.min(totalGroups - 1, currentQuestionGroup + 1))}
+                  disabled={currentQuestionGroup === totalGroups - 1}
+                  className="p-1 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="Next section"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            
+            {/* Question Number Buttons */}
+            <div className="flex flex-wrap gap-2">
+              {allQuestions
+                .filter((q) => q.index >= startQuestionIndex && q.index <= endQuestionIndex)
+                .map((question) => (
+                  <button
+                    key={question.id}
+                    onClick={() => navigateToQuestion(question.index)}
+                    className={`w-10 h-10 rounded font-medium text-sm transition-colors ${getQuestionButtonColor(question.index)} ${
+                      reviewMarked.has(question.index) ? 'ring-2 ring-yellow-400' : ''
+                    }`}
+                    title={
+                      reviewMarked.has(question.index)
+                        ? `Question ${question.index} - Marked for review`
+                        : `Question ${question.index}`
+                    }
+                  >
+                    {question.index}
+                  </button>
+                ))}
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setCurrentSection(Math.max(1, currentSection - 1))}
-              disabled={currentSection === 1}
-              className="bg-gray-200 border border-gray-400 rounded px-6 py-2 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-            >
-              Previous
-            </button>
-            {currentSection < totalSections ? (
+        </div>
+
+        {/* Action Buttons */}
+        <div className="py-3 px-6">
+          <div className="max-w-5xl mx-auto flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              <span className="font-semibold">{answeredCount}</span> of {totalQuestions} answered
+              {reviewMarked.size > 0 && (
+                <span className="ml-3 text-yellow-600">
+                  • {reviewMarked.size} marked for review
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-3">
               <button
-                onClick={() => setCurrentSection(Math.min(totalSections, currentSection + 1))}
-                className="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700 font-medium"
+                onClick={() => navigateToQuestion(Math.max(1, currentQuestionIndex - 1))}
+                disabled={currentQuestionIndex === 1}
+                className="bg-gray-200 border border-gray-400 rounded px-6 py-2 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
-                Next
+                Previous
               </button>
-            ) : (
-              <button
-                onClick={handleSubmitExam}
-                disabled={isSubmitting}
-                className="bg-green-600 text-white rounded px-6 py-2 hover:bg-green-700 font-medium disabled:opacity-50"
-              >
-                {isSubmitting ? 'Submitting...' : 'Submit Test'}
-              </button>
-            )}
+              {currentQuestionIndex < totalQuestions ? (
+                <button
+                  onClick={() => navigateToQuestion(Math.min(totalQuestions, currentQuestionIndex + 1))}
+                  className="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700 font-medium"
+                >
+                  Next
+                </button>
+              ) : (
+                <button
+                  onClick={handleSubmitExam}
+                  disabled={isSubmitting}
+                  className="bg-green-600 text-white rounded px-6 py-2 hover:bg-green-700 font-medium disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Test'}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </footer>
