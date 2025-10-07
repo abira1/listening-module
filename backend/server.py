@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,7 +7,7 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime, timezone
 
@@ -20,7 +21,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(title="IELTS Listening Test Platform API")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -36,6 +37,89 @@ class StatusCheck(BaseModel):
 
 class StatusCheckCreate(BaseModel):
     client_name: str
+
+# Exam Models
+class ExamCreate(BaseModel):
+    title: str
+    description: str
+    duration_seconds: int = 1800
+    is_demo: bool = False
+
+class ExamUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    duration_seconds: Optional[int] = None
+    audio_url: Optional[str] = None
+    audio_source_method: Optional[str] = None
+    loop_audio: Optional[bool] = None
+    published: Optional[bool] = None
+
+class Exam(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str
+    title: str
+    description: str
+    audio_url: Optional[str] = None
+    audio_source_method: Optional[str] = None
+    loop_audio: bool = False
+    duration_seconds: int = 1800
+    published: bool = False
+    created_at: str
+    updated_at: str
+    is_demo: bool = False
+    question_count: int = 0
+    submission_count: int = 0
+
+# Section Models
+class Section(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str
+    exam_id: str
+    index: int
+    title: str
+
+# Question Models
+class QuestionCreate(BaseModel):
+    exam_id: str
+    section_id: str
+    type: str = "single_answer"
+    payload: Dict[str, Any] = {}
+    marks: int = 1
+    created_by: str = "admin"
+    is_demo: bool = False
+
+class Question(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str
+    exam_id: str
+    section_id: str
+    index: int
+    type: str
+    payload: Dict[str, Any]
+    marks: int
+    created_by: str
+    is_demo: bool
+
+# Submission Models
+class SubmissionCreate(BaseModel):
+    exam_id: str
+    user_id_or_session: Optional[str] = None
+    answers: Dict[str, Any] = {}
+
+class Submission(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str
+    exam_id: str
+    user_id_or_session: str
+    started_at: str
+    finished_at: Optional[str] = None
+    answers: Dict[str, Any]
+    progress_percent: int = 0
+    last_playback_time: int = 0
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
