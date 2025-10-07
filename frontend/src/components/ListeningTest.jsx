@@ -103,8 +103,13 @@ export function ListeningTest({ examId, audioRef }) {
   };
 
   const getQuestionButtonColor = (questionIndex) => {
-    if (currentQuestionIndex === questionIndex) {
-      return 'bg-blue-600 text-white'; // Blue - current question
+    // Determine which section this question belongs to
+    const questionSection = Math.floor((questionIndex - 1) / 10);
+    const currentSection = Math.floor((currentQuestionIndex - 1) / 10);
+    
+    if (questionSection === currentSection) {
+      // Questions in current section are blue (current page)
+      return 'bg-blue-600 text-white';
     } else if (answers[questionIndex] !== undefined && answers[questionIndex] !== '') {
       return 'bg-gray-800 text-white'; // Black - answered
     } else {
