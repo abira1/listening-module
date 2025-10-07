@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FirebaseService } from '../services/FirebaseService';
+import { BackendService } from '../services/BackendService';
 
 export function ListeningTest({ examId, audioRef }) {
   const [examData, setExamData] = useState(null);
