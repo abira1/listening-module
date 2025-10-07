@@ -81,7 +81,7 @@ export function QuestionManager() {
     }
 
     try {
-      await FirebaseService.deleteQuestion(questionId);
+      await BackendService.deleteQuestion(questionId);
       showToast('Question deleted successfully', 'success');
       handleRefresh();
     } catch (err) {
