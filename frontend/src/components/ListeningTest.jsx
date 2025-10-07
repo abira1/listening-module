@@ -318,8 +318,15 @@ export function ListeningTest({ examId, audioRef }) {
   }
 
   const sectionData = getCurrentSectionData();
-  const totalSections = examData.sections.length;
-  const answeredCount = Object.keys(answers).length;
+  const currentQuestion = getCurrentQuestion();
+  const allQuestions = getAllQuestions();
+  const totalQuestions = allQuestions.length;
+  const answeredCount = Object.keys(answers).filter(key => answers[key] !== undefined && answers[key] !== '').length;
+
+  // Calculate which questions to show in current group (10 questions per group)
+  const startQuestionIndex = currentQuestionGroup * 10 + 1;
+  const endQuestionIndex = Math.min((currentQuestionGroup + 1) * 10, totalQuestions);
+  const totalGroups = Math.ceil(totalQuestions / 10);
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-blue-50">
@@ -353,48 +360,48 @@ export function ListeningTest({ examId, audioRef }) {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 pb-24">
+      <main className="flex-1 p-6 pb-32">
         <div className="max-w-5xl mx-auto">
           <div className="bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 mb-6">
             <div className="flex justify-between items-center mb-4 pb-3 border-b-2 border-gray-200">
               <h2 className="text-xl font-bold text-gray-800">
-                SECTION {currentSection} — Questions {sectionData.questions[0]?.index}-{sectionData.questions[sectionData.questions.length - 1]?.index}
+                Question {currentQuestionIndex} of {totalQuestions}
               </h2>
               <div className="text-sm text-gray-600">
-                <span className="font-semibold">{answeredCount} / 40</span> answered
+                <span className="font-semibold">{answeredCount} / {totalQuestions}</span> answered
               </div>
             </div>
 
-            {/* Show image for map labeling section */}
-            {currentSection === 2 && sectionData.questions[0]?.payload?.image_url && (
+            {/* Show image for map labeling questions */}
+            {currentQuestion?.type === 'map_labeling' && currentQuestion?.payload?.image_url && (
               <div className="mb-6 bg-gray-50 p-4 rounded border border-gray-300">
                 <p className="text-sm font-semibold text-gray-700 mb-3">
                   Label the map below. Choose the correct letter, A–I:
                 </p>
                 <img
-                  src={sectionData.questions[0].payload.image_url}
+                  src={currentQuestion.payload.image_url}
                   alt="Ferry Map"
                   className="max-w-full h-auto mx-auto border-2 border-gray-300 rounded"
                 />
               </div>
             )}
 
-            {/* Show image for diagram labeling section */}
-            {currentSection === 4 && sectionData.questions[0]?.payload?.image_url && (
+            {/* Show image for diagram labeling questions */}
+            {currentQuestion?.type === 'diagram_labeling' && currentQuestion?.payload?.image_url && (
               <div className="mb-6 bg-gray-50 p-4 rounded border border-gray-300">
                 <p className="text-sm font-semibold text-gray-700 mb-3">
                   Complete the notes on the diagram below. Write ONE WORD ONLY for each answer:
                 </p>
                 <img
-                  src={sectionData.questions[0].payload.image_url}
+                  src={currentQuestion.payload.image_url}
                   alt="Fission Reactor Diagram"
                   className="max-w-full h-auto mx-auto border-2 border-gray-300 rounded"
                 />
               </div>
             )}
 
-            {/* Section Instructions */}
-            {currentSection === 1 && (
+            {/* Section Instructions based on question type */}
+            {currentQuestion?.type === 'short_answer' && currentQuestionIndex <= 10 && (
               <div className="mb-4 p-3 bg-blue-50 rounded border border-blue-200">
                 <p className="text-sm text-gray-700">
                   <strong>Complete the notes below.</strong><br />
@@ -403,7 +410,7 @@ export function ListeningTest({ examId, audioRef }) {
               </div>
             )}
 
-            {currentSection === 3 && (
+            {currentQuestionIndex >= 21 && currentQuestionIndex <= 30 && (
               <div className="mb-4 p-3 bg-blue-50 rounded border border-blue-200">
                 <p className="text-sm text-gray-700">
                   Questions 21-25: <strong>Choose the correct answer.</strong><br />
@@ -413,9 +420,24 @@ export function ListeningTest({ examId, audioRef }) {
               </div>
             )}
 
-            {/* Questions */}
+            {/* Current Question */}
             <div className="space-y-2">
-              {sectionData.questions.map((question) => renderQuestion(question))}
+              {currentQuestion && renderQuestion(currentQuestion)}
+            </div>
+
+            {/* Review Checkbox */}
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={reviewMarked.has(currentQuestionIndex)}
+                  onChange={() => toggleReviewMark(currentQuestionIndex)}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700 font-medium">
+                  Mark for review
+                </span>
+              </label>
             </div>
           </div>
         </div>
