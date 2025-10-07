@@ -265,8 +265,268 @@ def test_exam_sections(exam_id):
         print_error(f"Sections retrieval request failed: {str(e)}")
         return None
 
+def test_question_creation(exam_id, section_id):
+    """Test 8: Question Creation - POST /api/questions"""
+    print_test_header("Question Creation")
+    
+    if not exam_id or not section_id:
+        print_error("Missing exam_id or section_id for question creation test")
+        return None
+    
+    question_data = {
+        "exam_id": exam_id,
+        "section_id": section_id,
+        "type": "single_answer",
+        "payload": {
+            "prompt": "Listen to the conversation and choose the correct answer. What is the main topic discussed?",
+            "options": [
+                "University accommodation",
+                "Course registration", 
+                "Library services",
+                "Student activities"
+            ],
+            "correct_answer": 0
+        },
+        "marks": 1
+    }
+    
+    try:
+        response = requests.post(
+            f"{BACKEND_URL}/questions",
+            json=question_data,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            question = response.json()
+            print_success(f"Question created successfully - Status: {response.status_code}")
+            print_info(f"Question ID: {question.get('id')}")
+            print_info(f"Question index: {question.get('index')}")
+            print_info(f"Question type: {question.get('type')}")
+            print_info(f"Question marks: {question.get('marks')}")
+            
+            # Verify expected response structure
+            required_fields = ['id', 'exam_id', 'section_id', 'index', 'type', 'payload', 'marks']
+            missing_fields = [field for field in required_fields if field not in question]
+            
+            if not missing_fields:
+                print_success("Question response contains all required fields")
+                if question.get('index') == 1:
+                    print_success("Question correctly assigned index 1")
+                return question
+            else:
+                print_warning(f"Question response missing fields: {missing_fields}")
+                return question
+        else:
+            print_error(f"Question creation failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            return None
+            
+    except requests.exceptions.RequestException as e:
+        print_error(f"Question creation request failed: {str(e)}")
+        return None
+
+def test_section_questions(section_id):
+    """Test 9: Section Questions Retrieval - GET /api/sections/{section_id}/questions"""
+    print_test_header("Section Questions Retrieval")
+    
+    if not section_id:
+        print_error("No section ID provided for questions test")
+        return None
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/sections/{section_id}/questions", timeout=10)
+        
+        if response.status_code == 200:
+            questions = response.json()
+            print_success(f"Section questions retrieved - Status: {response.status_code}")
+            print_info(f"Questions count: {len(questions)}")
+            
+            for i, question in enumerate(questions):
+                print_info(f"  Question {question.get('index')}: {question.get('type')} (ID: {question.get('id')})")
+            
+            return questions
+        else:
+            print_error(f"Section questions retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            return None
+            
+    except requests.exceptions.RequestException as e:
+        print_error(f"Section questions request failed: {str(e)}")
+        return None
+
+def test_question_retrieval(question_id):
+    """Test 10: Single Question Retrieval - GET /api/questions/{question_id}"""
+    print_test_header("Single Question Retrieval")
+    
+    if not question_id:
+        print_error("No question ID provided for retrieval test")
+        return None
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/questions/{question_id}", timeout=10)
+        
+        if response.status_code == 200:
+            question = response.json()
+            print_success(f"Question retrieved successfully - Status: {response.status_code}")
+            print_info(f"Question ID: {question.get('id')}")
+            print_info(f"Question type: {question.get('type')}")
+            print_info(f"Question index: {question.get('index')}")
+            return question
+        else:
+            print_error(f"Question retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            return None
+            
+    except requests.exceptions.RequestException as e:
+        print_error(f"Question retrieval request failed: {str(e)}")
+        return None
+
+def test_question_update(question_id):
+    """Test 11: Question Update - PUT /api/questions/{question_id}"""
+    print_test_header("Question Update")
+    
+    if not question_id:
+        print_error("No question ID provided for update test")
+        return False
+    
+    update_data = {
+        "payload": {
+            "prompt": "UPDATED: Listen to the conversation and choose the correct answer. What is the main topic discussed?",
+            "options": [
+                "University accommodation",
+                "Course registration", 
+                "Library services",
+                "Student activities"
+            ],
+            "correct_answer": 1
+        }
+    }
+    
+    try:
+        response = requests.put(
+            f"{BACKEND_URL}/questions/{question_id}",
+            json=update_data,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            updated_question = response.json()
+            print_success(f"Question updated successfully - Status: {response.status_code}")
+            print_info(f"Updated prompt: {updated_question.get('payload', {}).get('prompt', 'N/A')[:50]}...")
+            print_info(f"Updated correct answer: {updated_question.get('payload', {}).get('correct_answer')}")
+            
+            # Verify the update was applied
+            if "UPDATED:" in updated_question.get('payload', {}).get('prompt', ''):
+                print_success("Question payload updated correctly")
+                return True
+            else:
+                print_error("Question payload not updated correctly")
+                return False
+        else:
+            print_error(f"Question update failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            return False
+            
+    except requests.exceptions.RequestException as e:
+        print_error(f"Question update request failed: {str(e)}")
+        return False
+
+def test_multiple_questions_and_deletion(exam_id, section_id):
+    """Test 12: Create Multiple Questions and Test Deletion with Re-indexing"""
+    print_test_header("Multiple Questions Creation and Deletion Test")
+    
+    if not exam_id or not section_id:
+        print_error("Missing exam_id or section_id for multiple questions test")
+        return False
+    
+    # Create 3 questions
+    questions = []
+    for i in range(3):
+        question_data = {
+            "exam_id": exam_id,
+            "section_id": section_id,
+            "type": "single_answer",
+            "payload": {
+                "prompt": f"Test question {i+1} - What is the answer to question {i+1}?",
+                "options": [f"Option A{i+1}", f"Option B{i+1}", f"Option C{i+1}", f"Option D{i+1}"],
+                "correct_answer": i % 4
+            },
+            "marks": 1
+        }
+        
+        try:
+            response = requests.post(
+                f"{BACKEND_URL}/questions",
+                json=question_data,
+                headers={"Content-Type": "application/json"},
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                question = response.json()
+                questions.append(question)
+                print_success(f"Created question {i+1} with index {question.get('index')}")
+            else:
+                print_error(f"Failed to create question {i+1} - Status: {response.status_code}")
+                return False
+                
+        except requests.exceptions.RequestException as e:
+            print_error(f"Question {i+1} creation request failed: {str(e)}")
+            return False
+    
+    if len(questions) != 3:
+        print_error("Failed to create all 3 questions")
+        return False
+    
+    print_info(f"Successfully created {len(questions)} questions")
+    
+    # Delete the middle question (index 2)
+    middle_question = questions[1]  # Second question (index 2)
+    middle_question_id = middle_question.get('id')
+    
+    print_info(f"Deleting middle question (ID: {middle_question_id}, Index: {middle_question.get('index')})")
+    
+    try:
+        response = requests.delete(f"{BACKEND_URL}/questions/{middle_question_id}", timeout=10)
+        
+        if response.status_code == 200:
+            print_success("Middle question deleted successfully")
+            
+            # Verify remaining questions are re-indexed
+            remaining_response = requests.get(f"{BACKEND_URL}/sections/{section_id}/questions", timeout=10)
+            
+            if remaining_response.status_code == 200:
+                remaining_questions = remaining_response.json()
+                print_info(f"Remaining questions count: {len(remaining_questions)}")
+                
+                # Check if indices are properly re-indexed (should be 1, 2)
+                expected_indices = [1, 2]
+                actual_indices = [q.get('index') for q in remaining_questions]
+                actual_indices.sort()
+                
+                if actual_indices == expected_indices:
+                    print_success("Questions properly re-indexed after deletion (indices: 1, 2)")
+                    return True
+                else:
+                    print_error(f"Questions not properly re-indexed. Expected: {expected_indices}, Got: {actual_indices}")
+                    return False
+            else:
+                print_error("Failed to retrieve remaining questions for re-indexing verification")
+                return False
+        else:
+            print_error(f"Question deletion failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            return False
+            
+    except requests.exceptions.RequestException as e:
+        print_error(f"Question deletion request failed: {str(e)}")
+        return False
+
 def test_full_exam_data(exam_id):
-    """Test 8: Full Exam Data - GET /api/exams/{exam_id}/full"""
+    """Test 13: Full Exam Data - GET /api/exams/{exam_id}/full"""
     print_test_header("Full Exam Data Retrieval")
     
     if not exam_id:
@@ -309,6 +569,39 @@ def test_full_exam_data(exam_id):
     except requests.exceptions.RequestException as e:
         print_error(f"Full exam data request failed: {str(e)}")
         return None
+
+def test_exam_cleanup(exam_id):
+    """Test 14: Exam Cleanup - DELETE /api/exams/{exam_id}"""
+    print_test_header("Exam Cleanup")
+    
+    if not exam_id:
+        print_error("No exam ID provided for cleanup test")
+        return False
+    
+    try:
+        response = requests.delete(f"{BACKEND_URL}/exams/{exam_id}", timeout=10)
+        
+        if response.status_code == 200:
+            result = response.json()
+            print_success(f"Exam deleted successfully - Status: {response.status_code}")
+            print_info(f"Response: {result.get('message', 'No message')}")
+            
+            # Verify exam is actually deleted
+            verify_response = requests.get(f"{BACKEND_URL}/exams/{exam_id}", timeout=10)
+            if verify_response.status_code == 404:
+                print_success("Exam deletion verified - exam no longer exists")
+                return True
+            else:
+                print_warning("Exam still exists after deletion attempt")
+                return False
+        else:
+            print_error(f"Exam deletion failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            return False
+            
+    except requests.exceptions.RequestException as e:
+        print_error(f"Exam deletion request failed: {str(e)}")
+        return False
 
 def run_all_tests():
     """Run all backend API tests in sequence"""
