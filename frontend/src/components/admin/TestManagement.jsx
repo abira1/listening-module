@@ -78,10 +78,10 @@ export function TestManagement() {
     try {
       const examToDuplicate = exams.find((exam) => exam.id === testId);
       if (examToDuplicate) {
-        const newExam = await FirebaseService.createExam({
-          ...examToDuplicate,
+        const newExam = await BackendService.createExam({
           title: `Copy of ${examToDuplicate.title}`,
-          published: false,
+          description: examToDuplicate.description,
+          duration_seconds: examToDuplicate.duration_seconds,
           is_demo: false,
         });
         setExams([...exams, newExam]);
@@ -90,7 +90,7 @@ export function TestManagement() {
       }
     } catch (error) {
       console.error('Error duplicating test:', error);
-      showToast('Failed to duplicate test', 'error');
+      showToast(error.message || 'Failed to duplicate test', 'error');
     }
   };
 
