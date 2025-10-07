@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, Plus, Edit, Trash2, CheckCircle, Loader, AlertCircle, Music } from 'lucide-react';
-import { FirebaseService } from '../../services/FirebaseService';
+import { BackendService } from '../../services/BackendService';
 import { useToast } from '../common/Toast';
 
 export function QuestionManager() {
