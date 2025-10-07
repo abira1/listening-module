@@ -5,7 +5,7 @@ import { ConfirmDetails } from './ConfirmDetails';
 import { SoundTest } from './SoundTest';
 import { ListeningInstructions } from './ListeningInstructions';
 import { ListeningTest } from './ListeningTest';
-import { FirebaseService } from '../services/FirebaseService';
+import { BackendService } from '../services/BackendService';
 
 export function ExamTest() {
   const { examId } = useParams();
