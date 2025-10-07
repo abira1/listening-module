@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Users, FileText, CheckCircle, Clock, BarChart3 } from 'lucide-react';
-import { FirebaseService } from '../../services/FirebaseService';
+import { BackendService } from '../../services/BackendService';
 
 export function Dashboard() {
   const [stats, setStats] = useState({
