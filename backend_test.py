@@ -680,7 +680,7 @@ def run_all_tests():
                 })
             
             # Test 10: Multiple Questions and Deletion with Re-indexing
-            test_results['question_deletion_reindex'] = test_multiple_questions_and_deletion(exam_id, section_id)
+            test_results['question_deletion_reindex'] = test_multiple_questions_and_deletion(exam_id, sections)
         else:
             test_results.update({
                 'question_creation': False,
