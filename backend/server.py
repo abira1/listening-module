@@ -497,6 +497,50 @@ async def get_exam_submissions(exam_id: str):
         logger.error(f"Error fetching submissions: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch submissions")
 
+# Audio File Upload Route
+@api_router.post("/upload-audio")
+async def upload_audio_file(file: UploadFile = File(...)):
+    """
+    Upload an audio file to the listening_tracks directory.
+    Returns the URL path to access the uploaded file.
+    """
+    try:
+        # Validate file type
+        allowed_extensions = ['.mp3', '.wav', '.m4a', '.ogg', '.flac']
+        file_ext = Path(file.filename).suffix.lower()
+        
+        if file_ext not in allowed_extensions:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Invalid file type. Allowed types: {', '.join(allowed_extensions)}"
+            )
+        
+        # Generate unique filename
+        unique_filename = f"{generate_id()}{file_ext}"
+        file_path = LISTENING_TRACKS_DIR / unique_filename
+        
+        # Save file in chunks to handle large files
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+        # Return the URL path to access the file
+        audio_url = f"/listening_tracks/{unique_filename}"
+        
+        logger.info(f"Audio file uploaded successfully: {unique_filename}")
+        
+        return {
+            "message": "Audio file uploaded successfully",
+            "filename": unique_filename,
+            "audio_url": audio_url,
+            "size": os.path.getsize(file_path)
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error uploading audio file: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to upload audio file: {str(e)}")
+
 # Legacy status endpoints
 @api_router.get("/")
 async def root():
