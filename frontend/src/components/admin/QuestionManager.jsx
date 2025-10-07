@@ -93,7 +93,7 @@ export function QuestionManager() {
   const handlePublishExam = async () => {
     if (!examId) return;
     try {
-      const updatedExam = await FirebaseService.publishExam(examId);
+      const updatedExam = await BackendService.publishExam(examId);
       if (updatedExam) {
         setExam(updatedExam);
         showToast('Test published successfully', 'success');
