@@ -192,6 +192,9 @@ frontend:
       - working: true
         agent: "main"
         comment: "Exam creation working via backend API. Successfully created and published exams that appear on main website"
+      - working: true
+        agent: "testing"
+        comment: "CRITICAL TEST PASSED: Exam creation modal opens correctly, form can be filled with title 'Frontend UI Test Exam', description, and 30-minute duration. Form submission works without refresh loops (URL remains stable). New exam appears in admin list immediately. Success message shows 'Test published successfully'. NO REFRESH LOOP ISSUES detected - this was the main concern and it's fully resolved."
   
   - task: "Backend Integration"
     implemented: true
