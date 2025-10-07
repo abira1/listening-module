@@ -217,7 +217,7 @@ export function ListeningTest({ examId, audioRef }) {
 
       case 'multiple_choice':
         return (
-          <div key={question.id} className="mb-6">
+          <div key={question.id} className="mb-6" onClick={() => setCurrentQuestionIndex(questionNum)}>
             <div className="flex items-start gap-2">
               <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
               <div className="flex-1">
@@ -233,6 +233,7 @@ export function ListeningTest({ examId, audioRef }) {
                           value={optionLabel}
                           checked={answers[questionNum] === optionLabel}
                           onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+                          onFocus={() => setCurrentQuestionIndex(questionNum)}
                           className="mt-1"
                         />
                         <span className="text-gray-700">
