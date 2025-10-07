@@ -31,7 +31,7 @@ export function QuestionManager() {
       if (!examId) return;
       setLoading(true);
       try {
-        const examData = await FirebaseService.getExamWithSectionsAndQuestions(examId);
+        const examData = await BackendService.getExamWithSectionsAndQuestions(examId);
         if (examData) {
           setExam(examData.exam);
           setSections(examData.sections);
