@@ -104,7 +104,7 @@ export function AudioUpload() {
         }
       }
 
-      const updatedExam = await FirebaseService.uploadAudio(examId, finalAudioUrl, uploadMethod);
+      const updatedExam = await BackendService.uploadAudio(examId, finalAudioUrl, uploadMethod);
       if (updatedExam) {
         setExam(updatedExam);
         setUploadSuccess(true);
