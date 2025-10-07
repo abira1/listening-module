@@ -12,7 +12,7 @@ export function Dashboard() {
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const exams = await FirebaseService.getAllExams();
+        const exams = await BackendService.getAllExams();
         const totalSubmissions = exams.reduce((sum, exam) => sum + (exam.submission_count || 0), 0);
         const activeTests = exams.filter(exam => exam.published).length;
         
