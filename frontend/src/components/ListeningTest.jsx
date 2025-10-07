@@ -192,7 +192,7 @@ export function ListeningTest({ examId, audioRef }) {
     switch (question.type) {
       case 'short_answer':
         return (
-          <div key={question.id} className="mb-4">
+          <div key={question.id} className="mb-4" onClick={() => setCurrentQuestionIndex(questionNum)}>
             <div className="flex items-start gap-2">
               <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
               <div className="flex-1">
@@ -201,6 +201,7 @@ export function ListeningTest({ examId, audioRef }) {
                   type="text"
                   value={answers[questionNum] || ''}
                   onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+                  onFocus={() => setCurrentQuestionIndex(questionNum)}
                   className="w-full max-w-md px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Your answer"
                 />
