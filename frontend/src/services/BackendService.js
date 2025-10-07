@@ -154,9 +154,12 @@ export const BackendService = {
 
   getQuestion: async (questionId) => {
     try {
-      // Note: We need to implement this endpoint in the backend if needed
-      throw new Error('Question lookup by ID not implemented');
+      const response = await api.get(`/questions/${questionId}`);
+      return response.data;
     } catch (error) {
+      if (error.response?.status === 404) {
+        return null;
+      }
       console.error('Error fetching question:', error);
       throw new Error('Failed to fetch question');
     }
@@ -174,8 +177,8 @@ export const BackendService = {
 
   updateQuestion: async (questionId, questionData) => {
     try {
-      // Note: We need to implement this endpoint in the backend if needed
-      throw new Error('Question update not implemented');
+      const response = await api.put(`/questions/${questionId}`, questionData);
+      return response.data;
     } catch (error) {
       console.error('Error updating question:', error);
       throw new Error('Failed to update question');
@@ -184,9 +187,12 @@ export const BackendService = {
 
   deleteQuestion: async (questionId) => {
     try {
-      // Note: We need to implement this endpoint in the backend if needed
-      throw new Error('Question deletion not implemented');
+      await api.delete(`/questions/${questionId}`);
+      return true;
     } catch (error) {
+      if (error.response?.status === 400 && error.response?.data?.detail?.includes('Demo questions')) {
+        throw new Error('Demo questions cannot be deleted');
+      }
       console.error('Error deleting question:', error);
       throw new Error('Failed to delete question');
     }
