@@ -570,15 +570,18 @@ async def get_status_checks():
     
     return status_checks
 
-# Include the router in the main app
-app.include_router(api_router)
-
-# Configure logging
+# Configure logging first (before using logger)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Include the router in the main app
+app.include_router(api_router)
+
+# Mount static files for serving audio files
+app.mount("/listening_tracks", StaticFiles(directory=str(LISTENING_TRACKS_DIR)), name="listening_tracks")
 
 app.add_middleware(
     CORSMiddleware,
