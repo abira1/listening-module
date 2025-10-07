@@ -187,17 +187,20 @@ frontend:
         agent: "main"
         comment: "Exam creation working via backend API. Successfully created and published exams that appear on main website"
   
-  - task: "Firebase Integration"
+  - task: "Backend Integration"
     implemented: true
-    working: false
-    file: "/app/frontend/src/services/FirebaseService.js"
-    stuck_count: 1
+    working: true
+    file: "/app/frontend/src/services/BackendService.js"
+    stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "Firebase connection failing - unable to load or create exams"
+      - working: true
+        agent: "main"
+        comment: "Replaced Firebase with FastAPI backend. All components updated to use BackendService. Exam creation, retrieval, and publishing working correctly"
 
 metadata:
   created_by: "main_agent"
