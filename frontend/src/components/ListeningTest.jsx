@@ -186,6 +186,52 @@ export function ListeningTest({ examId, audioRef }) {
     return null;
   };
 
+  // Helper function to render prompt with inline input for blanks
+  const renderPromptWithInlineInput = (prompt, questionNum) => {
+    // Check if prompt contains blank markers (_____)
+    const blankPattern = /_{3,}/g;
+    const parts = prompt.split(blankPattern);
+    
+    if (parts.length === 1) {
+      // No blanks found, return plain text with input below
+      return (
+        <>
+          <p className="text-gray-700 mb-2">{prompt}</p>
+          <input
+            type="text"
+            value={answers[questionNum] || ''}
+            onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+            onFocus={() => setCurrentQuestionIndex(questionNum)}
+            className="w-full max-w-md px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Your answer"
+          />
+        </>
+      );
+    }
+    
+    // Blanks found, render inline
+    return (
+      <div className="text-gray-700 flex flex-wrap items-center gap-1">
+        {parts.map((part, index) => (
+          <React.Fragment key={index}>
+            <span>{part}</span>
+            {index < parts.length - 1 && (
+              <input
+                type="text"
+                value={answers[questionNum] || ''}
+                onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+                onFocus={() => setCurrentQuestionIndex(questionNum)}
+                className="inline-block min-w-[120px] max-w-[200px] px-2 py-1 border-b-2 border-gray-400 focus:outline-none focus:border-blue-500 bg-transparent"
+                placeholder=""
+                style={{ width: `${Math.max(120, (answers[questionNum]?.length || 0) * 10 + 40)}px` }}
+              />
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  };
+
   const renderQuestion = (question) => {
     const questionNum = question.index;
 
@@ -196,15 +242,7 @@ export function ListeningTest({ examId, audioRef }) {
             <div className="flex items-start gap-2">
               <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
               <div className="flex-1">
-                <p className="text-gray-700 mb-2">{question.payload.prompt}</p>
-                <input
-                  type="text"
-                  value={answers[questionNum] || ''}
-                  onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
-                  onFocus={() => setCurrentQuestionIndex(questionNum)}
-                  className="w-full max-w-md px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Your answer"
-                />
+                {renderPromptWithInlineInput(question.payload.prompt, questionNum)}
                 {question.payload.max_words && (
                   <p className="text-xs text-gray-500 mt-1">
                     Maximum {question.payload.max_words} word(s)
