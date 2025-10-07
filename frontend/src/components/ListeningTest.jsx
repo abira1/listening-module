@@ -446,7 +446,11 @@ export function ListeningTest({ examId, audioRef }) {
               </span>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setCurrentQuestionGroup(Math.max(0, currentQuestionGroup - 1))}
+                  onClick={() => {
+                    const newGroup = Math.max(0, currentQuestionGroup - 1);
+                    setCurrentQuestionGroup(newGroup);
+                    navigateToQuestion(newGroup * 10 + 1);
+                  }}
                   disabled={currentQuestionGroup === 0}
                   className="p-1 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Previous section"
@@ -454,7 +458,11 @@ export function ListeningTest({ examId, audioRef }) {
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
-                  onClick={() => setCurrentQuestionGroup(Math.min(totalGroups - 1, currentQuestionGroup + 1))}
+                  onClick={() => {
+                    const newGroup = Math.min(totalGroups - 1, currentQuestionGroup + 1);
+                    setCurrentQuestionGroup(newGroup);
+                    navigateToQuestion(newGroup * 10 + 1);
+                  }}
                   disabled={currentQuestionGroup === totalGroups - 1}
                   className="p-1 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Next section"
@@ -501,15 +509,23 @@ export function ListeningTest({ examId, audioRef }) {
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={() => navigateToQuestion(Math.max(1, currentQuestionIndex - 1))}
-                disabled={currentQuestionIndex === 1}
+                onClick={() => {
+                  const prevSection = Math.max(0, currentQuestionGroup - 1);
+                  setCurrentQuestionGroup(prevSection);
+                  navigateToQuestion(prevSection * 10 + 1);
+                }}
+                disabled={currentQuestionGroup === 0}
                 className="bg-gray-200 border border-gray-400 rounded px-6 py-2 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
                 Previous
               </button>
-              {currentQuestionIndex < totalQuestions ? (
+              {currentQuestionGroup < totalGroups - 1 ? (
                 <button
-                  onClick={() => navigateToQuestion(Math.min(totalQuestions, currentQuestionIndex + 1))}
+                  onClick={() => {
+                    const nextSection = Math.min(totalGroups - 1, currentQuestionGroup + 1);
+                    setCurrentQuestionGroup(nextSection);
+                    navigateToQuestion(nextSection * 10 + 1);
+                  }}
                   className="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700 font-medium"
                 >
                   Next
