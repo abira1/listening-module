@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BackendService } from '../services/BackendService';
-import { Clock, Volume2 } from 'lucide-react';
+import { Clock, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function ListeningTest({ examId, audioRef }) {
   const navigate = useNavigate();
   const [examData, setExamData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentSection, setCurrentSection] = useState(1);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1); // Changed from currentSection
   const [answers, setAnswers] = useState({});
+  const [reviewMarked, setReviewMarked] = useState(new Set()); // Track questions marked for review
+  const [visitedQuestions, setVisitedQuestions] = useState(new Set([1])); // Track which questions have been viewed
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [audioEnded, setAudioEnded] = useState(false);
   const [examFinished, setExamFinished] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentQuestionGroup, setCurrentQuestionGroup] = useState(0); // 0 = questions 1-10, 1 = 11-20, etc.
   const timerRef = useRef(null);
   const audioEndTimeRef = useRef(null);
 
