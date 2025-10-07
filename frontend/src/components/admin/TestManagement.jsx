@@ -20,7 +20,7 @@ export function TestManagement() {
 
   const fetchExams = async () => {
     try {
-      const examsData = await FirebaseService.getAllExams();
+      const examsData = await BackendService.getAllExams();
       setExams(examsData);
       setLoading(false);
     } catch (error) {
