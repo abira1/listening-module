@@ -104,14 +104,14 @@ export function TestManagement() {
 
   const handlePublishTest = async (testId) => {
     try {
-      const updatedExam = await FirebaseService.publishExam(testId);
+      const updatedExam = await BackendService.publishExam(testId);
       if (updatedExam) {
         setExams(exams.map((exam) => exam.id === testId ? { ...exam, published: true } : exam));
         showToast('Test published successfully', 'success');
       }
     } catch (error) {
       console.error('Error publishing test:', error);
-      showToast('Failed to publish test', 'error');
+      showToast(error.message || 'Failed to publish test', 'error');
     }
   };
 
