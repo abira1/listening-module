@@ -22,6 +22,10 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Create listening tracks directory
+LISTENING_TRACKS_DIR = Path("/app/listening_tracks")
+LISTENING_TRACKS_DIR.mkdir(exist_ok=True)
+
 # Create the main app without a prefix
 app = FastAPI(title="IELTS Listening Test Platform API")
 
