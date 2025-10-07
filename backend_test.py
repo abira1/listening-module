@@ -606,9 +606,9 @@ def test_exam_cleanup(exam_id):
 def run_all_tests():
     """Run all backend API tests in sequence"""
     print(f"{Colors.BOLD}{Colors.BLUE}")
-    print("=" * 60)
-    print("  IELTS Listening Test Platform - Backend API Tests")
-    print("=" * 60)
+    print("=" * 80)
+    print("  IELTS Listening Test Platform - Complete Backend API Tests")
+    print("=" * 80)
     print(f"{Colors.END}")
     
     print_info(f"Testing backend at: {BACKEND_URL}")
@@ -617,6 +617,8 @@ def run_all_tests():
     # Track test results
     test_results = {}
     created_exam = None
+    sections = None
+    created_question = None
     
     # Test 1: Health Check
     test_results['health_check'] = test_api_health_check()
@@ -633,49 +635,133 @@ def run_all_tests():
     published_empty = test_published_exams_empty()
     test_results['published_exams_empty'] = published_empty is not None
     
-    # Test 5: Exam Publishing (only if we have an exam)
+    # Continue with remaining tests only if we have an exam
     if created_exam:
         exam_id = created_exam.get('id')
-        test_results['exam_publishing'] = test_exam_publishing(exam_id)
         
-        # Test 6: Published Exams (after publishing)
-        published_after = test_published_exams_after_publishing()
-        test_results['published_exams_after'] = published_after is not None
-        
-        # Test 7: Exam Sections
+        # Test 5: Exam Sections
         sections = test_exam_sections(exam_id)
         test_results['exam_sections'] = sections is not None
         
-        # Test 8: Full Exam Data
+        # Question CRUD Tests (only if we have sections)
+        if sections and len(sections) > 0:
+            section_id = sections[0].get('id')  # Use first section
+            
+            # Test 6: Question Creation
+            created_question = test_question_creation(exam_id, section_id)
+            test_results['question_creation'] = created_question is not None
+            
+            # Test 7: Section Questions Retrieval
+            section_questions = test_section_questions(section_id)
+            test_results['section_questions'] = section_questions is not None
+            
+            # Question operations (only if we have a question)
+            if created_question:
+                question_id = created_question.get('id')
+                
+                # Test 8: Single Question Retrieval
+                retrieved_question = test_question_retrieval(question_id)
+                test_results['question_retrieval'] = retrieved_question is not None
+                
+                # Test 9: Question Update
+                test_results['question_update'] = test_question_update(question_id)
+            else:
+                test_results.update({
+                    'question_retrieval': False,
+                    'question_update': False
+                })
+            
+            # Test 10: Multiple Questions and Deletion with Re-indexing
+            test_results['question_deletion_reindex'] = test_multiple_questions_and_deletion(exam_id, section_id)
+        else:
+            test_results.update({
+                'question_creation': False,
+                'section_questions': False,
+                'question_retrieval': False,
+                'question_update': False,
+                'question_deletion_reindex': False
+            })
+        
+        # Test 11: Exam Publishing
+        test_results['exam_publishing'] = test_exam_publishing(exam_id)
+        
+        # Test 12: Published Exams (after publishing)
+        published_after = test_published_exams_after_publishing()
+        test_results['published_exams_after'] = published_after is not None
+        
+        # Test 13: Full Exam Data
         full_data = test_full_exam_data(exam_id)
         test_results['full_exam_data'] = full_data is not None
+        
+        # Test 14: Exam Cleanup
+        test_results['exam_cleanup'] = test_exam_cleanup(exam_id)
     else:
         print_warning("Skipping remaining tests due to exam creation failure")
         test_results.update({
+            'exam_sections': False,
+            'question_creation': False,
+            'section_questions': False,
+            'question_retrieval': False,
+            'question_update': False,
+            'question_deletion_reindex': False,
             'exam_publishing': False,
             'published_exams_after': False,
-            'exam_sections': False,
-            'full_exam_data': False
+            'full_exam_data': False,
+            'exam_cleanup': False
         })
     
     # Print summary
-    print(f"\n{Colors.BOLD}{Colors.BLUE}=== TEST SUMMARY ==={Colors.END}")
+    print(f"\n{Colors.BOLD}{Colors.BLUE}=== COMPREHENSIVE TEST SUMMARY ==={Colors.END}")
     
     passed_tests = sum(1 for result in test_results.values() if result)
     total_tests = len(test_results)
     
-    for test_name, result in test_results.items():
-        status = "PASS" if result else "FAIL"
-        color = Colors.GREEN if result else Colors.RED
-        print(f"{color}{status:4} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    # Group tests by category for better readability
+    basic_tests = ['health_check', 'exam_creation', 'exam_retrieval', 'published_exams_empty']
+    question_tests = ['question_creation', 'section_questions', 'question_retrieval', 'question_update', 'question_deletion_reindex']
+    publishing_tests = ['exam_publishing', 'published_exams_after', 'full_exam_data']
+    cleanup_tests = ['exam_cleanup', 'exam_sections']
     
-    print(f"\n{Colors.BOLD}Results: {passed_tests}/{total_tests} tests passed{Colors.END}")
+    print(f"\n{Colors.BOLD}Basic API Tests:{Colors.END}")
+    for test_name in basic_tests:
+        if test_name in test_results:
+            result = test_results[test_name]
+            status = "PASS" if result else "FAIL"
+            color = Colors.GREEN if result else Colors.RED
+            print(f"  {color}{status:4} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    print(f"\n{Colors.BOLD}Question CRUD Tests:{Colors.END}")
+    for test_name in question_tests:
+        if test_name in test_results:
+            result = test_results[test_name]
+            status = "PASS" if result else "FAIL"
+            color = Colors.GREEN if result else Colors.RED
+            print(f"  {color}{status:4} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    print(f"\n{Colors.BOLD}Publishing & Data Tests:{Colors.END}")
+    for test_name in publishing_tests:
+        if test_name in test_results:
+            result = test_results[test_name]
+            status = "PASS" if result else "FAIL"
+            color = Colors.GREEN if result else Colors.RED
+            print(f"  {color}{status:4} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    print(f"\n{Colors.BOLD}Cleanup & Structure Tests:{Colors.END}")
+    for test_name in cleanup_tests:
+        if test_name in test_results:
+            result = test_results[test_name]
+            status = "PASS" if result else "FAIL"
+            color = Colors.GREEN if result else Colors.RED
+            print(f"  {color}{status:4} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    print(f"\n{Colors.BOLD}Overall Results: {passed_tests}/{total_tests} tests passed{Colors.END}")
     
     if passed_tests == total_tests:
-        print_success("All backend API tests passed! ✨")
+        print_success("🎉 ALL BACKEND API TESTS PASSED! The complete exam creation workflow is working perfectly! ✨")
         return True
     else:
-        print_error(f"{total_tests - passed_tests} test(s) failed")
+        failed_tests = total_tests - passed_tests
+        print_error(f"❌ {failed_tests} test(s) failed - Backend needs attention")
         return False
 
 if __name__ == "__main__":
