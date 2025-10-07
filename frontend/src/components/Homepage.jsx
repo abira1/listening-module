@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from './Header';
 import { ClockIcon, BookOpenIcon, LayersIcon, CheckIcon } from 'lucide-react';
-import { FirebaseService } from '../services/FirebaseService';
+import { BackendService } from '../services/BackendService';
 
 export function Homepage() {
   const [exams, setExams] = useState([]);
