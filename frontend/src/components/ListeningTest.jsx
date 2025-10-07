@@ -82,6 +82,53 @@ export function ListeningTest({ examId, audioRef }) {
     }));
   };
 
+  const toggleReviewMark = (questionIndex) => {
+    setReviewMarked((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(questionIndex)) {
+        newSet.delete(questionIndex);
+      } else {
+        newSet.add(questionIndex);
+      }
+      return newSet;
+    });
+  };
+
+  const navigateToQuestion = (questionIndex) => {
+    setCurrentQuestionIndex(questionIndex);
+    setVisitedQuestions((prev) => new Set([...prev, questionIndex]));
+    // Update question group based on question index
+    const group = Math.floor((questionIndex - 1) / 10);
+    setCurrentQuestionGroup(group);
+  };
+
+  const getQuestionButtonColor = (questionIndex) => {
+    if (currentQuestionIndex === questionIndex) {
+      return 'bg-blue-600 text-white'; // Blue - current question
+    } else if (answers[questionIndex] !== undefined && answers[questionIndex] !== '') {
+      return 'bg-gray-800 text-white'; // Black - answered
+    } else {
+      return 'bg-white text-gray-700 border border-gray-300'; // White - unanswered
+    }
+  };
+
+  const getAllQuestions = () => {
+    if (!examData) return [];
+    // Flatten all questions from all sections into a single array
+    const allQuestions = [];
+    examData.sections.forEach((section) => {
+      section.questions.forEach((question) => {
+        allQuestions.push(question);
+      });
+    });
+    return allQuestions.sort((a, b) => a.index - b.index);
+  };
+
+  const getCurrentQuestion = () => {
+    const allQuestions = getAllQuestions();
+    return allQuestions.find((q) => q.index === currentQuestionIndex);
+  };
+
   const handleSubmitExam = async () => {
     if (isSubmitting) return;
     
