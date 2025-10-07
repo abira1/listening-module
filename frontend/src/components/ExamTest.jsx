@@ -18,7 +18,7 @@ export function ExamTest() {
     const loadExam = async () => {
       if (examId) {
         try {
-          const examData = await FirebaseService.getExam(examId);
+          const examData = await BackendService.getExam(examId);
           setExam(examData);
           setLoading(false);
         } catch (error) {
