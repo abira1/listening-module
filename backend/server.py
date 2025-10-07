@@ -12,6 +12,7 @@ from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime, timezone
 import shutil
+from init_ielts_test import init_ielts_test
 
 
 ROOT_DIR = Path(__file__).parent
