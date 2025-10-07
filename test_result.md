@@ -228,6 +228,21 @@ frontend:
       - working: true
         agent: "testing"
         comment: "COMPREHENSIVE TESTING COMPLETED: All 14 backend API test scenarios passed successfully! ✅ Health Check API responding correctly ✅ Exam Creation with auto-generated 4 sections working perfectly ✅ Question Creation in Section 1 with proper indexing (index=1) ✅ Section Questions Retrieval showing created questions ✅ Single Question Retrieval by ID working ✅ Question Update (PUT) successfully modifying payload ✅ Question Deletion with proper re-indexing (created 3 questions in clean section, deleted middle one, remaining questions properly re-indexed from [1,2,3] to [1,2]) ✅ Exam Publishing workflow functional ✅ Published Exams endpoint returning published exams ✅ Full Exam Data endpoint returning complete hierarchical structure ✅ Exam Cleanup (DELETE) working with proper verification. The complete exam creation workflow is fully operational and ready for production use."
+  
+  - task: "Refresh Loop Bug Fix"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/common/Toast.jsx"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User reported: When clicking on test name to edit or add questions from Test Management, page gets stuck in a refresh loop"
+      - working: true
+        agent: "main"
+        comment: "CRITICAL BUG FIXED: The refresh loop was caused by showToast function being recreated on every render, triggering infinite re-renders in useEffect dependencies. Fixed by wrapping showToast and removeToast in useCallback hooks. Also fixed QuestionManager.jsx and AudioUpload.jsx by removing showToast from useEffect dependency arrays. Frontend restarted successfully."
 
 metadata:
   created_by: "main_agent"
