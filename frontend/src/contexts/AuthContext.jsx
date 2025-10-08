@@ -124,13 +124,19 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await FirebaseAuthService.signOut();
+      // Only clear student session, don't sign out from Firebase completely
+      // This allows admin session to remain active
+      sessionStorage.removeItem('studentUser');
       setUser(null);
       setIsAuthenticated(false);
       setIsAdmin(false);
+      
+      // Sign out from Firebase
+      await FirebaseAuthService.signOut();
     } catch (error) {
       console.error('Logout error:', error);
       // Still clear local state even if API call fails
+      sessionStorage.removeItem('studentUser');
       setUser(null);
       setIsAuthenticated(false);
       setIsAdmin(false);
