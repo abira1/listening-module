@@ -98,6 +98,36 @@ export const BackendService = {
     }
   },
 
+  startExam: async (examId) => {
+    try {
+      const response = await api.put(`/admin/exams/${examId}/start`);
+      return response.data;
+    } catch (error) {
+      console.error('Error starting exam:', error);
+      throw new Error('Failed to start exam');
+    }
+  },
+
+  stopExam: async (examId) => {
+    try {
+      const response = await api.put(`/admin/exams/${examId}/stop`);
+      return response.data;
+    } catch (error) {
+      console.error('Error stopping exam:', error);
+      throw new Error('Failed to stop exam');
+    }
+  },
+
+  getExamStatus: async (examId) => {
+    try {
+      const response = await api.get(`/exams/${examId}/status`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching exam status:', error);
+      throw new Error('Failed to fetch exam status');
+    }
+  },
+
   // Section operations
   getSectionsByExam: async (examId) => {
     try {
