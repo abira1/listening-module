@@ -493,7 +493,7 @@ export function SubmissionManagement() {
 
       {/* Submission Review Modal */}
       {showReviewModal && selectedSubmission && (
-        <SubmissionReview
+        <FirebaseSubmissionReview
           submissionId={selectedSubmission.id}
           onClose={() => {
             setShowReviewModal(false);
