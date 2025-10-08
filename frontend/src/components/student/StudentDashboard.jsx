@@ -182,12 +182,17 @@ export function StudentDashboard() {
               <div>
                 <p className="text-sm text-gray-600">Average Score</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {submissions.length > 0
-                    ? Math.round(
-                        submissions.reduce((acc, sub) => acc + (sub.score || 0), 0) / submissions.length
-                      )
-                    : 0}
-                  /{submissions.length > 0 ? submissions[0]?.total_questions || 40 : 40}
+                  {(() => {
+                    const publishedSubs = submissions.filter(sub => sub.isPublished === true);
+                    if (publishedSubs.length > 0) {
+                      const avgScore = Math.round(
+                        publishedSubs.reduce((acc, sub) => acc + (sub.score || 0), 0) / publishedSubs.length
+                      );
+                      const totalQuestions = publishedSubs[0]?.totalQuestions || publishedSubs[0]?.total_questions || 40;
+                      return `${avgScore}/${totalQuestions}`;
+                    }
+                    return 'N/A';
+                  })()}
                 </p>
               </div>
             </div>
