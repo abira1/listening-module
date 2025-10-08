@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { AuthService } from '../../services/AuthService';
+import FirebaseAuthService from '../../services/FirebaseAuthService';
 import { BackendService } from '../../services/BackendService';
 import { LogOut, User, BookOpen, CheckCircle, Clock, FileText, Award } from 'lucide-react';
 
