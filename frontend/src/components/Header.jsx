@@ -15,11 +15,16 @@ export function Header() {
   return (
     <header className="bg-white w-full p-4 flex justify-between items-center shadow-sm">
       <div className="flex items-center gap-3">
-        <Link to="/">
+        <Link to="/" className="flex items-center gap-4">
           <img
             src="https://i.postimg.cc/FKx07M5m/ILTES.png"
             alt="IELTS Logo"
             className="h-10 cursor-pointer"
+          />
+          <img
+            src="https://customer-assets.emergentagent.com/job_login-gateway-23/artifacts/lb58nl9d_Shah-Sultan-Logo-2.png"
+            alt="Shah Sultan's IELTS Academy"
+            className="h-12 cursor-pointer"
           />
         </Link>
         
