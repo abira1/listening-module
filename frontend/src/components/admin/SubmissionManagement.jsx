@@ -206,23 +206,23 @@ export function SubmissionManagement() {
     setCalculatedScore(0);
   };
 
-  const handleScoreUpdate = async (scoreToUpdate) => {
-    try {
-      await FirebaseAuthService.updateSubmissionScore(selectedStudent.submissionId, scoreToUpdate);
-      alert('Score updated successfully!');
+  const handleMarkQuestion = (questionIndex, mark) => {
+    setQuestionMarks(prev => {
+      const newMarks = { ...prev };
       
-      // Refresh submission details
-      const detailed = await BackendService.getSubmissionDetailed(selectedStudent.submissionId);
-      const firebaseSubmission = await FirebaseAuthService.getSubmission(selectedStudent.submissionId);
-      setSubmissionDetails({
-        ...detailed,
-        firebaseData: firebaseSubmission
-      });
-      setNewScore(scoreToUpdate);
-    } catch (error) {
-      console.error('Error updating score:', error);
-      alert('Failed to update score. Please try again.');
-    }
+      // Toggle: if clicking the same mark, unmark it
+      if (newMarks[questionIndex] === mark) {
+        delete newMarks[questionIndex];
+      } else {
+        newMarks[questionIndex] = mark;
+      }
+      
+      // Recalculate score
+      const correctCount = Object.values(newMarks).filter(m => m === 'correct').length;
+      setCalculatedScore(correctCount);
+      
+      return newMarks;
+    });
   };
 
   const handlePublishResult = async () => {
