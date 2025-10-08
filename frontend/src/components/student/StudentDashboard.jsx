@@ -212,14 +212,24 @@ export function StudentDashboard() {
                 {exams.map((exam) => {
                   const examStatus = getExamStatus(exam.id);
                   const isCompleted = attemptedExams.has(exam.id);
+                  const status = examStatuses[exam.id];
+                  const isActive = status?.is_active || false;
+                  const canStart = isActive && !isCompleted;
 
                   return (
                     <div key={exam.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="text-lg font-semibold text-gray-900">{exam.title}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${examStatus.color}`}>
-                          {examStatus.status}
-                        </span>
+                        <div className="flex flex-col items-end gap-1">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${examStatus.color}`}>
+                            {examStatus.status}
+                          </span>
+                          {isActive && !isCompleted && (
+                            <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium animate-pulse">
+                              ● Active
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <p className="text-gray-600 text-sm mb-4">{exam.description}</p>
                       <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
@@ -232,16 +242,21 @@ export function StudentDashboard() {
                           {exam.question_count || 40} questions
                         </span>
                       </div>
+                      {!isActive && !isCompleted && (
+                        <div className="mb-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-700 text-center">
+                          Waiting for admin to start this test...
+                        </div>
+                      )}
                       <button
                         onClick={() => handleStartExam(exam.id)}
-                        disabled={isCompleted}
+                        disabled={!canStart}
                         className={`w-full py-2 rounded-lg font-medium transition-colors ${
-                          isCompleted
+                          !canStart
                             ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                             : 'bg-blue-600 text-white hover:bg-blue-700'
                         }`}
                       >
-                        {isCompleted ? 'Already Completed' : 'Start Exam'}
+                        {isCompleted ? 'Already Completed' : canStart ? 'Start Exam' : 'Test Not Active'}
                       </button>
                     </div>
                   );
