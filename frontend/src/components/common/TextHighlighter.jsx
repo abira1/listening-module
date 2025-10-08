@@ -93,7 +93,10 @@ const TextHighlighter = ({ children, enabled = true }) => {
       e.preventDefault();
       
       const highlightId = highlightedElement.dataset.highlightId;
-      const highlight = highlights.find(h => h.id === highlightId);
+      // Use ref to get latest highlights state
+      const highlight = highlightsRef.current.find(h => h.id === highlightId);
+
+      console.log('Right-click on highlight:', highlightId, highlight);
 
       if (highlight) {
         setContextMenu({
@@ -103,9 +106,11 @@ const TextHighlighter = ({ children, enabled = true }) => {
           highlightId: highlightId,
           highlight: highlight
         });
+      } else {
+        console.warn('Highlight not found in state:', highlightId);
       }
     }
-  }, [enabled, highlights]);
+  }, [enabled]);
 
   // Apply highlight using Range API
   const applyHighlight = useCallback(() => {
