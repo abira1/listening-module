@@ -442,7 +442,7 @@ frontend:
   - task: "Score Visibility Control and Result Publishing System"
     implemented: true
     working: true
-    file: "/app/backend/server.py, /app/frontend/src/components/ListeningTest.jsx, /app/frontend/src/components/admin/SubmissionManagement.jsx, /app/frontend/src/components/student/StudentDashboard.jsx, /app/frontend/src/components/student/ProgressChart.jsx, /app/frontend/src/services/BackendService.js, /app/frontend/src/services/FirebaseAuthService.js"
+    file: "/app/backend/server.py, /app/frontend/src/components/ListeningTest.jsx, /app/frontend/src/components/admin/SubmissionManagement.jsx, /app/frontend/src/components/student/StudentDashboard.jsx, /app/frontend/src/components/student/ProgressChart.jsx, /app/frontend/src/services/BackendService.js, /app/frontend/src/services/FirebaseAuthService.js, /app/frontend/src/components/admin/FirebaseSubmissionReview.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
@@ -450,6 +450,9 @@ frontend:
       - working: true
         agent: "main"
         comment: "Implemented complete score visibility control system. BACKEND: Added is_published and published_at fields to Submission model with default is_published=false. Modified POST /api/submissions to auto-grade but not return scores to students. Created admin endpoints: PUT /api/admin/exams/{exam_id}/publish-results (bulk publish all submissions for an exam), PUT /api/admin/submissions/{id}/publish (publish individual submission). FRONTEND: Updated ListeningTest.jsx to remove score alert - students now see generic 'Test submitted successfully! Results will be available once your instructor publishes them.' Updated StudentDashboard.jsx to show 'Results Pending' for unpublished submissions, only display scores/percentages for published results. Updated SubmissionManagement.jsx with 'Publish All Results for Selected Exam' button and individual 'Publish' buttons for each submission. Added Published status column with Lock/Unlock badges. Updated ProgressChart.jsx to filter and only display published submissions. FIREBASE: Added publishSubmission() and publishExamSubmissions() methods to FirebaseAuthService. Both backend and Firebase are updated when publishing. WORKFLOW: Students submit test → backend grades internally → scores stored but hidden → admin views all submissions with scores in admin panel → admin clicks publish → scores become visible to students → progress charts update automatically. All services restarted successfully."
+      - working: true
+        agent: "main"
+        comment: "SUBMISSION REVIEW FIX: Updated FirebaseSubmissionReview.jsx to properly display detailed question information. Admin can now see: Full question text/prompt, Question type badges, Multiple choice options (if applicable), Question images (for map_labeling/diagram_labeling), Student's answer vs Correct answer side-by-side, Visual indicators (green checkmark for correct, red X for incorrect, gray alert for unanswered), Questions organized by section with section headers. Fixed 'No answer details available' issue - now properly fetches and displays full exam data with all questions mapped to student answers. Frontend restarted successfully."
 
   - task: "Student Progress Chart"
     implemented: true
