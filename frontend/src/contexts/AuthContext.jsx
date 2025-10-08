@@ -17,26 +17,38 @@ export const AuthProvider = ({ children }) => {
       const userData = await AuthService.getCurrentUser();
       setUser(userData);
       setIsAuthenticated(true);
-      setLoading(false);
     } catch (error) {
       // Not authenticated - this is normal, don't log as error
       setUser(null);
       setIsAuthenticated(false);
+    } finally {
       setLoading(false);
     }
   };
 
   const login = async (sessionId) => {
-    const response = await AuthService.exchangeSession(sessionId);
-    setUser(response.user);
-    setIsAuthenticated(true);
-    return response;
+    try {
+      const response = await AuthService.exchangeSession(sessionId);
+      setUser(response.user);
+      setIsAuthenticated(true);
+      return response;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
   };
 
   const logout = async () => {
-    await AuthService.logout();
-    setUser(null);
-    setIsAuthenticated(false);
+    try {
+      await AuthService.logout();
+      setUser(null);
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still clear local state even if API call fails
+      setUser(null);
+      setIsAuthenticated(false);
+    }
   };
 
   const updateUser = (userData) => {
