@@ -409,6 +409,42 @@ frontend:
         agent: "main"
         comment: "Enhanced exam header: Made header FIXED to screen (position: fixed, top: 0, z-index: 50). Implemented Hide functionality - clicking Hide button toggles visibility of top logo section while keeping bottom info bar visible. Button text changes to 'Show' when hidden. Added dynamic padding to main content (pt-36 when full header shown, pt-20 when hidden) to prevent content overlap. State management with isHeaderHidden useState hook. Frontend restarted successfully."
   
+  - task: "Test Control System - Start/Stop Tests"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py, /app/frontend/src/components/admin/TestManagement.jsx, /app/frontend/src/services/BackendService.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented complete test control system. Backend: Added is_active, started_at, stopped_at fields to Exam model. Created admin endpoints PUT /api/admin/exams/{id}/start and PUT /api/admin/exams/{id}/stop (admin-only, protected). Created public polling endpoint GET /api/exams/{id}/status for students. Frontend Admin: Added Start/Stop buttons in TestManagement table with proper status indicators (Active/Inactive). Frontend Student: Added polling mechanism (every 3 seconds) to check test status. Students see published tests with disabled 'Start Test' button until admin starts the test. Added 'Waiting for admin to start' message. Button becomes enabled when is_active=true. Updated BackendService with startExam(), stopExam(), getExamStatus() methods. All services restarted successfully."
+
+  - task: "Enhanced Timer with 3D Design and Auto-Submit"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/ListeningTest.jsx, /app/frontend/tailwind.config.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented enhanced exam timer with 3D design and animations. Timer now has gradient background with shadow effects (blue gradient normally, red gradient for final 2 minutes). Added custom 'timer-fade' keyframe animation with red/white pulsing effect for final 2 minutes. Timer scales up slightly during final 2 minutes for emphasis. When timer expires, exam auto-submits immediately. Added completion screen with success message and manual 'Home' button to navigate back to dashboard. Created custom Tailwind animation in tailwind.config.js. Frontend restarted successfully."
+
+  - task: "Student Progress Chart"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/student/ProgressChart.jsx, /app/frontend/src/components/student/StudentDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented student progress chart showing performance across ALL completed tests. Installed recharts library via yarn. Created ProgressChart component with bar chart displaying scores for all submissions. Color-coded bars (green ≥80%, blue 60-79%, orange 40-59%, red <40%). Custom tooltip showing exam title, score, percentage, and date. Added legend showing color coding. Chart displays on StudentDashboard below results table. Chart auto-updates when admin modifies scores in Firebase (real-time data from Firebase submissions). Responsive design with proper labels and axis. Frontend restarted successfully."
+
   - task: "Manual Submission Marking System"
     implemented: true
     working: true
