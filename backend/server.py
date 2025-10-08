@@ -592,6 +592,116 @@ async def get_exam_submissions(exam_id: str):
         logger.error(f"Error fetching submissions: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch submissions")
 
+@api_router.get("/submissions/{submission_id}/detailed")
+async def get_submission_detailed(submission_id: str):
+    """
+    Get detailed submission with all questions, student answers, and correct answers.
+    Used for manual review and marking by teachers.
+    """
+    try:
+        # Get submission
+        submission = await db.submissions.find_one({"id": submission_id}, {"_id": 0})
+        if not submission:
+            raise HTTPException(status_code=404, detail="Submission not found")
+        
+        # Get exam details
+        exam = await db.exams.find_one({"id": submission["exam_id"]}, {"_id": 0})
+        if not exam:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        # Get all sections and questions for this exam
+        sections = await db.sections.find({"exam_id": submission["exam_id"]}, {"_id": 0}).sort("index", 1).to_list(1000)
+        
+        detailed_sections = []
+        for section in sections:
+            questions = await db.questions.find({"section_id": section["id"]}, {"_id": 0}).sort("index", 1).to_list(1000)
+            
+            # Add student answer and correct answer to each question
+            for question in questions:
+                question_index = str(question["index"])
+                question["student_answer"] = submission.get("answers", {}).get(question_index, "")
+                question["correct_answer"] = question.get("payload", {}).get("answer_key", "")
+                
+                # Check if answer is correct
+                student_ans = str(question["student_answer"]).strip().lower()
+                correct_ans = str(question["correct_answer"]).strip().lower()
+                question["is_correct"] = student_ans == correct_ans if correct_ans else None
+            
+            detailed_sections.append({
+                **section,
+                "questions": questions
+            })
+        
+        return {
+            "submission": submission,
+            "exam": exam,
+            "sections": detailed_sections
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching detailed submission: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch detailed submission")
+
+@api_router.put("/submissions/{submission_id}/score")
+async def update_submission_score(
+    submission_id: str,
+    score_data: Dict[str, Any],
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Update submission score manually. Can update individual question scores or overall score.
+    Admin-only endpoint.
+    """
+    try:
+        # Verify admin access
+        user = await AuthService.get_current_user(request, db, session_token)
+        if not user or user.get("email") != "shahsultanweb@gmail.com":
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        # Get submission
+        submission = await db.submissions.find_one({"id": submission_id}, {"_id": 0})
+        if not submission:
+            raise HTTPException(status_code=404, detail="Submission not found")
+        
+        # Update score and correct_answers
+        new_score = score_data.get("score")
+        new_correct_answers = score_data.get("correct_answers")
+        
+        update_data = {"updated_at": get_timestamp()}
+        
+        if new_score is not None:
+            update_data["score"] = new_score
+        
+        if new_correct_answers is not None:
+            update_data["correct_answers"] = new_correct_answers
+        
+        # Add manual_grading flag to indicate this was manually adjusted
+        update_data["manually_graded"] = True
+        update_data["graded_by"] = user.get("email")
+        update_data["graded_at"] = get_timestamp()
+        
+        await db.submissions.update_one(
+            {"id": submission_id},
+            {"$set": update_data}
+        )
+        
+        # Fetch updated submission
+        updated_submission = await db.submissions.find_one({"id": submission_id}, {"_id": 0})
+        
+        return {
+            "message": "Score updated successfully",
+            "submission": updated_submission
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating submission score: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update submission score")
+
 # Audio File Upload Route
 @api_router.post("/upload-audio")
 async def upload_audio_file(file: UploadFile = File(...)):
