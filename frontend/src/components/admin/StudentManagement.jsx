@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AuthService } from '../../services/AuthService';
-import { Users, Search, Trash2, Download, Mail, Phone, Building, BookOpen } from 'lucide-react';
+import { Users, Search, Trash2, Download, Mail, Phone, Building, BookOpen, Eye } from 'lucide-react';
+import { SubmissionReview } from './SubmissionReview';
 
 export function StudentManagement() {
   const [students, setStudents] = useState([]);
