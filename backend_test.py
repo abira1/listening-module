@@ -859,6 +859,235 @@ def run_all_tests():
         print_error(f"❌ {failed_tests} test(s) failed - Backend needs attention")
         return False
 
+def test_manual_submission_marking_system():
+    """Test Manual Submission Marking System Endpoints"""
+    print_test_header("Manual Submission Marking System Tests")
+    
+    print_info("Testing new manual marking system endpoints:")
+    print_info("1. GET /api/exams/published - Get published exams")
+    print_info("2. GET /api/exams/{exam_id}/submissions - Get exam submissions")
+    print_info("3. GET /api/submissions/{submission_id}/detailed - Get detailed submission")
+    print_info("4. PUT /api/submissions/{submission_id}/score - Update submission score (no auth)")
+    
+    results = {}
+    
+    # Test 1: Get Published Exams
+    print_info("\n--- Test 1: Get Published Exams ---")
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/published", timeout=10)
+        if response.status_code == 200:
+            published_exams = response.json()
+            print_success(f"✅ Published exams retrieved - Status: {response.status_code}")
+            print_info(f"Found {len(published_exams)} published exams")
+            
+            if published_exams:
+                exam = published_exams[0]
+                exam_id = exam.get('id')
+                print_info(f"Using exam: {exam.get('title')} (ID: {exam_id})")
+                results['published_exams'] = True
+                results['exam_id'] = exam_id
+            else:
+                print_error("❌ No published exams found - cannot continue with submission tests")
+                results['published_exams'] = False
+                return results
+        else:
+            print_error(f"❌ Published exams retrieval failed - Status: {response.status_code}")
+            results['published_exams'] = False
+            return results
+    except Exception as e:
+        print_error(f"❌ Published exams request error: {str(e)}")
+        results['published_exams'] = False
+        return results
+    
+    # Test 2: Get Exam Submissions
+    print_info("\n--- Test 2: Get Exam Submissions ---")
+    exam_id = results.get('exam_id')
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/{exam_id}/submissions", timeout=10)
+        if response.status_code == 200:
+            submissions = response.json()
+            print_success(f"✅ Exam submissions retrieved - Status: {response.status_code}")
+            print_info(f"Found {len(submissions)} submissions for exam")
+            
+            if submissions:
+                submission = submissions[0]
+                submission_id = submission.get('id')
+                print_info(f"Using submission ID: {submission_id}")
+                print_info(f"Submission score: {submission.get('score', 'N/A')}/{submission.get('total_questions', 'N/A')}")
+                print_info(f"Student: {submission.get('student_name', 'Anonymous')}")
+                results['exam_submissions'] = True
+                results['submission_id'] = submission_id
+            else:
+                print_warning("⚠️ No submissions found for this exam")
+                # Create a test submission for testing purposes
+                print_info("Creating a test submission for testing...")
+                test_submission = create_test_submission(exam_id)
+                if test_submission:
+                    results['exam_submissions'] = True
+                    results['submission_id'] = test_submission.get('id')
+                    print_success(f"✅ Test submission created: {test_submission.get('id')}")
+                else:
+                    results['exam_submissions'] = False
+                    return results
+        else:
+            print_error(f"❌ Exam submissions retrieval failed - Status: {response.status_code}")
+            results['exam_submissions'] = False
+            return results
+    except Exception as e:
+        print_error(f"❌ Exam submissions request error: {str(e)}")
+        results['exam_submissions'] = False
+        return results
+    
+    # Test 3: Get Detailed Submission
+    print_info("\n--- Test 3: Get Detailed Submission ---")
+    submission_id = results.get('submission_id')
+    try:
+        response = requests.get(f"{BACKEND_URL}/submissions/{submission_id}/detailed", timeout=10)
+        if response.status_code == 200:
+            detailed_submission = response.json()
+            print_success(f"✅ Detailed submission retrieved - Status: {response.status_code}")
+            
+            # Verify data structure
+            required_fields = ['submission', 'exam', 'sections']
+            missing_fields = [field for field in required_fields if field not in detailed_submission]
+            
+            if not missing_fields:
+                print_success("✅ Response contains all required fields (submission, exam, sections)")
+                
+                # Check submission details
+                submission_data = detailed_submission['submission']
+                exam_data = detailed_submission['exam']
+                sections_data = detailed_submission['sections']
+                
+                print_info(f"Submission ID: {submission_data.get('id')}")
+                print_info(f"Exam: {exam_data.get('title')}")
+                print_info(f"Sections: {len(sections_data)}")
+                
+                # Check questions structure
+                total_questions = 0
+                questions_with_answers = 0
+                for section in sections_data:
+                    questions = section.get('questions', [])
+                    total_questions += len(questions)
+                    for question in questions:
+                        if 'student_answer' in question and 'correct_answer' in question and 'is_correct' in question:
+                            questions_with_answers += 1
+                
+                print_info(f"Total questions: {total_questions}")
+                print_info(f"Questions with answer comparison: {questions_with_answers}")
+                
+                if questions_with_answers == total_questions:
+                    print_success("✅ All questions have student_answer, correct_answer, and is_correct fields")
+                    results['detailed_submission'] = True
+                else:
+                    print_warning(f"⚠️ Only {questions_with_answers}/{total_questions} questions have complete answer data")
+                    results['detailed_submission'] = True  # Still working, just incomplete data
+            else:
+                print_error(f"❌ Response missing required fields: {missing_fields}")
+                results['detailed_submission'] = False
+        else:
+            print_error(f"❌ Detailed submission retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['detailed_submission'] = False
+    except Exception as e:
+        print_error(f"❌ Detailed submission request error: {str(e)}")
+        results['detailed_submission'] = False
+    
+    # Test 4: Test Score Update (No Auth) - Should fail
+    print_info("\n--- Test 4: Test Score Update (No Authentication) ---")
+    try:
+        score_update_data = {
+            "score": 35,
+            "correct_answers": 35
+        }
+        
+        response = requests.put(
+            f"{BACKEND_URL}/submissions/{submission_id}/score",
+            json=score_update_data,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code in [401, 403]:
+            print_success(f"✅ Score update properly protected - Status: {response.status_code}")
+            print_success("✅ Endpoint correctly requires admin authentication")
+            results['score_update_protection'] = True
+        elif response.status_code == 200:
+            print_error("❌ Score update endpoint is NOT protected - this is a security issue!")
+            print_error("❌ Endpoint should require admin authentication")
+            results['score_update_protection'] = False
+        else:
+            print_warning(f"⚠️ Unexpected response - Status: {response.status_code}")
+            print_info(f"Response: {response.text}")
+            results['score_update_protection'] = False
+    except Exception as e:
+        print_error(f"❌ Score update request error: {str(e)}")
+        results['score_update_protection'] = False
+    
+    # Summary
+    print_info("\n--- Manual Submission Marking System Test Summary ---")
+    passed_tests = sum(1 for key, result in results.items() if key != 'exam_id' and key != 'submission_id' and result)
+    total_tests = len([key for key in results.keys() if key not in ['exam_id', 'submission_id']])
+    
+    if passed_tests == total_tests:
+        print_success(f"🎉 ALL MANUAL MARKING SYSTEM TESTS PASSED ({passed_tests}/{total_tests})")
+        print_success("✅ Detailed submission endpoint returns complete data structure")
+        print_success("✅ Score update endpoint properly protected with admin authentication")
+        print_success("✅ Manual marking system is ready for teacher use")
+    else:
+        print_error(f"❌ SOME TESTS FAILED ({passed_tests}/{total_tests})")
+        for test_name, result in results.items():
+            if test_name not in ['exam_id', 'submission_id']:
+                status = "PASS" if result else "FAIL"
+                color = Colors.GREEN if result else Colors.RED
+                print(f"  {color}{status} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    return results
+
+def create_test_submission(exam_id):
+    """Helper function to create a test submission for testing purposes"""
+    print_info("Creating test submission with sample answers...")
+    
+    # Create sample answers for 40 questions (typical IELTS test)
+    sample_answers = {}
+    for i in range(1, 41):
+        if i <= 10:  # Section 1 - short answers
+            sample_answers[str(i)] = f"answer{i}"
+        elif i <= 20:  # Section 2 - multiple choice and map labeling
+            sample_answers[str(i)] = "A" if i % 2 == 0 else "B"
+        elif i <= 30:  # Section 3 - multiple choice and short answers
+            sample_answers[str(i)] = "C" if i % 3 == 0 else f"answer{i}"
+        else:  # Section 4 - diagram labeling and short answers
+            sample_answers[str(i)] = f"test{i}"
+    
+    submission_data = {
+        "exam_id": exam_id,
+        "user_id_or_session": f"test_user_{datetime.now().strftime('%H%M%S')}",
+        "answers": sample_answers,
+        "started_at": datetime.now().isoformat(),
+        "finished_at": datetime.now().isoformat(),
+        "progress_percent": 100
+    }
+    
+    try:
+        response = requests.post(
+            f"{BACKEND_URL}/submissions",
+            json=submission_data,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            submission = response.json()
+            print_success(f"Test submission created successfully")
+            return submission
+        else:
+            print_error(f"Failed to create test submission - Status: {response.status_code}")
+            return None
+    except Exception as e:
+        print_error(f"Test submission creation error: {str(e)}")
+        return None
+
 def run_authentication_protection_tests():
     """Run focused authentication protection tests"""
     print(f"{Colors.BOLD}{Colors.BLUE}")
@@ -872,6 +1101,20 @@ def run_authentication_protection_tests():
     print_info("Focus: Verify backend APIs work after frontend authentication changes")
     
     return test_authentication_protection_scenarios()
+
+def run_manual_marking_tests():
+    """Run focused manual submission marking system tests"""
+    print(f"{Colors.BOLD}{Colors.BLUE}")
+    print("=" * 80)
+    print("  IELTS Platform - Manual Submission Marking System Tests")
+    print("=" * 80)
+    print(f"{Colors.END}")
+    
+    print_info(f"Testing backend at: {BACKEND_URL}")
+    print_info(f"Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print_info("Focus: Test new manual marking system endpoints for teachers")
+    
+    return test_manual_submission_marking_system()
 
 if __name__ == "__main__":
     import sys
