@@ -431,8 +431,7 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus:
-    - "Manual Submission Marking System"
+  current_focus: []
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
