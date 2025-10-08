@@ -9,13 +9,47 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const NotePopup = ({ x, y, highlightId, currentNote, onSave, onClose }) => {
   const [noteText, setNoteText] = useState(currentNote || '');
+  const [position, setPosition] = useState({ x, y, transform: 'translateX(-50%)' });
   const textareaRef = useRef(null);
+  const popupRef = useRef(null);
 
   // Update noteText when currentNote prop changes
   useEffect(() => {
     setNoteText(currentNote || '');
     console.log('NotePopup opened with note:', currentNote);
   }, [currentNote]);
+
+  // Smart positioning to keep popup on screen
+  useEffect(() => {
+    if (popupRef.current) {
+      const popupRect = popupRef.current.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      
+      let adjustedX = x;
+      let adjustedY = y;
+      let transform = 'translateX(-50%)'; // Center by default
+
+      // Check if popup goes off right edge
+      if (x + popupRect.width / 2 > windowWidth - 10) {
+        adjustedX = windowWidth - popupRect.width - 10;
+        transform = 'translateX(0)';
+      }
+      
+      // Check if popup goes off left edge
+      if (x - popupRect.width / 2 < 10) {
+        adjustedX = 10;
+        transform = 'translateX(0)';
+      }
+
+      // Check if popup goes off bottom edge
+      if (y + popupRect.height > windowHeight - 10) {
+        adjustedY = y - popupRect.height - 10; // Position above instead
+      }
+
+      setPosition({ x: adjustedX, y: adjustedY, transform });
+    }
+  }, [x, y]);
 
   useEffect(() => {
     // Focus on textarea when popup opens
