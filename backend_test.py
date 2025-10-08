@@ -2170,6 +2170,20 @@ def run_test_control_system_tests():
     
     return test_control_system_endpoints()
 
+def run_hierarchical_submission_tests():
+    """Run Enhanced Hierarchical Submission Management System Tests"""
+    print(f"{Colors.BOLD}{Colors.BLUE}")
+    print("=" * 80)
+    print("  IELTS Platform - Enhanced Hierarchical Submission Management Tests")
+    print("=" * 80)
+    print(f"{Colors.END}")
+    
+    print_info(f"Testing backend at: {BACKEND_URL}")
+    print_info(f"Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print_info("Focus: Test enhanced hierarchical submission management system backend endpoints")
+    
+    return test_enhanced_hierarchical_submission_management()
+
 if __name__ == "__main__":
     import sys
     
@@ -2183,6 +2197,8 @@ if __name__ == "__main__":
             success = run_complete_student_submission_tests()
         elif sys.argv[1] == "--test-control":
             success = run_test_control_system_tests()
+        elif sys.argv[1] == "--hierarchical":
+            success = run_hierarchical_submission_tests()
         else:
             print_error(f"Unknown test suite: {sys.argv[1]}")
             print_info("Available test suites:")
@@ -2190,10 +2206,11 @@ if __name__ == "__main__":
             print_info("  --manual-marking      : Run manual submission marking system tests")
             print_info("  --student-submission  : Run complete student & submission management tests")
             print_info("  --test-control        : Run test control system tests")
+            print_info("  --hierarchical        : Run enhanced hierarchical submission management tests")
             print_info("  (no args)             : Run all comprehensive backend tests")
             sys.exit(1)
     else:
-        # Run the test control system tests as the default for this review
-        success = run_test_control_system_tests()
+        # Run the hierarchical submission management tests as the default for this review
+        success = run_hierarchical_submission_tests()
     
     sys.exit(0 if success else 1)
