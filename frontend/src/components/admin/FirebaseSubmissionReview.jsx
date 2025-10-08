@@ -31,11 +31,12 @@ export function FirebaseSubmissionReview({ submissionId, onClose }) {
         try {
           const examData = await BackendService.getExamWithSectionsAndQuestions(submissionData.examId);
           console.log('Loaded exam data:', examData); // Debug log
-          setExam(examData);
+          setExam(examData.exam || examData);
+          setSections(examData.sections || []);
         } catch (error) {
           console.error('Error loading exam:', error);
-          // Set exam to null to show error message instead of infinite loading
-          setExam(null);
+          // Set empty arrays to show error message instead of infinite loading
+          setSections([]);
         }
       }
 
