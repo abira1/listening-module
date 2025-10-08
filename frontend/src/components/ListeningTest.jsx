@@ -392,26 +392,28 @@ export function ListeningTest({ examId, audioRef }) {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-blue-50">
-      {/* Header - Two-section design */}
-      <header className="bg-white w-full shadow-sm">
-        {/* Top Section - Logos */}
-        <div className="w-full p-4 flex justify-between items-center">
-          <div className="flex items-center gap-6">
-            <img src="https://i.postimg.cc/FKx07M5m/ILTES.png" alt="IELTS Logo" className="h-10" />
-            <img 
-              src="https://customer-assets.emergentagent.com/job_login-gateway-23/artifacts/lb58nl9d_Shah-Sultan-Logo-2.png" 
-              alt="Shah Sultan's IELTS Academy" 
-              className="h-12"
-            />
+      {/* Header - Two-section design - FIXED TO TOP */}
+      <header className="fixed top-0 left-0 right-0 bg-white w-full shadow-md z-50">
+        {/* Top Section - Logos (can be hidden) */}
+        {!isHeaderHidden && (
+          <div className="w-full p-4 flex justify-between items-center border-b border-gray-200">
+            <div className="flex items-center gap-6">
+              <img src="https://i.postimg.cc/FKx07M5m/ILTES.png" alt="IELTS Logo" className="h-10" />
+              <img 
+                src="https://customer-assets.emergentagent.com/job_login-gateway-23/artifacts/lb58nl9d_Shah-Sultan-Logo-2.png" 
+                alt="Shah Sultan's IELTS Academy" 
+                className="h-12"
+              />
+            </div>
+            <div className="flex items-center gap-6">
+              <img src="https://i.postimg.cc/0Q2DmVPS/Biritsh-Council.png" alt="British Council" className="h-8" />
+              <img src="https://i.postimg.cc/9f2GXWkJ/IDB.png" alt="IDP" className="h-8" />
+              <img src="https://i.postimg.cc/TYZVSjJ8/Cambridge-University.png" alt="Cambridge Assessment English" className="h-8" />
+            </div>
           </div>
-          <div className="flex items-center gap-6">
-            <img src="https://i.postimg.cc/0Q2DmVPS/Biritsh-Council.png" alt="British Council" className="h-8" />
-            <img src="https://i.postimg.cc/9f2GXWkJ/IDB.png" alt="IDP" className="h-8" />
-            <img src="https://i.postimg.cc/TYZVSjJ8/Cambridge-University.png" alt="Cambridge Assessment English" className="h-8" />
-          </div>
-        </div>
+        )}
         
-        {/* Bottom Section - Info Bar */}
+        {/* Bottom Section - Info Bar (always visible) */}
         <div className="w-full bg-gray-700 px-6 py-3 flex justify-between items-center text-white">
           <div className="flex items-center gap-2">
             <User className="w-5 h-5" />
@@ -437,18 +439,18 @@ export function ListeningTest({ examId, audioRef }) {
             </button>
             <button 
               className="flex items-center gap-2 px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded text-sm font-medium transition-colors"
-              title="Hide timer"
-              onClick={() => {/* Timer hide functionality can be added */}}
+              title={isHeaderHidden ? "Show header" : "Hide header"}
+              onClick={() => setIsHeaderHidden(!isHeaderHidden)}
             >
               <EyeOff className="w-4 h-4" />
-              Hide
+              {isHeaderHidden ? 'Show' : 'Hide'}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 p-6 pb-32">
+      {/* Main Content - Add padding-top to account for fixed header */}
+      <main className={`flex-1 p-6 pb-32 ${isHeaderHidden ? 'pt-20' : 'pt-36'}`}>
         <div className="max-w-5xl mx-auto">
           <div className="bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 mb-6">
             <div className="flex justify-between items-center mb-4 pb-3 border-b-2 border-gray-200">
