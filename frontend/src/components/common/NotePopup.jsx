@@ -1,0 +1,87 @@
+import React, { useState, useEffect, useRef } from 'react';
+
+/**
+ * NotePopup Component
+ * 
+ * Small popup that appears when user adds a note to highlighted text.
+ * Allows typing and saving notes associated with specific highlights.
+ */
+
+const NotePopup = ({ x, y, highlightId, currentNote, onSave, onClose }) => {
+  const [noteText, setNoteText] = useState(currentNote || '');
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    // Focus on textarea when popup opens
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, []);
+
+  const handleSave = () => {
+    onSave(highlightId, noteText);
+  };
+
+  const handleKeyDown = (e) => {
+    // Save on Ctrl+Enter or Cmd+Enter
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      handleSave();
+    }
+    // Close on Escape
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  return (
+    <div
+      className="note-popup fixed bg-white rounded-lg shadow-2xl border-2 border-blue-300 p-3 z-[9999]"
+      style={{
+        left: `${x}px`,
+        top: `${y}px`,
+        minWidth: '280px',
+        maxWidth: '400px',
+      }}
+    >
+      <div className="mb-2">
+        <label className="text-xs font-semibold text-gray-700 mb-1 block">
+          Add Note
+        </label>
+        <textarea
+          ref={textareaRef}
+          value={noteText}
+          onChange={(e) => setNoteText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Type your note here..."
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
+          rows="3"
+        />
+      </div>
+      
+      <div className="flex gap-2 justify-end">
+        <button
+          onClick={onClose}
+          className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSave}
+          className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors"
+        >
+          Save Note
+        </button>
+      </div>
+
+      {currentNote && (
+        <div className="mt-2 pt-2 border-t border-gray-200">
+          <p className="text-xs text-gray-500 italic">
+            Tip: Press Ctrl+Enter to save quickly
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default NotePopup;
