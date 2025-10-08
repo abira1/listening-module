@@ -7,6 +7,7 @@ import { AdminRouter } from './components/admin/AdminRouter';
 import { AuthProvider } from './contexts/AuthContext';
 import { StudentHome } from './components/student/StudentHome';
 import { CompleteProfile } from './components/student/CompleteProfile';
+import { WaitingForApproval } from './components/student/WaitingForApproval';
 import { StudentDashboard } from './components/student/StudentDashboard';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/exam/:examId" element={<ExamTest />} />
             <Route path="/student" element={<StudentHome />} />
             <Route path="/complete-profile" element={<CompleteProfile />} />
+            <Route path="/waiting-approval" element={<WaitingForApproval />} />
             <Route path="/student/dashboard" element={<StudentDashboard />} />
             <Route path="/admin/*" element={<AdminRouter />} />
             <Route path="*" element={<Navigate to="/" replace />} />
