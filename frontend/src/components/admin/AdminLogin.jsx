@@ -69,11 +69,6 @@ export function AdminLogin() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Admin Login
           </h2>
-          <div className="mt-3 text-center text-sm bg-blue-50 text-blue-700 p-4 rounded-md border border-blue-100">
-            <ShieldAlert className="w-5 h-5 mx-auto mb-2" />
-            <p className="font-medium">Restricted Access</p>
-            <p className="mt-1 text-xs">Only authorized admin emails can access this panel</p>
-          </div>
         </div>
         
         {error && (
