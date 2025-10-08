@@ -12,6 +12,7 @@ export function StudentDashboard() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [attemptedExams, setAttemptedExams] = useState(new Set());
+  const [examStatuses, setExamStatuses] = useState({});
 
   useEffect(() => {
     if (!authLoading && !user) {
