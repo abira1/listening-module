@@ -131,8 +131,22 @@ sudo supervisorctl restart all
 
 ### Admin Access
 
-- Navigate to `/admin/login`
-- Default credentials: `admin@example.com` / `password`
+**Authentication Method:** Firebase Google OAuth with Email Whitelist
+
+**Access URL:** `/admin/login` or `/admin`
+
+**Authorized Admin Emails:**
+- aminulislam004474@gmail.com
+- shahsultanweb@gmail.com
+
+**How to Access:**
+1. Navigate to `/admin` or `/admin/login`
+2. Click "Sign in with Google"
+3. Select your Google account
+4. If your email is in the whitelist, you'll be granted admin access
+5. If not authorized, you'll be redirected to the homepage
+
+**Note:** Only users with whitelisted emails can access the admin panel. All other users will be denied access.
 
 ### Creating a New Test
 
