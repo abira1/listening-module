@@ -174,7 +174,14 @@ export function SubmissionManagement() {
         firebaseData: firebaseSubmission
       });
       
-      setNewScore(firebaseSubmission.score || 0);
+      // Load existing marks if result was already published
+      const existingMarks = firebaseSubmission.questionMarks || {};
+      setQuestionMarks(existingMarks);
+      
+      // Calculate score from existing marks
+      const correctCount = Object.values(existingMarks).filter(mark => mark === 'correct').length;
+      setCalculatedScore(correctCount);
+      
       setView('review');
       setLoading(false);
     } catch (error) {
