@@ -1,0 +1,324 @@
+import React, { useState, useEffect } from 'react';
+import { X, CheckCircle, XCircle, Edit2, Save, AlertCircle, Calendar, User, Award } from 'lucide-react';
+import FirebaseAuthService from '../../services/FirebaseAuthService';
+import { BackendService } from '../../services/BackendService';
+
+export function FirebaseSubmissionReview({ submissionId, onClose }) {
+  const [submission, setSubmission] = useState(null);
+  const [exam, setExam] = useState(null);
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editedScore, setEditedScore] = useState(0);
+
+  useEffect(() => {
+    loadSubmissionDetails();
+  }, [submissionId]);
+
+  const loadSubmissionDetails = async () => {
+    try {
+      setLoading(true);
+      
+      // Load submission from Firebase
+      const submissionData = await FirebaseAuthService.getSubmission(submissionId);
+      setSubmission(submissionData);
+      setEditedScore(submissionData.score || 0);
+
+      // Load exam details
+      if (submissionData.examId) {
+        try {
+          const examData = await BackendService.getFullExam(submissionData.examId);
+          setExam(examData);
+        } catch (error) {
+          console.error('Error loading exam:', error);
+        }
+      }
+
+      // Load student details
+      if (submissionData.studentUid) {
+        try {
+          const studentData = await FirebaseAuthService.getStudentProfile(submissionData.studentUid);
+          setStudent(studentData);
+        } catch (error) {
+          console.error('Error loading student:', error);
+        }
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading submission details:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleSaveScore = async () => {
+    try {
+      setSaving(true);
+      await FirebaseAuthService.updateSubmissionScore(submissionId, editedScore);
+      
+      // Reload to reflect changes
+      await loadSubmissionDetails();
+      setEditMode(false);
+      setSaving(false);
+      
+      alert('Score updated successfully!');
+    } catch (error) {
+      console.error('Error saving score:', error);
+      alert('Failed to save score. Please try again.');
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-8 max-w-4xl w-full mx-4">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading submission details...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!submission) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-8 max-w-4xl w-full mx-4">
+          <div className="text-center text-red-600">
+            <AlertCircle className="w-12 h-12 mx-auto mb-4" />
+            <p>Failed to load submission details</p>
+            <button
+              onClick={onClose}
+              className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const percentage = submission.totalQuestions
+    ? Math.round((submission.score / submission.totalQuestions) * 100)
+    : 0;
+  const isPassed = percentage >= 60;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white rounded-lg max-w-5xl w-full my-8">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10 rounded-t-lg">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Submission Review</h2>
+            <p className="text-sm text-gray-600 mt-1">
+              {submission.studentName} - {submission.examTitle}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Score Summary */}
+        <div className="p-6 bg-gray-50 border-b">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-white rounded-lg p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <User className="w-4 h-4 text-gray-400" />
+                <p className="text-sm text-gray-600">Student</p>
+              </div>
+              <p className="font-semibold text-gray-900">{submission.studentName || 'Unknown'}</p>
+              <p className="text-xs text-gray-500">{submission.studentEmail || 'N/A'}</p>
+            </div>
+
+            <div className="bg-white rounded-lg p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <Calendar className="w-4 h-4 text-gray-400" />
+                <p className="text-sm text-gray-600">Submitted</p>
+              </div>
+              <p className="font-semibold text-gray-900">
+                {new Date(submission.createdAt).toLocaleDateString()}
+              </p>
+              <p className="text-xs text-gray-500">
+                {new Date(submission.createdAt).toLocaleTimeString()}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg p-4 shadow-sm">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4 text-gray-400" />
+                  <p className="text-sm text-gray-600">Score</p>
+                </div>
+                {!editMode && (
+                  <button
+                    onClick={() => setEditMode(true)}
+                    className="p-1 hover:bg-gray-100 rounded transition-colors"
+                    title="Edit score"
+                  >
+                    <Edit2 className="w-4 h-4 text-blue-600" />
+                  </button>
+                )}
+              </div>
+              {editMode ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    value={editedScore}
+                    onChange={(e) => setEditedScore(parseInt(e.target.value) || 0)}
+                    className="w-20 px-2 py-1 border border-blue-500 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    min="0"
+                    max={submission.totalQuestions}
+                  />
+                  <span className="text-sm text-gray-600">/ {submission.totalQuestions}</span>
+                </div>
+              ) : (
+                <p className="text-2xl font-bold text-gray-900">
+                  {submission.score}/{submission.totalQuestions}
+                </p>
+              )}
+            </div>
+
+            <div className="bg-white rounded-lg p-4 shadow-sm">
+              <p className="text-sm text-gray-600 mb-2">Percentage</p>
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div
+                      className={`h-3 rounded-full transition-all ${
+                        isPassed ? 'bg-green-600' : 'bg-red-600'
+                      }`}
+                      style={{ width: `${Math.min(percentage, 100)}%` }}
+                    />
+                  </div>
+                </div>
+                <span className="text-xl font-bold text-gray-900">{percentage}%</span>
+              </div>
+              <div className="mt-2">
+                <span
+                  className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                    isPassed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}
+                >
+                  {isPassed ? (
+                    <>
+                      <CheckCircle className="w-3 h-3" />
+                      Passed
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="w-3 h-3" />
+                      Failed
+                    </>
+                  )}
+                </span>
+                {submission.manuallyGraded && (
+                  <span className="ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                    <Edit2 className="w-3 h-3" />
+                    Manual
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {editMode && (
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  setEditMode(false);
+                  setEditedScore(submission.score || 0);
+                }}
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveScore}
+                disabled={saving}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                <Save className="w-4 h-4" />
+                {saving ? 'Saving...' : 'Save Score'}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Student Answers */}
+        <div className="p-6 max-h-96 overflow-y-auto">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Student Answers</h3>
+          
+          {submission.answers && Object.keys(submission.answers).length > 0 ? (
+            <div className="space-y-3">
+              {Object.entries(submission.answers).map(([questionIndex, answer]) => (
+                <div
+                  key={questionIndex}
+                  className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-700 mb-1">
+                        Question {questionIndex}
+                      </p>
+                      <p className="text-sm text-gray-900">
+                        <span className="font-medium">Answer:</span>{' '}
+                        {answer || <span className="text-gray-400 italic">Not answered</span>}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              <p>No answer details available</p>
+            </div>
+          )}
+        </div>
+
+        {/* Additional Info */}
+        {(submission.startedAt || submission.finishedAt) && (
+          <div className="p-6 bg-gray-50 border-t">
+            <h3 className="text-sm font-semibold text-gray-700 mb-3">Timing Information</h3>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              {submission.startedAt && (
+                <div>
+                  <p className="text-gray-600">Started At:</p>
+                  <p className="text-gray-900 font-medium">
+                    {new Date(submission.startedAt).toLocaleString()}
+                  </p>
+                </div>
+              )}
+              {submission.finishedAt && (
+                <div>
+                  <p className="text-gray-600">Finished At:</p>
+                  <p className="text-gray-900 font-medium">
+                    {new Date(submission.finishedAt).toLocaleString()}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Footer */}
+        <div className="flex justify-end gap-2 p-6 border-t">
+          <button
+            onClick={onClose}
+            className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
