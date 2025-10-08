@@ -1,15 +1,21 @@
 # IELTS Listening Test Platform
 
-A comprehensive web application for administering IELTS Listening tests with audio playback, multiple question types, and automated submission tracking.
+A comprehensive web application for administering IELTS Listening tests with Firebase authentication, audio playback, multiple question types, and automated submission tracking.
 
 ## 🎯 Features
+
+- **Firebase Authentication**
+  - Google OAuth for students
+  - Admin access via email whitelist
+  - Profile completion flow
+  - Student dashboard with progress tracking
 
 - **Full-Featured Listening Test Interface**
   - Audio playback with automatic timing (31:24 + 2 min review)
   - Real-time countdown timer
   - Section-based navigation
   - Progress tracking
-  - Answer submission to database
+  - Answer submission to Firebase Realtime Database
 
 - **Multiple Question Types**
   - Short answer / Fill-in-the-blank
@@ -17,12 +23,14 @@ A comprehensive web application for administering IELTS Listening tests with aud
   - Map labeling with images
   - Diagram labeling with images
 
-- **Admin Panel**
+- **Admin Panel** (Restricted Access)
   - Create and manage exams
   - Upload audio files (local or URL)
   - Question management
   - Publish/unpublish tests
   - View submissions
+  - Student management
+  - **Admin Emails**: aminulislam004474@gmail.com, shahsultanweb@gmail.com
 
 - **Audio File Management**
   - Local file uploads stored in `/listening_tracks`
