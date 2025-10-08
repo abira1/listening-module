@@ -167,8 +167,13 @@ const TextHighlighter = ({ children, enabled = true }) => {
 
   // Add note to highlight
   const addNote = useCallback((highlightId) => {
-    const highlight = highlights.find(h => h.id === highlightId);
-    if (!highlight) return;
+    const highlight = highlightsRef.current.find(h => h.id === highlightId);
+    if (!highlight) {
+      console.error('Highlight not found for adding note:', highlightId);
+      return;
+    }
+
+    console.log('Adding note to highlight:', highlightId, 'Current note:', highlight.note);
 
     const rect = highlight.element.getBoundingClientRect();
     setNotePopup({
@@ -179,7 +184,7 @@ const TextHighlighter = ({ children, enabled = true }) => {
     });
 
     setContextMenu(null);
-  }, [highlights]);
+  }, []);
 
   // Save note
   const saveNote = useCallback((highlightId, noteText) => {
