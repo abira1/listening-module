@@ -79,10 +79,12 @@ const NotePopup = ({ x, y, highlightId, currentNote, onSave, onClose }) => {
 
   return (
     <div
+      ref={popupRef}
       className="note-popup fixed bg-white rounded-lg shadow-2xl border-2 border-blue-300 p-3 z-[9999]"
       style={{
-        left: `${x}px`,
-        top: `${y}px`,
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        transform: position.transform,
         minWidth: '280px',
         maxWidth: '400px',
       }}
