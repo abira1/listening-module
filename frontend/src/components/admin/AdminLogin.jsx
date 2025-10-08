@@ -21,16 +21,8 @@ export function AdminLogin() {
     setError('');
 
     try {
-      const userData = await loginWithGoogle();
-      
-      // Check if user is admin
-      if (!userData.isAdmin) {
-        setError('Access Denied: Your email is not authorized for admin access.');
-        setTimeout(() => {
-          navigate('/');
-        }, 3000);
-      }
-      // If admin, useEffect will handle navigation
+      await loginWithGoogle();
+      // useEffect will handle navigation if successful
     } catch (err) {
       console.error('Admin login error:', err);
       setError(err.message || 'Failed to sign in. Please try again.');
