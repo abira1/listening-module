@@ -61,6 +61,9 @@ class ExamUpdate(BaseModel):
     audio_source_method: Optional[str] = None
     loop_audio: Optional[bool] = None
     published: Optional[bool] = None
+    is_active: Optional[bool] = None
+    started_at: Optional[str] = None
+    stopped_at: Optional[str] = None
 
 class Exam(BaseModel):
     model_config = ConfigDict(extra="ignore")
