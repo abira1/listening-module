@@ -1359,19 +1359,22 @@ def test_control_system_endpoints():
     
     return results
 
-def test_enhanced_hierarchical_submission_management():
-    """Test Enhanced Hierarchical Submission Management System Backend Endpoints"""
-    print_test_header("Enhanced Hierarchical Submission Management System Tests")
+def test_hierarchical_submission_management_fix():
+    """Test Fixed Hierarchical Submission Management System - Detailed Answer Sheet View"""
+    print_test_header("Fixed Hierarchical Submission Management System - Detailed Answer Sheet View")
     
-    print_info("Testing the enhanced hierarchical submission management system backend endpoints:")
-    print_info("Level 1 - Tests List: GET /api/exams/published")
-    print_info("Level 2 - Students List: GET /api/exams/{exam_id}/submissions")
-    print_info("Level 3 - Answer Review: GET /api/submissions/{submission_id}/detailed")
-    print_info("Score Update: PUT /api/submissions/{submission_id}/score (protected)")
-    print_info("Publish Single Submission: PUT /api/admin/submissions/{submission_id}/publish (protected)")
+    print_info("Testing the fixed hierarchical submission management system as per review request:")
+    print_info("Context: Fixed issue where clicking on student was showing loading and returning to student list")
+    print_info("System now fetches submission data from Firebase and exam structure from backend")
+    print_info("")
+    print_info("Test Scenarios:")
+    print_info("1. Get Full Exam Data Endpoint - GET /api/exams/{exam_id}/full")
+    print_info("2. Verify Question Structure (40 questions with proper indexing)")
+    print_info("3. Firebase Submission Access (data structure compatibility)")
+    print_info("")
     
     results = {}
-    exam_id = "ielts-listening-practice-test-1"  # Use the IELTS exam ID as specified
+    exam_id = "ielts-listening-practice-test-1"  # Specific exam ID from review request
     
     # Test 1: Published Exams Endpoint (Level 1 - Tests List)
     print_info("\n--- Test 1: Published Exams Endpoint (Level 1 - Tests List) ---")
