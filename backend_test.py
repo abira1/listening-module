@@ -1607,12 +1607,15 @@ if __name__ == "__main__":
             success = run_authentication_protection_tests()
         elif sys.argv[1] == "--manual-marking":
             success = run_manual_marking_tests()
+        elif sys.argv[1] == "--student-submission":
+            success = run_complete_student_submission_tests()
         else:
             print_error(f"Unknown test suite: {sys.argv[1]}")
             print_info("Available test suites:")
-            print_info("  --auth-protection  : Run authentication protection tests")
-            print_info("  --manual-marking   : Run manual submission marking system tests")
-            print_info("  (no args)          : Run all comprehensive backend tests")
+            print_info("  --auth-protection     : Run authentication protection tests")
+            print_info("  --manual-marking      : Run manual submission marking system tests")
+            print_info("  --student-submission  : Run complete student & submission management tests")
+            print_info("  (no args)             : Run all comprehensive backend tests")
             sys.exit(1)
     else:
         success = run_all_tests()
