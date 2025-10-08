@@ -119,7 +119,11 @@ export function TestManagement() {
 
   const handleStartTest = async (testId) => {
     try {
-      const updatedExam = await BackendService.startExam(testId);
+      if (!user?.email) {
+        showToast('Admin email not found. Please login again.', 'error');
+        return;
+      }
+      const updatedExam = await BackendService.startExam(testId, user.email);
       if (updatedExam) {
         setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_active: true, started_at: updatedExam.started_at } : exam));
         showToast('Test started successfully! Students can now take the test.', 'success');
@@ -133,7 +137,11 @@ export function TestManagement() {
   const handleStopTest = async (testId) => {
     if (window.confirm('Are you sure you want to stop this test? Students will no longer be able to take it.')) {
       try {
-        const updatedExam = await BackendService.stopExam(testId);
+        if (!user?.email) {
+          showToast('Admin email not found. Please login again.', 'error');
+          return;
+        }
+        const updatedExam = await BackendService.stopExam(testId, user.email);
         if (updatedExam) {
           setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_active: false, stopped_at: updatedExam.stopped_at } : exam));
           showToast('Test stopped successfully!', 'success');
