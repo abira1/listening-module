@@ -1028,6 +1028,114 @@ async def delete_student(
     
     return {"message": "Student deleted successfully"}
 
+# Test Control Endpoints (Admin only)
+@api_router.put("/admin/exams/{exam_id}/start")
+async def start_exam(
+    exam_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Admin only: Start an exam - enables students to take the test"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    AuthService.require_admin(user, ADMIN_EMAILS)
+    
+    try:
+        # Check if exam exists
+        exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+        if not exam:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        # Update exam status to active
+        now = get_timestamp()
+        result = await db.exams.update_one(
+            {"id": exam_id},
+            {
+                "$set": {
+                    "is_active": True,
+                    "started_at": now,
+                    "stopped_at": None,
+                    "updated_at": now
+                }
+            }
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        # Return updated exam
+        updated_exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+        return Exam(**updated_exam)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error starting exam: {e}")
+        raise HTTPException(status_code=500, detail="Failed to start exam")
+
+@api_router.put("/admin/exams/{exam_id}/stop")
+async def stop_exam(
+    exam_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Admin only: Stop an exam - disables students from taking the test"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    AuthService.require_admin(user, ADMIN_EMAILS)
+    
+    try:
+        # Check if exam exists
+        exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+        if not exam:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        # Update exam status to inactive
+        now = get_timestamp()
+        result = await db.exams.update_one(
+            {"id": exam_id},
+            {
+                "$set": {
+                    "is_active": False,
+                    "stopped_at": now,
+                    "updated_at": now
+                }
+            }
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        # Return updated exam
+        updated_exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+        return Exam(**updated_exam)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error stopping exam: {e}")
+        raise HTTPException(status_code=500, detail="Failed to stop exam")
+
+@api_router.get("/exams/{exam_id}/status")
+async def get_exam_status(exam_id: str):
+    """Public endpoint: Get exam status for polling"""
+    try:
+        exam = await db.exams.find_one(
+            {"id": exam_id}, 
+            {"_id": 0, "is_active": 1, "started_at": 1, "stopped_at": 1, "published": 1}
+        )
+        if not exam:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        return {
+            "exam_id": exam_id,
+            "is_active": exam.get("is_active", False),
+            "started_at": exam.get("started_at"),
+            "stopped_at": exam.get("stopped_at"),
+            "published": exam.get("published", False)
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching exam status: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch exam status")
+
 # Legacy status endpoints
 @api_router.get("/")
 async def root():
