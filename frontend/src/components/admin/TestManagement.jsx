@@ -115,6 +115,34 @@ export function TestManagement() {
     }
   };
 
+  const handleStartTest = async (testId) => {
+    try {
+      const updatedExam = await BackendService.startExam(testId);
+      if (updatedExam) {
+        setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_active: true, started_at: updatedExam.started_at } : exam));
+        showToast('Test started successfully! Students can now take the test.', 'success');
+      }
+    } catch (error) {
+      console.error('Error starting test:', error);
+      showToast(error.message || 'Failed to start test', 'error');
+    }
+  };
+
+  const handleStopTest = async (testId) => {
+    if (window.confirm('Are you sure you want to stop this test? Students will no longer be able to take it.')) {
+      try {
+        const updatedExam = await BackendService.stopExam(testId);
+        if (updatedExam) {
+          setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_active: false, stopped_at: updatedExam.stopped_at } : exam));
+          showToast('Test stopped successfully!', 'success');
+        }
+      } catch (error) {
+        console.error('Error stopping test:', error);
+        showToast(error.message || 'Failed to stop test', 'error');
+      }
+    }
+  };
+
   return (
     <div>
       <ToastContainer />
