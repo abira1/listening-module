@@ -219,6 +219,53 @@ You can also use external audio URLs instead of uploading:
 2. Paste direct URL to audio file
 3. URL is validated before saving
 
+## 👥 Student Authentication & Access
+
+### Student Login
+
+**Authentication Method:** Firebase Google OAuth
+
+**Access URL:** `/student` or click "Login to Access Exams" on homepage
+
+**Login Flow:**
+1. Visit homepage or navigate to `/student`
+2. Click "Login with Google"
+3. Authenticate with your Google account
+4. Complete profile (first-time users only)
+5. Access student dashboard
+
+### Profile Completion (First-Time Users)
+
+New students must complete their profile with:
+- Full Name
+- Email (auto-filled from Google)
+- Phone Number *
+- Institution *
+- Department (optional)
+- Roll Number / Student ID (optional)
+
+\* Required fields
+
+### Student Dashboard Features
+
+Once authenticated, students can:
+- View all available exams
+- Start new exams
+- View submission history with scores
+- Track progress and performance
+- Access exam results with detailed breakdowns
+
+### Taking an Exam
+
+1. Login to student account
+2. Select an exam from dashboard or homepage
+3. Click "Start Test"
+4. Listen to audio and answer questions
+5. Submit when complete
+6. View instant score and feedback
+
+**Note:** Each student can attempt an exam only once. The system tracks attempts to maintain test integrity.
+
 ## 🔧 API Endpoints
 
 ### Exams
