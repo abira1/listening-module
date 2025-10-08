@@ -32,13 +32,15 @@ export function StudentDashboard() {
       const publishedExams = await BackendService.getPublishedExams();
       setExams(publishedExams);
 
-      // Load student's submissions
-      const studentSubmissions = await AuthService.getMySubmissions();
-      setSubmissions(studentSubmissions);
+      // Load student's submissions from Firebase
+      if (user?.uid) {
+        const studentSubmissions = await FirebaseAuthService.getStudentSubmissions(user.uid);
+        setSubmissions(studentSubmissions);
 
-      // Create set of attempted exam IDs
-      const attemptedIds = new Set(studentSubmissions.map(sub => sub.exam_id));
-      setAttemptedExams(attemptedIds);
+        // Create set of attempted exam IDs
+        const attemptedIds = new Set(studentSubmissions.map(sub => sub.examId));
+        setAttemptedExams(attemptedIds);
+      }
 
       setLoading(false);
     } catch (error) {
