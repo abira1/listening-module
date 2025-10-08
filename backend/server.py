@@ -476,12 +476,65 @@ async def get_exam_with_sections_and_questions(exam_id: str):
 
 # Submission Routes
 @api_router.post("/submissions", response_model=Submission)
-async def create_submission(submission_data: SubmissionCreate):
+async def create_submission(
+    submission_data: SubmissionCreate,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
     try:
         # Check if exam exists
         exam = await db.exams.find_one({"id": submission_data.exam_id}, {"_id": 0})
         if not exam:
             raise HTTPException(status_code=404, detail="Exam not found")
+        
+        # Get current user if authenticated
+        user = await AuthService.get_current_user(request, db, session_token)
+        
+        # Use authenticated user ID or provided session ID
+        user_id = user["id"] if user else (submission_data.user_id_or_session or f"anonymous_{generate_id()}")
+        
+        # Check if student has already submitted this exam
+        if user:
+            existing_submission = await db.submissions.find_one({
+                "exam_id": submission_data.exam_id,
+                "user_id_or_session": user_id
+            })
+            if existing_submission:
+                raise HTTPException(
+                    status_code=400,
+                    detail="You have already submitted this exam. Each student can attempt an exam only once."
+                )
+        
+        # Get all questions for auto-grading
+        sections = await db.sections.find({"exam_id": submission_data.exam_id}, {"_id": 0}).to_list(1000)
+        all_questions = []
+        for section in sections:
+            questions = await db.questions.find({"section_id": section["id"]}, {"_id": 0}).to_list(1000)
+            all_questions.extend(questions)
+        
+        # Auto-grade submission
+        correct_count = 0
+        total_questions = len(all_questions)
+        
+        for question in all_questions:
+            question_index = str(question["index"])
+            student_answer = submission_data.answers.get(question_index, "").strip().lower()
+            
+            # Check if question has answer_key
+            if "answer_key" in question.get("payload", {}):
+                correct_answer = str(question["payload"]["answer_key"]).strip().lower()
+                
+                # For short answer questions, do case-insensitive comparison
+                if question["type"] in ["short_answer", "diagram_labeling"]:
+                    if student_answer == correct_answer:
+                        correct_count += 1
+                # For multiple choice and map labeling, exact match
+                elif question["type"] in ["multiple_choice", "map_labeling"]:
+                    if student_answer == correct_answer:
+                        correct_count += 1
+        
+        # Calculate score (out of total questions)
+        score = correct_count if total_questions > 0 else 0
         
         submission_id = generate_id()
         now = get_timestamp()
@@ -489,12 +542,17 @@ async def create_submission(submission_data: SubmissionCreate):
         new_submission = {
             "id": submission_id,
             "exam_id": submission_data.exam_id,
-            "user_id_or_session": submission_data.user_id_or_session or f"anonymous_{generate_id()}",
+            "user_id_or_session": user_id,
             "started_at": submission_data.started_at or now,
             "finished_at": submission_data.finished_at or now,
             "answers": submission_data.answers,
             "progress_percent": submission_data.progress_percent,
             "last_playback_time": 0,
+            "score": score,
+            "total_questions": total_questions,
+            "correct_answers": correct_count,
+            "student_name": user.get("full_name", "Anonymous") if user else "Anonymous",
+            "student_email": user.get("email", "") if user else ""
         }
         
         await db.submissions.insert_one({**new_submission, "_id": submission_id})
