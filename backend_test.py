@@ -1869,6 +1869,20 @@ def run_complete_student_submission_tests():
     
     return test_complete_student_submission_management()
 
+def run_test_control_system_tests():
+    """Run Test Control System Tests"""
+    print(f"{Colors.BOLD}{Colors.BLUE}")
+    print("=" * 80)
+    print("  IELTS Platform - Test Control System Implementation Tests")
+    print("=" * 80)
+    print(f"{Colors.END}")
+    
+    print_info(f"Testing backend at: {BACKEND_URL}")
+    print_info(f"Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print_info("Focus: Test newly implemented test control system endpoints")
+    
+    return test_control_system_endpoints()
+
 if __name__ == "__main__":
     import sys
     
@@ -1880,15 +1894,19 @@ if __name__ == "__main__":
             success = run_manual_marking_tests()
         elif sys.argv[1] == "--student-submission":
             success = run_complete_student_submission_tests()
+        elif sys.argv[1] == "--test-control":
+            success = run_test_control_system_tests()
         else:
             print_error(f"Unknown test suite: {sys.argv[1]}")
             print_info("Available test suites:")
             print_info("  --auth-protection     : Run authentication protection tests")
             print_info("  --manual-marking      : Run manual submission marking system tests")
             print_info("  --student-submission  : Run complete student & submission management tests")
+            print_info("  --test-control        : Run test control system tests")
             print_info("  (no args)             : Run all comprehensive backend tests")
             sys.exit(1)
     else:
-        success = run_all_tests()
+        # Run the test control system tests as the default for this review
+        success = run_test_control_system_tests()
     
     sys.exit(0 if success else 1)
