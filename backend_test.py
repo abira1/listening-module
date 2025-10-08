@@ -859,6 +859,27 @@ def run_all_tests():
         print_error(f"❌ {failed_tests} test(s) failed - Backend needs attention")
         return False
 
+def run_authentication_protection_tests():
+    """Run focused authentication protection tests"""
+    print(f"{Colors.BOLD}{Colors.BLUE}")
+    print("=" * 80)
+    print("  IELTS Platform - Authentication Protection Implementation Tests")
+    print("=" * 80)
+    print(f"{Colors.END}")
+    
+    print_info(f"Testing backend at: {BACKEND_URL}")
+    print_info(f"Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print_info("Focus: Verify backend APIs work after frontend authentication changes")
+    
+    return test_authentication_protection_scenarios()
+
 if __name__ == "__main__":
-    success = run_all_tests()
+    import sys
+    
+    # Check if we want to run focused authentication tests
+    if len(sys.argv) > 1 and sys.argv[1] == "--auth-protection":
+        success = run_authentication_protection_tests()
+    else:
+        success = run_all_tests()
+    
     sys.exit(0 if success else 1)
