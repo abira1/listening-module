@@ -402,8 +402,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "IELTS Listening Practice Test 1"
-    - "Submission API Endpoints"
+    - "Homepage Authentication Protection"
+    - "Google OAuth Authentication System"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
