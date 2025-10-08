@@ -17,10 +17,11 @@ export const AuthProvider = ({ children }) => {
       const userData = await AuthService.getCurrentUser();
       setUser(userData);
       setIsAuthenticated(true);
+      setLoading(false);
     } catch (error) {
+      // Not authenticated - this is normal, don't log as error
       setUser(null);
       setIsAuthenticated(false);
-    } finally {
       setLoading(false);
     }
   };
