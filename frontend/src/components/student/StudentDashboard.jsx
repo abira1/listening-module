@@ -70,6 +70,40 @@ export function StudentDashboard() {
     }
   };
 
+  // Real-time listener for submissions updates
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    // Set up Firebase real-time listener for student's submissions
+    const submissionsRef = ref(database, 'submissions');
+    
+    const unsubscribe = onValue(submissionsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const submissionsObj = snapshot.val();
+        // Filter submissions for this student
+        const studentSubmissions = Object.keys(submissionsObj)
+          .filter(key => submissionsObj[key].studentUid === user.uid)
+          .map(key => ({
+            id: key,
+            ...submissionsObj[key]
+          }))
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        setSubmissions(studentSubmissions);
+
+        // Update attempted exams set
+        const attemptedIds = new Set(studentSubmissions.map(sub => sub.examId));
+        setAttemptedExams(attemptedIds);
+      }
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      off(submissionsRef);
+      unsubscribe();
+    };
+  }, [user?.uid]);
+
   // Poll exam statuses every 3 seconds
   useEffect(() => {
     if (exams.length === 0) return;
