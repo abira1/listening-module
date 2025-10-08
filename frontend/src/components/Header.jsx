@@ -28,23 +28,9 @@ export function Header() {
           />
         </Link>
         
-        {!isAuthenticated ? (
-          <>
-            <Link
-              to="/student"
-              className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition-colors"
-            >
-              Student Login
-            </Link>
-            <Link
-              to="/admin"
-              className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Admin Panel
-            </Link>
-          </>
-        ) : (
-          <div className="flex items-center gap-3">
+        {/* Show user info and logout when authenticated */}
+        {isAuthenticated && (
+          <div className="flex items-center gap-3 ml-4">
             <Link
               to="/student/dashboard"
               className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
