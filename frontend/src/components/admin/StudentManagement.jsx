@@ -10,6 +10,7 @@ export function StudentManagement() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('students'); // 'students' or 'submissions'
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [reviewingSubmission, setReviewingSubmission] = useState(null);
 
   useEffect(() => {
     loadData();
