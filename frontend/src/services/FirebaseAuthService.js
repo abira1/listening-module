@@ -312,6 +312,11 @@ class FirebaseAuthService {
    */
   async updateSubmissionWithMarks(submissionId, calculatedScore, questionMarks) {
     try {
+      console.log('[FirebaseAuth] updateSubmissionWithMarks called');
+      console.log('[FirebaseAuth] Submission ID:', submissionId);
+      console.log('[FirebaseAuth] Score:', calculatedScore);
+      console.log('[FirebaseAuth] Marks:', questionMarks);
+      
       const submissionRef = ref(database, `submissions/${submissionId}`);
       const updateData = {
         score: calculatedScore,
@@ -320,10 +325,15 @@ class FirebaseAuthService {
         updatedAt: new Date().toISOString()
       };
       
+      console.log('[FirebaseAuth] Updating Firebase with data:', updateData);
       await update(submissionRef, updateData);
+      console.log('[FirebaseAuth] Firebase update successful');
+      
       return updateData;
     } catch (error) {
-      console.error('Error updating submission with marks:', error);
+      console.error('[FirebaseAuth] Error updating submission with marks:', error);
+      console.error('[FirebaseAuth] Error code:', error.code);
+      console.error('[FirebaseAuth] Error message:', error.message);
       throw error;
     }
   }
@@ -333,16 +343,24 @@ class FirebaseAuthService {
    */
   async publishSubmission(submissionId) {
     try {
+      console.log('[FirebaseAuth] publishSubmission called');
+      console.log('[FirebaseAuth] Submission ID:', submissionId);
+      
       const submissionRef = ref(database, `submissions/${submissionId}`);
       const updateData = {
         isPublished: true,
         publishedAt: new Date().toISOString()
       };
       
+      console.log('[FirebaseAuth] Publishing with data:', updateData);
       await update(submissionRef, updateData);
+      console.log('[FirebaseAuth] Publish successful');
+      
       return updateData;
     } catch (error) {
-      console.error('Error publishing submission:', error);
+      console.error('[FirebaseAuth] Error publishing submission:', error);
+      console.error('[FirebaseAuth] Error code:', error.code);
+      console.error('[FirebaseAuth] Error message:', error.message);
       throw error;
     }
   }
