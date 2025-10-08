@@ -2,19 +2,22 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 export function ProgressChart({ submissions }) {
-  // Prepare data for chart - all completed tests
-  const chartData = submissions.map((submission, index) => {
-    const percentage = submission.total_questions
-      ? Math.round((submission.score / submission.total_questions) * 100)
+  // Filter only published submissions
+  const publishedSubmissions = submissions.filter(sub => sub.isPublished === true);
+  
+  // Prepare data for chart - only published completed tests
+  const chartData = publishedSubmissions.map((submission, index) => {
+    const percentage = (submission.totalQuestions || submission.total_questions)
+      ? Math.round((submission.score / (submission.totalQuestions || submission.total_questions)) * 100)
       : 0;
     
     return {
       name: `Test ${index + 1}`,
       score: submission.score || 0,
-      maxScore: submission.total_questions || 40,
+      maxScore: submission.totalQuestions || submission.total_questions || 40,
       percentage: percentage,
-      examTitle: submission.exam_title || submission.examTitle || 'Unknown Exam',
-      date: submission.submitted_at || submission.finished_at || 'N/A'
+      examTitle: submission.examTitle || submission.exam_title || 'Unknown Exam',
+      date: submission.finishedAt || submission.submitted_at || submission.finished_at || 'N/A'
     };
   });
 
