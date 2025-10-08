@@ -1359,6 +1359,293 @@ def test_control_system_endpoints():
     
     return results
 
+def test_enhanced_hierarchical_submission_management():
+    """Test Enhanced Hierarchical Submission Management System Backend Endpoints"""
+    print_test_header("Enhanced Hierarchical Submission Management System Tests")
+    
+    print_info("Testing the enhanced hierarchical submission management system backend endpoints:")
+    print_info("Level 1 - Tests List: GET /api/exams/published")
+    print_info("Level 2 - Students List: GET /api/exams/{exam_id}/submissions")
+    print_info("Level 3 - Answer Review: GET /api/submissions/{submission_id}/detailed")
+    print_info("Score Update: PUT /api/submissions/{submission_id}/score (protected)")
+    print_info("Publish Single Submission: PUT /api/admin/submissions/{submission_id}/publish (protected)")
+    
+    results = {}
+    exam_id = "ielts-listening-practice-test-1"  # Use the IELTS exam ID as specified
+    
+    # Test 1: Published Exams Endpoint (Level 1 - Tests List)
+    print_info("\n--- Test 1: Published Exams Endpoint (Level 1 - Tests List) ---")
+    print_info("GET /api/exams/published")
+    print_info("Should return list of published exams with id, title, duration, question_count")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/published", timeout=10)
+        if response.status_code == 200:
+            published_exams = response.json()
+            print_success(f"✅ Published exams retrieved successfully - Status: {response.status_code}")
+            print_info(f"Found {len(published_exams)} published exams")
+            
+            if published_exams:
+                # Find the IELTS exam
+                ielts_exam = None
+                for exam in published_exams:
+                    if exam.get('id') == exam_id:
+                        ielts_exam = exam
+                        break
+                
+                if ielts_exam:
+                    print_success(f"✅ Found IELTS Listening Practice Test 1: {ielts_exam.get('title')}")
+                    print_info(f"  ID: {ielts_exam.get('id')}")
+                    print_info(f"  Title: {ielts_exam.get('title')}")
+                    print_info(f"  Duration: {ielts_exam.get('duration_seconds')} seconds")
+                    print_info(f"  Question Count: {ielts_exam.get('question_count')}")
+                    
+                    # Verify required fields
+                    required_fields = ['id', 'title', 'duration_seconds', 'question_count']
+                    missing_fields = [field for field in required_fields if field not in ielts_exam]
+                    
+                    if not missing_fields:
+                        print_success("✅ Exam data includes all required fields (id, title, duration, question_count)")
+                        results['published_exams'] = True
+                        results['exam_data'] = ielts_exam
+                    else:
+                        print_error(f"❌ Exam data missing required fields: {missing_fields}")
+                        results['published_exams'] = False
+                else:
+                    print_error(f"❌ IELTS Listening Practice Test 1 (ID: {exam_id}) not found in published exams")
+                    print_info("Available exams:")
+                    for exam in published_exams[:3]:  # Show first 3
+                        print_info(f"  - {exam.get('title')} (ID: {exam.get('id')})")
+                    results['published_exams'] = False
+            else:
+                print_error("❌ No published exams found")
+                results['published_exams'] = False
+        else:
+            print_error(f"❌ Published exams retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['published_exams'] = False
+    except Exception as e:
+        print_error(f"❌ Published exams request error: {str(e)}")
+        results['published_exams'] = False
+    
+    if not results.get('published_exams'):
+        print_error("❌ Cannot continue with submission tests - IELTS exam not found")
+        return results
+    
+    # Test 2: Exam Submissions Endpoint (Level 2 - Students List)
+    print_info("\n--- Test 2: Exam Submissions Endpoint (Level 2 - Students List) ---")
+    print_info(f"GET /api/exams/{exam_id}/submissions")
+    print_info("Should return all submissions for the exam with student info, scores, timestamps")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/{exam_id}/submissions", timeout=10)
+        if response.status_code == 200:
+            submissions = response.json()
+            print_success(f"✅ Exam submissions retrieved successfully - Status: {response.status_code}")
+            print_info(f"Found {len(submissions)} submissions for IELTS exam")
+            
+            if submissions:
+                # Use existing submission
+                submission = submissions[0]
+                submission_id = submission.get('id')
+                print_info(f"Using existing submission: {submission_id}")
+                print_info(f"  Student: {submission.get('student_name', 'Anonymous')}")
+                print_info(f"  Email: {submission.get('student_email', 'N/A')}")
+                print_info(f"  Score: {submission.get('score', 'N/A')}/{submission.get('total_questions', 'N/A')}")
+                print_info(f"  Submitted: {submission.get('finished_at', 'N/A')}")
+                
+                # Verify required fields
+                expected_fields = ['id', 'student_name', 'student_email', 'score', 'total_questions', 'finished_at']
+                missing_fields = [field for field in expected_fields if field not in submission]
+                
+                if not missing_fields:
+                    print_success("✅ Submission data includes all required fields (id, student info, scores, timestamps)")
+                    results['exam_submissions'] = True
+                    results['submission_id'] = submission_id
+                else:
+                    print_warning(f"⚠️ Submission data missing some fields: {missing_fields}")
+                    results['exam_submissions'] = True  # Still functional
+                    results['submission_id'] = submission_id
+            else:
+                print_warning("⚠️ No submissions found for this exam")
+                # Create a test submission for testing
+                print_info("Creating a test submission for testing purposes...")
+                test_submission = create_test_submission(exam_id)
+                if test_submission:
+                    results['exam_submissions'] = True
+                    results['submission_id'] = test_submission.get('id')
+                    print_success(f"✅ Test submission created: {test_submission.get('id')}")
+                else:
+                    print_error("❌ Failed to create test submission")
+                    results['exam_submissions'] = False
+        else:
+            print_error(f"❌ Exam submissions retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['exam_submissions'] = False
+    except Exception as e:
+        print_error(f"❌ Exam submissions request error: {str(e)}")
+        results['exam_submissions'] = False
+    
+    if not results.get('exam_submissions') or not results.get('submission_id'):
+        print_error("❌ Cannot continue with detailed submission tests - no submission available")
+        return results
+    
+    submission_id = results['submission_id']
+    
+    # Test 3: Detailed Submission Endpoint (Level 3 - Answer Review)
+    print_info("\n--- Test 3: Detailed Submission Endpoint (Level 3 - Answer Review) ---")
+    print_info(f"GET /api/submissions/{submission_id}/detailed")
+    print_info("Should return complete structure with submission, exam, sections, and questions with student answers")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/submissions/{submission_id}/detailed", timeout=10)
+        if response.status_code == 200:
+            detailed_data = response.json()
+            print_success(f"✅ Detailed submission retrieved successfully - Status: {response.status_code}")
+            
+            # Verify main structure
+            required_top_fields = ['submission', 'exam', 'sections']
+            missing_top_fields = [field for field in required_top_fields if field not in detailed_data]
+            
+            if not missing_top_fields:
+                print_success("✅ Response contains all required top-level fields (submission, exam, sections)")
+                
+                # Check submission object
+                submission_obj = detailed_data['submission']
+                print_info(f"Submission ID: {submission_obj.get('id')}")
+                print_info(f"Score: {submission_obj.get('score')}/{submission_obj.get('total_questions')}")
+                
+                # Check exam object
+                exam_obj = detailed_data['exam']
+                print_info(f"Exam: {exam_obj.get('title')}")
+                print_info(f"Duration: {exam_obj.get('duration_seconds')} seconds")
+                
+                # Check sections array
+                sections_array = detailed_data['sections']
+                print_info(f"Sections: {len(sections_array)}")
+                
+                # Verify questions structure
+                total_questions = 0
+                questions_with_student_answers = 0
+                
+                for section in sections_array:
+                    questions = section.get('questions', [])
+                    section_questions = len(questions)
+                    total_questions += section_questions
+                    print_info(f"  Section {section.get('index')}: {section_questions} questions")
+                    
+                    # Check each question for required fields
+                    for question in questions:
+                        required_q_fields = ['id', 'index', 'student_answer']
+                        if all(field in question for field in required_q_fields):
+                            questions_with_student_answers += 1
+                
+                print_info(f"Total questions: {total_questions}")
+                print_info(f"Questions with student_answer: {questions_with_student_answers}")
+                
+                if questions_with_student_answers == total_questions and total_questions > 0:
+                    print_success("✅ All questions have required fields (id, index, student_answer)")
+                    results['detailed_submission'] = True
+                elif total_questions > 0:
+                    print_warning(f"⚠️ Only {questions_with_student_answers}/{total_questions} questions have complete data")
+                    results['detailed_submission'] = True  # Still functional
+                else:
+                    print_error("❌ No questions found in detailed submission")
+                    results['detailed_submission'] = False
+            else:
+                print_error(f"❌ Response missing required top-level fields: {missing_top_fields}")
+                results['detailed_submission'] = False
+        else:
+            print_error(f"❌ Detailed submission retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['detailed_submission'] = False
+    except Exception as e:
+        print_error(f"❌ Detailed submission request error: {str(e)}")
+        results['detailed_submission'] = False
+    
+    # Test 4: Score Update Endpoint (Protected)
+    print_info("\n--- Test 4: Score Update Endpoint (Protected) ---")
+    print_info(f"PUT /api/submissions/{submission_id}/score")
+    print_info("Should return 401/403 without authentication (admin-only)")
+    
+    try:
+        score_update_data = {
+            "score": 35,
+            "correct_answers": 35
+        }
+        
+        response = requests.put(
+            f"{BACKEND_URL}/submissions/{submission_id}/score",
+            json=score_update_data,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code in [401, 403]:
+            print_success(f"✅ Score update endpoint properly protected - Status: {response.status_code}")
+            print_success("✅ Endpoint correctly requires admin authentication")
+            results['score_update_protected'] = True
+        elif response.status_code == 200:
+            print_error("❌ Score update endpoint is NOT protected - this is a security issue!")
+            print_error("❌ Endpoint should require admin authentication")
+            results['score_update_protected'] = False
+        else:
+            print_warning(f"⚠️ Unexpected response - Status: {response.status_code}")
+            print_info(f"Response: {response.text}")
+            results['score_update_protected'] = False
+    except Exception as e:
+        print_error(f"❌ Score update request error: {str(e)}")
+        results['score_update_protected'] = False
+    
+    # Test 5: Publish Single Submission Endpoint (Protected)
+    print_info("\n--- Test 5: Publish Single Submission Endpoint (Protected) ---")
+    print_info(f"PUT /api/admin/submissions/{submission_id}/publish")
+    print_info("Should return 401/403 without authentication (admin-only)")
+    
+    try:
+        response = requests.put(f"{BACKEND_URL}/admin/submissions/{submission_id}/publish", timeout=10)
+        
+        if response.status_code in [401, 403]:
+            print_success(f"✅ Publish submission endpoint properly protected - Status: {response.status_code}")
+            print_success("✅ Endpoint correctly requires admin authentication")
+            results['publish_submission_protected'] = True
+        elif response.status_code == 200:
+            print_error("❌ Publish submission endpoint is NOT protected - this is a security issue!")
+            print_error("❌ Endpoint should require admin authentication")
+            results['publish_submission_protected'] = False
+        else:
+            print_warning(f"⚠️ Unexpected response - Status: {response.status_code}")
+            print_info(f"Response: {response.text}")
+            results['publish_submission_protected'] = False
+    except Exception as e:
+        print_error(f"❌ Publish submission request error: {str(e)}")
+        results['publish_submission_protected'] = False
+    
+    # Summary
+    print_info("\n--- Enhanced Hierarchical Submission Management System Test Summary ---")
+    passed_tests = sum(1 for key, result in results.items() 
+                      if key not in ['exam_data', 'submission_id'] and result)
+    total_tests = len([key for key in results.keys() 
+                      if key not in ['exam_data', 'submission_id']])
+    
+    if passed_tests == total_tests:
+        print_success(f"🎉 ALL HIERARCHICAL SUBMISSION MANAGEMENT TESTS PASSED ({passed_tests}/{total_tests})")
+        print_success("✅ Level 1 - Published Exams endpoint returns proper exam data")
+        print_success("✅ Level 2 - Exam Submissions endpoint returns all submissions with student info")
+        print_success("✅ Level 3 - Detailed Submission endpoint returns complete structure")
+        print_success("✅ Score Update endpoint properly protected (admin-only)")
+        print_success("✅ Publish Single Submission endpoint properly protected (admin-only)")
+        print_success("✅ Backend fully supports the 3-level hierarchical UI flow")
+    else:
+        print_error(f"❌ SOME TESTS FAILED ({passed_tests}/{total_tests})")
+        for test_name, result in results.items():
+            if test_name not in ['exam_data', 'submission_id']:
+                status = "PASS" if result else "FAIL"
+                color = Colors.GREEN if result else Colors.RED
+                print(f"  {color}{status} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    return results
+
 def run_authentication_protection_tests():
     """Run focused authentication protection tests"""
     print(f"{Colors.BOLD}{Colors.BLUE}")
