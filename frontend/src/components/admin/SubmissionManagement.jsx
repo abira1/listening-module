@@ -230,39 +230,53 @@ export function SubmissionManagement() {
       return;
     }
 
+    setIsPublishing(true);
+    
     try {
-      setIsPublishing(true);
-      
-      console.log('Publishing result for submission:', selectedStudent.submissionId);
+      console.log('========== PUBLISHING WORKFLOW START ==========');
+      console.log('Submission ID:', selectedStudent.submissionId);
       console.log('Calculated score:', calculatedScore);
-      console.log('Question marks:', questionMarks);
+      console.log('Total questions:', submissionDetails.submission.total_questions);
+      console.log('Number of marked questions:', Object.keys(questionMarks).length);
       
       // Step 1: Save marks and calculated score to Firebase
-      console.log('Step 1: Updating submission with marks...');
-      await FirebaseAuthService.updateSubmissionWithMarks(
-        selectedStudent.submissionId,
-        calculatedScore,
-        questionMarks
-      );
-      console.log('Step 1: Success - Marks saved to Firebase');
-      
-      // Step 2: Publish to Firebase
-      console.log('Step 2: Publishing to Firebase...');
-      await FirebaseAuthService.publishSubmission(selectedStudent.submissionId);
-      console.log('Step 2: Success - Published to Firebase');
-      
-      // Step 3: Publish to backend (if it fails, continue anyway)
+      console.log('\n--- Step 1: Updating submission with marks ---');
       try {
-        console.log('Step 3: Publishing to backend...');
-        await BackendService.publishSingleSubmission(selectedStudent.submissionId);
-        console.log('Step 3: Success - Published to backend');
+        const updateResult = await FirebaseAuthService.updateSubmissionWithMarks(
+          selectedStudent.submissionId,
+          calculatedScore,
+          questionMarks
+        );
+        console.log('✅ Step 1 SUCCESS: Marks saved to Firebase', updateResult);
+      } catch (step1Error) {
+        console.error('❌ Step 1 FAILED:', step1Error);
+        throw new Error(`Failed to save marks: ${step1Error.message}`);
+      }
+      
+      // Step 2: Publish to Firebase (make result visible to student)
+      console.log('\n--- Step 2: Publishing to Firebase ---');
+      try {
+        const publishResult = await FirebaseAuthService.publishSubmission(selectedStudent.submissionId);
+        console.log('✅ Step 2 SUCCESS: Published to Firebase', publishResult);
+      } catch (step2Error) {
+        console.error('❌ Step 2 FAILED:', step2Error);
+        throw new Error(`Failed to publish: ${step2Error.message}`);
+      }
+      
+      // Step 3: Try to publish to backend (optional - won't block success)
+      console.log('\n--- Step 3: Publishing to backend (optional) ---');
+      try {
+        await BackendService.publishSingleSubmission(selectedStudent.submissionId, 'admin@example.com');
+        console.log('✅ Step 3 SUCCESS: Published to backend');
       } catch (backendError) {
-        console.warn('Backend publish failed (non-critical):', backendError);
+        console.warn('⚠️ Step 3 WARNING: Backend publish failed (non-critical)', backendError.message);
         // Continue anyway as Firebase is the primary database
       }
       
+      console.log('========== PUBLISHING WORKFLOW COMPLETE ==========\n');
+      
       // Show success message
-      alert('✅ Result published successfully! The student can now view their score.');
+      alert('✅ Result published successfully! The student can now view their score in their dashboard.');
       
       // Wait 2 seconds then redirect to student list
       setTimeout(() => {
@@ -271,13 +285,23 @@ export function SubmissionManagement() {
       }, 2000);
       
     } catch (error) {
-      console.error('Error publishing result:', error);
-      console.error('Error details:', {
-        message: error.message,
-        code: error.code,
-        stack: error.stack
-      });
-      alert(`Failed to publish result: ${error.message || 'Unknown error'}. Please check console for details.`);
+      console.error('========== PUBLISHING WORKFLOW FAILED ==========');
+      console.error('Error:', error);
+      console.error('Error message:', error.message);
+      console.error('Error code:', error.code);
+      console.error('Error stack:', error.stack);
+      
+      // More user-friendly error messages
+      let errorMessage = 'Failed to publish result. ';
+      if (error.code === 'PERMISSION_DENIED') {
+        errorMessage += 'Permission denied. Please ensure you are logged in as an admin.';
+      } else if (error.message) {
+        errorMessage += error.message;
+      } else {
+        errorMessage += 'Please try again or check the browser console for details.';
+      }
+      
+      alert(errorMessage);
       setIsPublishing(false);
     }
   };
