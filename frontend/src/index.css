@@ -84,3 +84,75 @@ code {
     @apply bg-background text-foreground;
     }
 }
+
+
+/* Text Highlighting Styles */
+.highlighted-text {
+  background-color: #fef08a !important; /* Tailwind yellow-200 */
+  padding: 2px 0;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.highlighted-text:hover {
+  background-color: #fde047 !important; /* Tailwind yellow-300 */
+}
+
+.highlighted-text[data-has-note="true"]::after {
+  content: "📝";
+  font-size: 10px;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Prevent text selection issues with highlighting */
+.text-highlighter-container {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+/* Context menu animation */
+.context-menu {
+  animation: fadeIn 0.15s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Note popup animation */
+.note-popup {
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
