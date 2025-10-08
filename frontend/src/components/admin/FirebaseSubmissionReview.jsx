@@ -25,13 +25,16 @@ export function FirebaseSubmissionReview({ submissionId, onClose }) {
       setSubmission(submissionData);
       setEditedScore(submissionData.score || 0);
 
-      // Load exam details
+      // Load exam details with sections and questions
       if (submissionData.examId) {
         try {
-          const examData = await BackendService.getFullExam(submissionData.examId);
+          const examData = await BackendService.getExamWithSectionsAndQuestions(submissionData.examId);
+          console.log('Loaded exam data:', examData); // Debug log
           setExam(examData);
         } catch (error) {
           console.error('Error loading exam:', error);
+          // Set exam to null to show error message instead of infinite loading
+          setExam(null);
         }
       }
 
