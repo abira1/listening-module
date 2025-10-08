@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 /**
  * HighlightContextMenu Component
@@ -19,12 +19,48 @@ const HighlightContextMenu = ({
   hasHighlights,
   currentNote
 }) => {
+  const menuRef = useRef(null);
+  const [position, setPosition] = useState({ x, y, transform: 'translateX(-50%)' });
+
+  useEffect(() => {
+    if (menuRef.current) {
+      const menuRect = menuRef.current.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      
+      let adjustedX = x;
+      let adjustedY = y;
+      let transform = 'translateX(-50%)'; // Center by default
+
+      // Check if menu goes off right edge
+      if (x + menuRect.width / 2 > windowWidth - 10) {
+        adjustedX = windowWidth - menuRect.width - 10;
+        transform = 'translateX(0)';
+      }
+      
+      // Check if menu goes off left edge
+      if (x - menuRect.width / 2 < 10) {
+        adjustedX = 10;
+        transform = 'translateX(0)';
+      }
+
+      // Check if menu goes off bottom edge
+      if (y + menuRect.height > windowHeight - 10) {
+        adjustedY = y - menuRect.height - 10; // Position above instead
+      }
+
+      setPosition({ x: adjustedX, y: adjustedY, transform });
+    }
+  }, [x, y]);
+
   return (
     <div
+      ref={menuRef}
       className="context-menu fixed bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-[9999]"
       style={{
-        left: `${x}px`,
-        top: `${y}px`,
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        transform: position.transform,
         maxWidth: '320px',
         minWidth: '200px'
       }}
