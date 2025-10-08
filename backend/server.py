@@ -131,6 +131,7 @@ class Submission(BaseModel):
     
     id: str
     exam_id: str
+    exam_title: Optional[str] = None
     user_id_or_session: str
     started_at: str
     finished_at: Optional[str] = None
@@ -142,6 +143,8 @@ class Submission(BaseModel):
     correct_answers: Optional[int] = None
     student_name: Optional[str] = None
     student_email: Optional[str] = None
+    is_published: bool = False
+    published_at: Optional[str] = None
 
 # Student Models
 class StudentProfileComplete(BaseModel):
