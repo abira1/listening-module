@@ -18,6 +18,7 @@ export function ListeningTest({ examId, audioRef }) {
   const [examFinished, setExamFinished] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentQuestionGroup, setCurrentQuestionGroup] = useState(0); // 0 = questions 1-10, 1 = 11-20, etc.
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false); // Track header visibility
   const timerRef = useRef(null);
   const audioEndTimeRef = useRef(null);
 
