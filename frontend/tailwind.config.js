@@ -70,8 +70,7 @@ module.exports = {
                                 to: {
                                         height: '0'
                                 }
-                        }
-                        ,
+                        },
                         'timer-fade': {
                                 '0%, 100%': {
                                         backgroundColor: 'rgb(239 68 68)',
