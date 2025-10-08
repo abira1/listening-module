@@ -393,6 +393,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "COMPREHENSIVE AUTHENTICATION PROTECTION TESTING COMPLETED SUCCESSFULLY! ✅ Backend Health Check: API responding correctly at /api/ with proper message and version ✅ Published Exams Endpoint: GET /api/exams/published works without authentication, returns 1 published exam (IELTS Listening Practice Test 1) ✅ Service Status: Both frontend and backend services running properly ✅ Authentication Endpoints: Protected routes (/auth/me, /students/me, /admin/students) correctly return 401 for unauthenticated requests ✅ Public Endpoints: /exams/published and /exams/{id}/full work without authentication ✅ Anonymous Submissions: POST /submissions works for anonymous users ✅ All 10 authentication protection test scenarios passed (3/3 core tests + 7/7 authentication system tests). The authentication protection implementation is working perfectly - backend APIs remain functional while properly protecting authenticated routes."
+      - working: true
+        agent: "main"
+        comment: "Fixed authentication issue: User reported 'Failed to authenticate' error. Installed missing httpcore dependency required by httpx for OAuth API calls. Backend restarted. Authentication flow now working properly."
 
 metadata:
   created_by: "main_agent"
