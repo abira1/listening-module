@@ -188,19 +188,26 @@ const TextHighlighter = ({ children, enabled = true }) => {
 
   // Save note
   const saveNote = useCallback((highlightId, noteText) => {
-    setHighlights(prev => 
-      prev.map(h => {
+    const trimmedNote = noteText.trim();
+    console.log('Saving note for highlight:', highlightId, 'Note:', trimmedNote);
+
+    setHighlights(prev => {
+      const updated = prev.map(h => {
         if (h.id === highlightId) {
-          const hasNote = noteText.trim() !== '';
+          const hasNote = trimmedNote !== '';
           // Update the element's data attribute for CSS styling
           if (h.element) {
             h.element.setAttribute('data-has-note', hasNote.toString());
+            console.log('Set data-has-note attribute:', hasNote);
           }
-          return { ...h, note: noteText.trim() || null };
+          return { ...h, note: trimmedNote || null };
         }
         return h;
-      })
-    );
+      });
+      console.log('Updated highlights after save:', updated);
+      return updated;
+    });
+    
     setNotePopup(null);
   }, []);
 
