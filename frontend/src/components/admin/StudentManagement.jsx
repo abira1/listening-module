@@ -293,7 +293,7 @@ export function StudentManagement() {
               <tbody>
                 {filteredSubmissions.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="text-center py-8 text-gray-500">
+                    <td colSpan="6" className="text-center py-8 text-gray-500">
                       No submissions found
                     </td>
                   </tr>
@@ -316,9 +316,16 @@ export function StudentManagement() {
                         </td>
                         <td className="py-3 px-4 text-gray-700">{submission.exam_title}</td>
                         <td className="py-3 px-4">
-                          <span className="font-semibold text-gray-900">
-                            {submission.score}/{submission.total_questions}
-                          </span>
+                          <div>
+                            <span className="font-semibold text-gray-900">
+                              {submission.score}/{submission.total_questions}
+                            </span>
+                            {submission.manually_graded && (
+                              <span className="ml-2 text-xs px-2 py-0.5 bg-purple-100 text-purple-700 rounded">
+                                Manual
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-2">
@@ -338,6 +345,16 @@ export function StudentManagement() {
                         <td className="py-3 px-4 text-gray-600 text-sm">
                           {new Date(submission.finished_at).toLocaleDateString()} at{' '}
                           {new Date(submission.finished_at).toLocaleTimeString()}
+                        </td>
+                        <td className="py-3 px-4">
+                          <button
+                            onClick={() => setReviewingSubmission(submission.id)}
+                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+                            title="Review and mark submission"
+                          >
+                            <Eye className="w-4 h-4" />
+                            Review
+                          </button>
                         </td>
                       </tr>
                     );
