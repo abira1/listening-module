@@ -255,7 +255,7 @@ export function SubmissionManagement() {
         <div className="bg-white rounded-lg border border-red-200 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Failed (<60%)</p>
+              <p className="text-sm text-gray-600">Failed (&lt;60%)</p>
               <p className="text-2xl font-bold text-red-600 mt-1">{stats.failed}</p>
             </div>
             <TrendingDown className="w-8 h-8 text-red-600" />
