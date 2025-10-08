@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAdminAuth } from '../../contexts/AdminAuthContext';
 import { Loader2, ShieldAlert } from 'lucide-react';
 
 export function AdminLogin() {
   const navigate = useNavigate();
-  const { loginWithGoogle, isAuthenticated, isAdmin, user, loading: authLoading } = useAuth();
+  const { loginWithGoogle, isAuthenticated, user, loading: authLoading } = useAdminAuth();
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 
