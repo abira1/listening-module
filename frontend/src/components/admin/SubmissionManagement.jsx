@@ -74,6 +74,38 @@ export function SubmissionManagement() {
     setShowReviewModal(true);
   };
 
+  const handlePublishExamResults = async (examId) => {
+    if (!window.confirm('Are you sure you want to publish all results for this exam? Students will be able to see their scores.')) {
+      return;
+    }
+
+    try {
+      const result = await BackendService.publishExamResults(examId);
+      alert(`Successfully published ${result.published_count} result(s) for ${result.exam_title}`);
+      // Reload data to reflect changes
+      await loadAllData();
+    } catch (error) {
+      console.error('Error publishing exam results:', error);
+      alert('Failed to publish exam results. Please try again.');
+    }
+  };
+
+  const handlePublishSingleSubmission = async (submissionId) => {
+    if (!window.confirm('Are you sure you want to publish this result? The student will be able to see their score.')) {
+      return;
+    }
+
+    try {
+      await BackendService.publishSingleSubmission(submissionId);
+      alert('Result published successfully!');
+      // Reload data to reflect changes
+      await loadAllData();
+    } catch (error) {
+      console.error('Error publishing submission:', error);
+      alert('Failed to publish result. Please try again.');
+    }
+  };
+
   const getFilteredAndSortedSubmissions = () => {
     let filtered = [...submissions];
 
