@@ -391,34 +391,60 @@ export function ListeningTest({ examId, audioRef }) {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-blue-50">
-      {/* Header */}
-      <div className="bg-white w-full p-3 flex justify-between items-center border-b-2 border-gray-300 shadow-sm">
-        <div className="flex items-center gap-4">
-          <img src="https://i.postimg.cc/FKx07M5m/ILTES.png" alt="IELTS Logo" className="h-8" />
-          <div className="text-sm text-gray-600">
-            <span className="font-semibold">{examData.exam.title}</span>
+      {/* Header - Two-section design */}
+      <header className="bg-white w-full shadow-sm">
+        {/* Top Section - Logos */}
+        <div className="w-full p-4 flex justify-between items-center">
+          <div className="flex items-center gap-6">
+            <img src="https://i.postimg.cc/FKx07M5m/ILTES.png" alt="IELTS Logo" className="h-10" />
+            <img 
+              src="https://customer-assets.emergentagent.com/job_login-gateway-23/artifacts/lb58nl9d_Shah-Sultan-Logo-2.png" 
+              alt="Shah Sultan's IELTS Academy" 
+              className="h-12"
+            />
+          </div>
+          <div className="flex items-center gap-6">
+            <img src="https://i.postimg.cc/0Q2DmVPS/Biritsh-Council.png" alt="British Council" className="h-8" />
+            <img src="https://i.postimg.cc/9f2GXWkJ/IDB.png" alt="IDP" className="h-8" />
+            <img src="https://i.postimg.cc/TYZVSjJ8/Cambridge-University.png" alt="Cambridge Assessment English" className="h-8" />
           </div>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 text-gray-700">
-            <Volume2 className={`w-5 h-5 ${audioEnded ? 'text-gray-400' : 'text-green-600'}`} />
-            <span className="text-sm">
-              {audioEnded ? 'Audio ended - Review time' : 'Audio playing'}
+        
+        {/* Bottom Section - Info Bar */}
+        <div className="w-full bg-gray-700 px-6 py-3 flex justify-between items-center text-white">
+          <div className="flex items-center gap-2">
+            <User className="w-5 h-5" />
+            <span className="text-sm font-medium">
+              {user?.id ? `STU-${user.id.slice(0, 5).toUpperCase()}` : 'STUDENT'}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-gray-700">
+          
+          <div className="flex items-center gap-3">
             <Clock className="w-5 h-5" />
-            <span className={`text-lg font-bold ${timeRemaining < 120 ? 'text-red-600' : ''}`}>
-              {formatTime(timeRemaining)}
+            <span className={`text-base font-semibold ${timeRemaining < 120 ? 'text-red-400' : ''}`}>
+              {formatTime(timeRemaining)} left | Part {currentSectionIndex}
             </span>
           </div>
-          <div className="flex items-center gap-4">
-            <img src="https://i.postimg.cc/0Q2DmVPS/Biritsh-Council.png" alt="British Council" className="h-6" />
-            <img src="https://i.postimg.cc/9f2GXWkJ/IDB.png" alt="IDP" className="h-6" />
-            <img src="https://i.postimg.cc/TYZVSjJ8/Cambridge-University.png" alt="Cambridge" className="h-6" />
+          
+          <div className="flex items-center gap-3">
+            <button 
+              className="flex items-center gap-2 px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded text-sm font-medium transition-colors"
+              title="Get help"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Help
+            </button>
+            <button 
+              className="flex items-center gap-2 px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded text-sm font-medium transition-colors"
+              title="Hide timer"
+              onClick={() => {/* Timer hide functionality can be added */}}
+            >
+              <EyeOff className="w-4 h-4" />
+              Hide
+            </button>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content */}
       <main className="flex-1 p-6 pb-32">
