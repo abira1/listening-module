@@ -150,22 +150,40 @@ export function ListeningTest({ examId, audioRef }) {
       // Create submission in database
       const submissionData = {
         exam_id: examId,
-        user_id_or_session: `user_${Date.now()}`,
+        user_id_or_session: isAuthenticated && user ? user.id : `anonymous_${Date.now()}`,
         answers: answers,
         started_at: new Date().toISOString(),
         finished_at: new Date().toISOString(),
         progress_percent: 100,
       };
 
-      await BackendService.createSubmission(submissionData);
+      const submission = await BackendService.createSubmission(submissionData);
       
-      // Show completion message
-      alert('Test submitted successfully! Your answers have been saved.');
-      navigate('/');
+      // Show completion message with score
+      if (submission && submission.score !== undefined) {
+        alert(`Test submitted successfully!\n\nYour Score: ${submission.score}/${submission.total_questions}\nPercentage: ${Math.round((submission.score/submission.total_questions)*100)}%`);
+      } else {
+        alert('Test submitted successfully! Your answers have been saved.');
+      }
+      
+      // Redirect based on authentication
+      if (isAuthenticated && user) {
+        navigate('/student/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.error('Error submitting exam:', error);
-      alert('Test completed! (Submission feature will be implemented soon)');
-      navigate('/');
+      
+      // Check if it's a duplicate submission error
+      if (error.message && error.message.includes('already submitted')) {
+        alert('You have already submitted this exam. Each student can attempt an exam only once.');
+        navigate(isAuthenticated ? '/student/dashboard' : '/');
+      } else {
+        alert('Failed to submit test. Please try again.');
+        setIsSubmitting(false);
+        setExamFinished(false);
+      }
     }
   };
 
