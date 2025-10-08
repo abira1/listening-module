@@ -318,10 +318,12 @@ export const BackendService = {
   },
 
   // Result publishing operations (Admin only)
-  publishExamResults: async (examId) => {
+  publishExamResults: async (examId, adminEmail) => {
     try {
       const response = await api.put(`/admin/exams/${examId}/publish-results`, {}, {
-        withCredentials: true,
+        headers: {
+          'X-Admin-Email': adminEmail
+        }
       });
       return response.data;
     } catch (error) {
@@ -330,10 +332,12 @@ export const BackendService = {
     }
   },
 
-  publishSingleSubmission: async (submissionId) => {
+  publishSingleSubmission: async (submissionId, adminEmail) => {
     try {
       const response = await api.put(`/admin/submissions/${submissionId}/publish`, {}, {
-        withCredentials: true,
+        headers: {
+          'X-Admin-Email': adminEmail
+        }
       });
       return response.data;
     } catch (error) {
