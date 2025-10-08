@@ -295,33 +295,42 @@ export function StudentDashboard() {
                   </thead>
                   <tbody>
                     {submissions.map((submission) => {
-                      const percentage = submission.total_questions
+                      const percentage = submission.total_questions && submission.score !== null
                         ? Math.round((submission.score / submission.total_questions) * 100)
                         : 0;
+                      const isPublished = submission.isPublished === true;
 
                       return (
                         <tr key={submission.id} className="border-b hover:bg-gray-50">
                           <td className="py-3 px-4">
-                            <p className="font-medium text-gray-900">{submission.exam_title}</p>
+                            <p className="font-medium text-gray-900">{submission.examTitle || submission.exam_title}</p>
                           </td>
                           <td className="py-3 px-4 text-gray-600">
-                            {new Date(submission.finished_at).toLocaleDateString()}
+                            {new Date(submission.finishedAt || submission.finished_at).toLocaleDateString()}
                           </td>
                           <td className="py-3 px-4">
-                            <span className="font-semibold text-gray-900">
-                              {submission.score}/{submission.total_questions}
-                            </span>
+                            {isPublished ? (
+                              <span className="font-semibold text-gray-900">
+                                {submission.score}/{submission.totalQuestions || submission.total_questions}
+                              </span>
+                            ) : (
+                              <span className="text-gray-500 italic">Results Pending</span>
+                            )}
                           </td>
                           <td className="py-3 px-4">
-                            <div className="flex items-center gap-2">
-                              <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
-                                <div
-                                  className="bg-blue-600 h-2 rounded-full"
-                                  style={{ width: `${percentage}%` }}
-                                ></div>
+                            {isPublished ? (
+                              <div className="flex items-center gap-2">
+                                <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
+                                  <div
+                                    className="bg-blue-600 h-2 rounded-full"
+                                    style={{ width: `${percentage}%` }}
+                                  ></div>
+                                </div>
+                                <span className="text-sm font-medium text-gray-700">{percentage}%</span>
                               </div>
-                              <span className="text-sm font-medium text-gray-700">{percentage}%</span>
-                            </div>
+                            ) : (
+                              <span className="text-sm text-gray-500 italic">Awaiting Publication</span>
+                            )}
                           </td>
                         </tr>
                       );
