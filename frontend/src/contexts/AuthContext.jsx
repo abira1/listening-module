@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import FirebaseAuthService from '../services/FirebaseAuthService';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../config/firebase';
 
 const AuthContext = createContext(null);
 
@@ -62,6 +64,22 @@ export const AuthProvider = ({ children }) => {
 
     return () => unsubscribe();
   }, []);
+
+  // Real-time sync for student profile updates
+  useEffect(() => {
+    if (!user?.uid || isAdmin) return;
+
+    const studentRef = ref(database, `students/${user.uid}`);
+    const unsubscribe = onValue(studentRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const updatedProfile = snapshot.val();
+        console.log('Profile updated in AuthContext:', updatedProfile);
+        setUser(prev => ({ ...prev, ...updatedProfile }));
+      }
+    });
+
+    return () => unsubscribe();
+  }, [user?.uid, isAdmin]);
 
   const loginWithGoogle = async () => {
     try {
