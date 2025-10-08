@@ -386,7 +386,16 @@ export function SubmissionManagement() {
           </div>
         </div>
 
-        <div className="mt-4 flex justify-end">
+        <div className="mt-4 flex justify-end gap-3">
+          {examFilter !== 'all' && (
+            <button
+              onClick={() => handlePublishExamResults(examFilter)}
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              <Send className="w-4 h-4" />
+              Publish All Results for Selected Exam
+            </button>
+          )}
           <button
             onClick={exportToCSV}
             className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
