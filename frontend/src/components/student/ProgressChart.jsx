@@ -45,13 +45,13 @@ export function ProgressChart({ submissions }) {
     return '#ef4444'; // red
   };
 
-  if (!submissions || submissions.length === 0) {
+  if (!publishedSubmissions || publishedSubmissions.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4">Performance Progress</h3>
         <div className="text-center py-12 text-gray-500">
-          <p>No test results yet</p>
-          <p className="text-sm mt-2">Complete some tests to see your progress here</p>
+          <p>No published results yet</p>
+          <p className="text-sm mt-2">Results will appear here once your instructor publishes them</p>
         </div>
       </div>
     );
