@@ -1119,9 +1119,19 @@ def run_manual_marking_tests():
 if __name__ == "__main__":
     import sys
     
-    # Check if we want to run focused authentication tests
-    if len(sys.argv) > 1 and sys.argv[1] == "--auth-protection":
-        success = run_authentication_protection_tests()
+    # Check command line arguments for specific test suites
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--auth-protection":
+            success = run_authentication_protection_tests()
+        elif sys.argv[1] == "--manual-marking":
+            success = run_manual_marking_tests()
+        else:
+            print_error(f"Unknown test suite: {sys.argv[1]}")
+            print_info("Available test suites:")
+            print_info("  --auth-protection  : Run authentication protection tests")
+            print_info("  --manual-marking   : Run manual submission marking system tests")
+            print_info("  (no args)          : Run all comprehensive backend tests")
+            sys.exit(1)
     else:
         success = run_all_tests()
     
