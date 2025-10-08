@@ -15,7 +15,17 @@ export function StudentHome() {
       // Check if profile is completed
       if (user.profileCompleted === false || !user.phoneNumber || !user.institution) {
         navigate('/complete-profile');
+      } else if (user.status === 'pending') {
+        // Redirect to waiting for approval
+        navigate('/waiting-approval');
+      } else if (user.status === 'approved') {
+        // Only approved users can access dashboard
+        navigate('/student/dashboard');
+      } else if (user.status === 'rejected') {
+        // Rejected users see waiting page with rejection message
+        navigate('/waiting-approval');
       } else {
+        // Default: go to dashboard (for backward compatibility)
         navigate('/student/dashboard');
       }
     }
