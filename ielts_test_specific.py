@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend environment
-BACKEND_URL = "https://examtime-manager.preview.emergentagent.com/api"
+BACKEND_URL = "https://test-admin-start.preview.emergentagent.com/api"
 
 # Specific exam ID to test
 IELTS_EXAM_ID = "8f1f5182-1747-41f2-b1cb-34c78dd68831"
