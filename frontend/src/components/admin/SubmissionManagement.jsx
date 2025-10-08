@@ -441,7 +441,7 @@ export function SubmissionManagement() {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredSubmissions.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
                     {submissions.length === 0 ? 'No submissions yet' : 'No submissions match your filters'}
                   </td>
                 </tr>
