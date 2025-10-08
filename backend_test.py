@@ -2485,6 +2485,8 @@ if __name__ == "__main__":
             success = run_test_control_system_tests()
         elif sys.argv[1] == "--hierarchical":
             success = run_hierarchical_submission_tests()
+        elif sys.argv[1] == "--hierarchical-fix":
+            success = run_hierarchical_submission_fix_tests()
         else:
             print_error(f"Unknown test suite: {sys.argv[1]}")
             print_info("Available test suites:")
@@ -2493,10 +2495,11 @@ if __name__ == "__main__":
             print_info("  --student-submission  : Run complete student & submission management tests")
             print_info("  --test-control        : Run test control system tests")
             print_info("  --hierarchical        : Run enhanced hierarchical submission management tests")
-            print_info("  (no args)             : Run all comprehensive backend tests")
+            print_info("  --hierarchical-fix    : Run fixed hierarchical submission management tests (review request)")
+            print_info("  (no args)             : Run fixed hierarchical submission management tests")
             sys.exit(1)
     else:
-        # Run the hierarchical submission management tests as the default for this review
-        success = run_hierarchical_submission_tests()
+        # Run the hierarchical submission management fix tests as the default for this review
+        success = run_hierarchical_submission_fix_tests()
     
     sys.exit(0 if success else 1)
