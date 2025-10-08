@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File
+from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Cookie, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
@@ -13,6 +13,7 @@ import uuid
 from datetime import datetime, timezone
 import shutil
 from init_ielts_test import init_ielts_test
+from auth_service import AuthService
 
 
 ROOT_DIR = Path(__file__).parent
