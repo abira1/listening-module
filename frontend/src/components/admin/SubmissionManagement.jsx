@@ -136,35 +136,24 @@ export function SubmissionManagement() {
         return;
       }
       
-      // Get exam details from backend to build question structure
-      const exam = await BackendService.getExamById(firebaseSubmission.examId);
+      // Get full exam data with sections and questions from backend
+      const fullExamData = await BackendService.getExamWithSectionsAndQuestions(firebaseSubmission.examId);
       
-      if (!exam) {
-        alert('Exam not found');
+      if (!fullExamData || !fullExamData.exam) {
+        alert('Exam data not found');
         setLoading(false);
         return;
       }
       
-      // Get all sections and questions for this exam
-      const sections = await BackendService.getExamSections(firebaseSubmission.examId);
-      
       // Build detailed structure with student answers
-      const detailedSections = [];
-      for (const section of sections) {
-        const questions = await BackendService.getSectionQuestions(section.id);
-        
-        // Add student answers to each question
-        const questionsWithAnswers = questions.map(question => ({
+      const detailedSections = fullExamData.sections.map(section => ({
+        ...section,
+        questions: section.questions.map(question => ({
           ...question,
           student_answer: firebaseSubmission.answers?.[question.index] || '',
           correct_answer: question.payload?.answer_key || ''
-        }));
-        
-        detailedSections.push({
-          ...section,
-          questions: questionsWithAnswers
-        });
-      }
+        }))
+      }));
       
       setSubmissionDetails({
         submission: {
@@ -176,9 +165,9 @@ export function SubmissionManagement() {
           created_at: firebaseSubmission.createdAt
         },
         exam: {
-          id: exam.id,
-          title: exam.title,
-          duration: exam.duration_seconds
+          id: fullExamData.exam.id,
+          title: fullExamData.exam.title,
+          duration: fullExamData.exam.duration_seconds
         },
         sections: detailedSections,
         firebaseData: firebaseSubmission
@@ -189,7 +178,7 @@ export function SubmissionManagement() {
       setLoading(false);
     } catch (error) {
       console.error('Error loading submission details:', error);
-      alert('Failed to load submission details. Please try again.');
+      alert('Failed to load submission details: ' + (error.message || 'Unknown error'));
       setLoading(false);
     }
   };
