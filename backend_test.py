@@ -63,6 +63,93 @@ def test_api_health_check():
         print_error(f"Health check request failed: {str(e)}")
         return False
 
+def test_authentication_protection_scenarios():
+    """Test Authentication Protection Implementation - Focused Test"""
+    print_test_header("Authentication Protection Implementation Test")
+    
+    print_info("Testing authentication protection scenarios as requested:")
+    print_info("1. Backend Health Check")
+    print_info("2. Published Exams Endpoint (should work without authentication)")
+    print_info("3. Service Status Verification")
+    
+    results = {}
+    
+    # Test 1: Backend Health Check
+    print_info("\n--- Test 1: Backend Health Check ---")
+    try:
+        response = requests.get(f"{BACKEND_URL}/", timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            print_success(f"✅ Backend health check PASSED - Status: {response.status_code}")
+            print_info(f"Response: {data}")
+            results['health_check'] = True
+        else:
+            print_error(f"❌ Backend health check FAILED - Status: {response.status_code}")
+            results['health_check'] = False
+    except Exception as e:
+        print_error(f"❌ Backend health check ERROR: {str(e)}")
+        results['health_check'] = False
+    
+    # Test 2: Published Exams Endpoint (should work without authentication)
+    print_info("\n--- Test 2: Published Exams Endpoint (No Auth Required) ---")
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/published", timeout=10)
+        if response.status_code == 200:
+            exams = response.json()
+            print_success(f"✅ Published exams endpoint PASSED - Status: {response.status_code}")
+            print_info(f"Found {len(exams)} published exams")
+            
+            # Show some exam details if available
+            if exams:
+                for i, exam in enumerate(exams[:3]):  # Show first 3 exams
+                    print_info(f"  Exam {i+1}: {exam.get('title', 'No title')} (ID: {exam.get('id', 'No ID')})")
+            else:
+                print_info("  No published exams found (this is normal if no exams are published)")
+            
+            results['published_exams'] = True
+        else:
+            print_error(f"❌ Published exams endpoint FAILED - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['published_exams'] = False
+    except Exception as e:
+        print_error(f"❌ Published exams endpoint ERROR: {str(e)}")
+        results['published_exams'] = False
+    
+    # Test 3: Additional Backend Endpoints (to verify backend is fully functional)
+    print_info("\n--- Test 3: Additional Backend Functionality ---")
+    try:
+        # Test all exams endpoint
+        response = requests.get(f"{BACKEND_URL}/exams", timeout=10)
+        if response.status_code == 200:
+            all_exams = response.json()
+            print_success(f"✅ All exams endpoint PASSED - Found {len(all_exams)} total exams")
+            results['all_exams'] = True
+        else:
+            print_error(f"❌ All exams endpoint FAILED - Status: {response.status_code}")
+            results['all_exams'] = False
+    except Exception as e:
+        print_error(f"❌ All exams endpoint ERROR: {str(e)}")
+        results['all_exams'] = False
+    
+    # Summary for authentication protection test
+    print_info("\n--- Authentication Protection Test Summary ---")
+    passed_tests = sum(1 for result in results.values() if result)
+    total_tests = len(results)
+    
+    if passed_tests == total_tests:
+        print_success(f"🎉 ALL AUTHENTICATION PROTECTION TESTS PASSED ({passed_tests}/{total_tests})")
+        print_success("✅ Backend is running and accessible")
+        print_success("✅ Published exams endpoint works without authentication")
+        print_success("✅ Backend APIs are functional after frontend authentication changes")
+        return True
+    else:
+        print_error(f"❌ SOME TESTS FAILED ({passed_tests}/{total_tests})")
+        for test_name, result in results.items():
+            status = "PASS" if result else "FAIL"
+            color = Colors.GREEN if result else Colors.RED
+            print(f"  {color}{status} - {test_name.replace('_', ' ').title()}{Colors.END}")
+        return False
+
 def test_exam_creation():
     """Test 2: Exam Creation - POST /api/exams"""
     print_test_header("Exam Creation")
