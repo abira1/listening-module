@@ -286,6 +286,47 @@ class FirebaseAuthService {
       throw error;
     }
   }
+
+  /**
+   * Update submission score (admin only)
+   */
+  async updateSubmissionScore(submissionId, newScore) {
+    try {
+      const submissionRef = ref(database, `submissions/${submissionId}`);
+      const updateData = {
+        score: newScore,
+        manuallyGraded: true,
+        updatedAt: new Date().toISOString()
+      };
+      
+      await update(submissionRef, updateData);
+      return updateData;
+    } catch (error) {
+      console.error('Error updating submission score:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get single submission by ID
+   */
+  async getSubmission(submissionId) {
+    try {
+      const submissionRef = ref(database, `submissions/${submissionId}`);
+      const snapshot = await get(submissionRef);
+      
+      if (snapshot.exists()) {
+        return {
+          id: submissionId,
+          ...snapshot.val()
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting submission:', error);
+      throw error;
+    }
+  }
 }
 
 export default new FirebaseAuthService();
