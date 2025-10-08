@@ -332,6 +332,13 @@ export function StudentDashboard() {
             )}
           </div>
         </div>
+
+        {/* Performance Progress Chart */}
+        {submissions.length > 0 && (
+          <div className="mt-8">
+            <ProgressChart submissions={submissions} />
+          </div>
+        )}
       </main>
     </div>
   );
