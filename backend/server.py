@@ -578,6 +578,279 @@ async def upload_audio_file(file: UploadFile = File(...)):
         logger.error(f"Error uploading audio file: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to upload audio file: {str(e)}")
 
+# ============================================================================
+# AUTHENTICATION ENDPOINTS
+# ============================================================================
+
+@api_router.post("/auth/session")
+async def create_auth_session(data: SessionExchange, response: Response):
+    """
+    Exchange session_id for session_token and user data.
+    Creates new student if first time, otherwise returns existing student.
+    """
+    try:
+        # Exchange session_id for user data
+        user_data = await AuthService.exchange_session_id(data.session_id)
+        
+        google_id = user_data["id"]
+        email = user_data["email"]
+        name = user_data.get("name", "")
+        picture = user_data.get("picture", "")
+        session_token = user_data["session_token"]
+        
+        # Check if student already exists
+        existing_student = await db.students.find_one({"email": email})
+        
+        if existing_student:
+            # Student exists, create session and return
+            await AuthService.create_session(db, existing_student["id"], session_token)
+            
+            # Set httpOnly cookie
+            response.set_cookie(
+                key="session_token",
+                value=session_token,
+                httponly=True,
+                secure=True,
+                samesite="none",
+                max_age=7 * 24 * 60 * 60,  # 7 days
+                path="/"
+            )
+            
+            return {
+                "user": Student(**existing_student).model_dump(),
+                "is_new_user": False
+            }
+        else:
+            # New student - create minimal profile
+            student_id = generate_id()
+            now = get_timestamp()
+            
+            student = {
+                "id": student_id,
+                "_id": student_id,
+                "email": email,
+                "full_name": name,
+                "google_id": google_id,
+                "profile_picture": picture,
+                "phone_number": "",
+                "institution": "",
+                "department": "",
+                "roll_number": "",
+                "created_at": now,
+                "updated_at": now,
+                "profile_completed": False
+            }
+            
+            await db.students.insert_one(student)
+            await AuthService.create_session(db, student_id, session_token)
+            
+            # Set httpOnly cookie
+            response.set_cookie(
+                key="session_token",
+                value=session_token,
+                httponly=True,
+                secure=True,
+                samesite="none",
+                max_age=7 * 24 * 60 * 60,
+                path="/"
+            )
+            
+            return {
+                "user": {
+                    "id": student_id,
+                    "email": email,
+                    "full_name": name,
+                    "profile_picture": picture,
+                    "google_id": google_id
+                },
+                "is_new_user": True
+            }
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating auth session: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/auth/me")
+async def get_current_student(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get current authenticated student"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return Student(**user).model_dump()
+
+@api_router.post("/auth/logout")
+async def logout(request: Request, response: Response, session_token: Optional[str] = Cookie(None)):
+    """Logout current user"""
+    if session_token:
+        await AuthService.delete_session(db, session_token)
+    
+    response.delete_cookie(
+        key="session_token",
+        path="/",
+        samesite="none",
+        secure=True
+    )
+    
+    return {"message": "Logged out successfully"}
+
+# ============================================================================
+# STUDENT ENDPOINTS
+# ============================================================================
+
+@api_router.post("/students/complete-profile")
+async def complete_student_profile(
+    profile_data: StudentProfileComplete,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Complete student profile after first login"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    AuthService.require_auth(user)
+    
+    # Update student profile
+    update_data = profile_data.model_dump()
+    update_data["updated_at"] = get_timestamp()
+    update_data["profile_completed"] = True
+    
+    await db.students.update_one(
+        {"id": user["id"]},
+        {"$set": update_data}
+    )
+    
+    # Get updated student
+    updated_student = await db.students.find_one({"id": user["id"]})
+    return Student(**updated_student).model_dump()
+
+@api_router.get("/students/me")
+async def get_my_profile(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get current student's full profile"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    AuthService.require_auth(user)
+    return Student(**user).model_dump()
+
+@api_router.get("/students/me/submissions")
+async def get_my_submissions(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get current student's exam submissions with scores"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    AuthService.require_auth(user)
+    
+    # Get all submissions for this student
+    submissions = await db.submissions.find(
+        {"user_id_or_session": user["id"]},
+        {"_id": 0}
+    ).to_list(1000)
+    
+    # Enrich submissions with exam details
+    enriched_submissions = []
+    for sub in submissions:
+        exam = await db.exams.find_one({"id": sub["exam_id"]}, {"_id": 0})
+        if exam:
+            enriched_submissions.append({
+                **sub,
+                "exam_title": exam["title"],
+                "exam_description": exam.get("description", "")
+            })
+    
+    return enriched_submissions
+
+@api_router.get("/students/me/exam-status/{exam_id}")
+async def get_exam_attempt_status(
+    exam_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Check if student has already attempted this exam"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    
+    # If not authenticated, return not attempted
+    if not user:
+        return {"attempted": False, "submission": None}
+    
+    # Check for existing submission
+    submission = await db.submissions.find_one(
+        {
+            "exam_id": exam_id,
+            "user_id_or_session": user["id"]
+        },
+        {"_id": 0}
+    )
+    
+    return {
+        "attempted": submission is not None,
+        "submission": submission
+    }
+
+# ============================================================================
+# ADMIN ENDPOINTS - Student Management
+# ============================================================================
+
+@api_router.get("/admin/students")
+async def get_all_students(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Admin only: Get all students"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    AuthService.require_admin(user, ADMIN_EMAILS)
+    
+    students = await db.students.find({}, {"_id": 0}).to_list(10000)
+    
+    # Add submission counts
+    for student in students:
+        submission_count = await db.submissions.count_documents(
+            {"user_id_or_session": student["id"]}
+        )
+        student["submission_count"] = submission_count
+    
+    return students
+
+@api_router.get("/admin/submissions")
+async def get_all_submissions_admin(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Admin only: Get all submissions with student details"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    AuthService.require_admin(user, ADMIN_EMAILS)
+    
+    submissions = await db.submissions.find({}, {"_id": 0}).to_list(10000)
+    
+    # Enrich with student and exam data
+    enriched_submissions = []
+    for sub in submissions:
+        # Get student info
+        student = await db.students.find_one({"id": sub["user_id_or_session"]}, {"_id": 0})
+        
+        # Get exam info
+        exam = await db.exams.find_one({"id": sub["exam_id"]}, {"_id": 0})
+        
+        enriched_submissions.append({
+            **sub,
+            "student_name": student.get("full_name", "Unknown") if student else "Unknown",
+            "student_email": student.get("email", "Unknown") if student else "Unknown",
+            "student_institution": student.get("institution", "") if student else "",
+            "exam_title": exam.get("title", "Unknown") if exam else "Unknown"
+        })
+    
+    return enriched_submissions
+
+@api_router.delete("/admin/students/{student_id}")
+async def delete_student(
+    student_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Admin only: Delete a student"""
+    user = await AuthService.get_current_user(request, db, session_token)
+    AuthService.require_admin(user, ADMIN_EMAILS)
+    
+    result = await db.students.delete_one({"id": student_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    # Also delete their sessions and submissions
+    await db.sessions.delete_many({"user_id": student_id})
+    await db.submissions.delete_many({"user_id_or_session": student_id})
+    
+    return {"message": "Student deleted successfully"}
+
 # Legacy status endpoints
 @api_router.get("/")
 async def root():
