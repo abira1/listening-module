@@ -256,4 +256,26 @@ export const BackendService = {
       throw new Error('Failed to fetch exam submissions');
     }
   },
+
+  getSubmissionDetailed: async (submissionId) => {
+    try {
+      const response = await api.get(`/submissions/${submissionId}/detailed`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching detailed submission:', error);
+      throw new Error('Failed to fetch detailed submission');
+    }
+  },
+
+  updateSubmissionScore: async (submissionId, scoreData) => {
+    try {
+      const response = await api.put(`/submissions/${submissionId}/score`, scoreData, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating submission score:', error);
+      throw new Error('Failed to update submission score');
+    }
+  },
 };
