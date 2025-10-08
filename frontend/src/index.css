@@ -127,6 +127,26 @@ code {
 /* Context menu animation */
 .context-menu {
   animation: fadeIn 0.15s ease-in;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.context-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.context-menu::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.context-menu::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.context-menu::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 @keyframes fadeIn {
