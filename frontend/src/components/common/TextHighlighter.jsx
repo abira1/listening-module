@@ -172,11 +172,17 @@ const TextHighlighter = ({ children, enabled = true }) => {
   // Save note
   const saveNote = useCallback((highlightId, noteText) => {
     setHighlights(prev => 
-      prev.map(h => 
-        h.id === highlightId 
-          ? { ...h, note: noteText.trim() || null }
-          : h
-      )
+      prev.map(h => {
+        if (h.id === highlightId) {
+          const hasNote = noteText.trim() !== '';
+          // Update the element's data attribute for CSS styling
+          if (h.element) {
+            h.element.setAttribute('data-has-note', hasNote.toString());
+          }
+          return { ...h, note: noteText.trim() || null };
+        }
+        return h;
+      })
     );
     setNotePopup(null);
   }, []);
