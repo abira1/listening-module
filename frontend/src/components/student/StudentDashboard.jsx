@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import FirebaseAuthService from '../../services/FirebaseAuthService';
 import { BackendService } from '../../services/BackendService';
 import { LogOut, User, BookOpen, CheckCircle, Clock, FileText, Award } from 'lucide-react';
+import { ProgressChart } from './ProgressChart';
 
 export function StudentDashboard() {
   const navigate = useNavigate();
