@@ -127,22 +127,69 @@ export function SubmissionManagement() {
       setLoading(true);
       setSelectedStudent(student);
       
-      // Get detailed submission data from backend
-      const detailed = await BackendService.getSubmissionDetailed(student.submissionId);
-      
-      // Get Firebase submission for edit capability
+      // Get Firebase submission
       const firebaseSubmission = await FirebaseAuthService.getSubmission(student.submissionId);
       
+      if (!firebaseSubmission) {
+        alert('Submission not found');
+        setLoading(false);
+        return;
+      }
+      
+      // Get exam details from backend to build question structure
+      const exam = await BackendService.getExamById(firebaseSubmission.examId);
+      
+      if (!exam) {
+        alert('Exam not found');
+        setLoading(false);
+        return;
+      }
+      
+      // Get all sections and questions for this exam
+      const sections = await BackendService.getExamSections(firebaseSubmission.examId);
+      
+      // Build detailed structure with student answers
+      const detailedSections = [];
+      for (const section of sections) {
+        const questions = await BackendService.getSectionQuestions(section.id);
+        
+        // Add student answers to each question
+        const questionsWithAnswers = questions.map(question => ({
+          ...question,
+          student_answer: firebaseSubmission.answers?.[question.index] || '',
+          correct_answer: question.payload?.answer_key || ''
+        }));
+        
+        detailedSections.push({
+          ...section,
+          questions: questionsWithAnswers
+        });
+      }
+      
       setSubmissionDetails({
-        ...detailed,
+        submission: {
+          id: firebaseSubmission.id,
+          exam_id: firebaseSubmission.examId,
+          student_uid: firebaseSubmission.studentUid,
+          score: firebaseSubmission.score,
+          total_questions: firebaseSubmission.totalQuestions,
+          created_at: firebaseSubmission.createdAt
+        },
+        exam: {
+          id: exam.id,
+          title: exam.title,
+          duration: exam.duration_seconds
+        },
+        sections: detailedSections,
         firebaseData: firebaseSubmission
       });
       
-      setNewScore(firebaseSubmission?.score || detailed.submission.score);
+      setNewScore(firebaseSubmission.score || 0);
       setView('review');
       setLoading(false);
     } catch (error) {
       console.error('Error loading submission details:', error);
+      alert('Failed to load submission details. Please try again.');
       setLoading(false);
     }
   };
