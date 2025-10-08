@@ -226,6 +226,32 @@ export function TestManagement() {
                         {exam.published ? 'Published' : 'Draft'}
                       </span>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {exam.published && (
+                        exam.is_active ? (
+                          <button 
+                            onClick={() => handleStopTest(exam.id)} 
+                            className="flex items-center px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-md text-xs font-medium transition-colors"
+                            title="Stop test - students will not be able to take it"
+                          >
+                            <PauseIcon className="w-3.5 h-3.5 mr-1" />
+                            Stop
+                          </button>
+                        ) : (
+                          <button 
+                            onClick={() => handleStartTest(exam.id)} 
+                            className="flex items-center px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-md text-xs font-medium transition-colors"
+                            title="Start test - students will be able to take it"
+                          >
+                            <PlayIcon className="w-3.5 h-3.5 mr-1" />
+                            Start
+                          </button>
+                        )
+                      )}
+                      {!exam.published && (
+                        <span className="text-xs text-gray-400">Publish first</span>
+                      )}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <div className="flex space-x-2">
                         <button onClick={() => handleEditTest(exam.id)} className="text-blue-600 hover:text-blue-900" title="Edit test">
