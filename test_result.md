@@ -521,7 +521,8 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Interactive Scoring System for Admin Answer Review"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
