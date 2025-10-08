@@ -98,9 +98,13 @@ export const BackendService = {
     }
   },
 
-  startExam: async (examId) => {
+  startExam: async (examId, adminEmail) => {
     try {
-      const response = await api.put(`/admin/exams/${examId}/start`);
+      const response = await api.put(`/admin/exams/${examId}/start`, {}, {
+        headers: {
+          'X-Admin-Email': adminEmail
+        }
+      });
       return response.data;
     } catch (error) {
       console.error('Error starting exam:', error);
@@ -108,9 +112,13 @@ export const BackendService = {
     }
   },
 
-  stopExam: async (examId) => {
+  stopExam: async (examId, adminEmail) => {
     try {
-      const response = await api.put(`/admin/exams/${examId}/stop`);
+      const response = await api.put(`/admin/exams/${examId}/stop`, {}, {
+        headers: {
+          'X-Admin-Email': adminEmail
+        }
+      });
       return response.data;
     } catch (error) {
       console.error('Error stopping exam:', error);
