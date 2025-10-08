@@ -173,6 +173,22 @@ class SessionExchange(BaseModel):
 # Admin emails configuration
 ADMIN_EMAILS = ["shahsultanweb@gmail.com", "aminulislam004474@gmail.com"]
 
+# Admin authentication helper for Firebase
+def check_admin_access(request: Request) -> bool:
+    """
+    Check if request has admin access via Firebase email header
+    Accepts X-Admin-Email header from Firebase authenticated requests
+    """
+    admin_email = request.headers.get("X-Admin-Email")
+    if admin_email and admin_email in ADMIN_EMAILS:
+        return True
+    return False
+
+def require_admin_access(request: Request):
+    """Require admin access or raise 403"""
+    if not check_admin_access(request):
+        raise HTTPException(status_code=403, detail="Admin access required")
+
 # Utility functions
 def generate_id():
     return str(uuid.uuid4())
