@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, FileQuestion, Users, BarChart3, Settings, LogOut, X } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 
 export function Sidebar({ isOpen, setIsOpen }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
+  const handleLogout = async () => {
+    await logout();
     navigate('/admin/login');
   };
 
