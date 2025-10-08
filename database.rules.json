@@ -1,9 +1,11 @@
 {
   "rules": {
     "students": {
+      ".read": "auth != null",
+      ".write": "auth != null",
       "$uid": {
-        ".read": "auth != null && (auth.uid == $uid || root.child('students').child(auth.uid).child('isAdmin').val() == true)",
-        ".write": "auth != null && auth.uid == $uid"
+        ".read": "auth != null",
+        ".write": "auth != null"
       }
     },
     "submissions": {
