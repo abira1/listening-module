@@ -1,414 +1,358 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Search, 
-  Filter, 
-  Download, 
-  Eye, 
-  RefreshCw, 
-  CheckCircle, 
-  XCircle,
-  TrendingUp,
-  TrendingDown,
-  Award,
-  Calendar,
-  User,
-  FileText,
-  Edit,
+  ChevronRight,
+  ChevronLeft,
+  RefreshCw,
   Send,
   Lock,
-  Unlock
+  Unlock,
+  Calendar,
+  Users,
+  FileText,
+  Clock,
+  User,
+  CheckCircle,
+  XCircle
 } from 'lucide-react';
 import FirebaseAuthService from '../../services/FirebaseAuthService';
 import { BackendService } from '../../services/BackendService';
-import { FirebaseSubmissionReview } from './FirebaseSubmissionReview';
 
 export function SubmissionManagement() {
-  const [submissions, setSubmissions] = useState([]);
-  const [students, setStudents] = useState({});
-  const [exams, setExams] = useState({});
+  // Navigation state
+  const [view, setView] = useState('tests'); // 'tests', 'students', 'review'
+  const [selectedTest, setSelectedTest] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
+  // Data state
+  const [tests, setTests] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [submissionDetails, setSubmissionDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [examFilter, setExamFilter] = useState('all');
-  const [sortBy, setSortBy] = useState('date');
-  const [selectedSubmission, setSelectedSubmission] = useState(null);
-  const [showReviewModal, setShowReviewModal] = useState(false);
+
+  // Score editing state
+  const [editingScore, setEditingScore] = useState(false);
+  const [newScore, setNewScore] = useState(0);
 
   useEffect(() => {
-    loadAllData();
+    loadTests();
   }, []);
 
-  const loadAllData = async () => {
+  const loadTests = async () => {
     try {
       setLoading(true);
       
-      // Load submissions
+      // Get all submissions
       const allSubmissions = await FirebaseAuthService.getAllSubmissions();
-      setSubmissions(allSubmissions);
+      
+      // Get all exams
+      const allExams = await BackendService.getPublishedExams();
+      const examsMap = {};
+      allExams.forEach(exam => {
+        examsMap[exam.id] = exam;
+      });
 
-      // Load students
+      // Group submissions by exam
+      const testsMap = {};
+      allSubmissions.forEach(submission => {
+        if (!testsMap[submission.examId]) {
+          testsMap[submission.examId] = {
+            examId: submission.examId,
+            examTitle: examsMap[submission.examId]?.title || 'Unknown Exam',
+            examDuration: examsMap[submission.examId]?.duration || 0,
+            participants: [],
+            submissionCount: 0,
+            latestSubmission: submission.createdAt
+          };
+        }
+        testsMap[submission.examId].participants.push(submission);
+        testsMap[submission.examId].submissionCount++;
+        
+        // Track latest submission
+        if (new Date(submission.createdAt) > new Date(testsMap[submission.examId].latestSubmission)) {
+          testsMap[submission.examId].latestSubmission = submission.createdAt;
+        }
+      });
+
+      const testsArray = Object.values(testsMap).sort((a, b) => 
+        new Date(b.latestSubmission) - new Date(a.latestSubmission)
+      );
+
+      setTests(testsArray);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading tests:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleTestClick = async (test) => {
+    try {
+      setLoading(true);
+      setSelectedTest(test);
+      
+      // Get all students
       const allStudents = await FirebaseAuthService.getAllStudents();
       const studentsMap = {};
       allStudents.forEach(student => {
         studentsMap[student.uid] = student;
       });
-      setStudents(studentsMap);
 
-      // Load exams
-      const publishedExams = await BackendService.getPublishedExams();
-      const examsMap = {};
-      publishedExams.forEach(exam => {
-        examsMap[exam.id] = exam;
+      // Prepare student list with submission data
+      const studentList = test.participants.map(submission => ({
+        uid: submission.studentUid,
+        name: studentsMap[submission.studentUid]?.name || 'Unknown',
+        email: studentsMap[submission.studentUid]?.email || 'N/A',
+        photoURL: studentsMap[submission.studentUid]?.photoURL || 'https://via.placeholder.com/40',
+        submissionId: submission.id,
+        submittedAt: submission.createdAt,
+        score: submission.score,
+        totalQuestions: submission.totalQuestions,
+        isPublished: submission.isPublished || false,
+        manuallyGraded: submission.manuallyGraded || false
+      }));
+
+      setStudents(studentList);
+      setView('students');
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading students:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleStudentClick = async (student) => {
+    try {
+      setLoading(true);
+      setSelectedStudent(student);
+      
+      // Get detailed submission data from backend
+      const detailed = await BackendService.getSubmissionDetailed(student.submissionId);
+      
+      // Get Firebase submission for edit capability
+      const firebaseSubmission = await FirebaseAuthService.getSubmission(student.submissionId);
+      
+      setSubmissionDetails({
+        ...detailed,
+        firebaseData: firebaseSubmission
       });
-      setExams(examsMap);
-
+      
+      setNewScore(firebaseSubmission?.score || detailed.submission.score);
+      setView('review');
       setLoading(false);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error loading submission details:', error);
       setLoading(false);
     }
   };
 
-  const handleViewSubmission = (submission) => {
-    setSelectedSubmission(submission);
-    setShowReviewModal(true);
+  const handleBackToTests = () => {
+    setView('tests');
+    setSelectedTest(null);
+    setStudents([]);
+    setSearchQuery('');
   };
 
-  const handlePublishExamResults = async (examId) => {
-    if (!window.confirm('Are you sure you want to publish all results for this exam? Students will be able to see their scores.')) {
+  const handleBackToStudents = () => {
+    setView('students');
+    setSelectedStudent(null);
+    setSubmissionDetails(null);
+    setEditingScore(false);
+  };
+
+  const handleScoreUpdate = async (scoreToUpdate) => {
+    try {
+      await FirebaseAuthService.updateSubmissionScore(selectedStudent.submissionId, scoreToUpdate);
+      alert('Score updated successfully!');
+      
+      // Refresh submission details
+      const detailed = await BackendService.getSubmissionDetailed(selectedStudent.submissionId);
+      const firebaseSubmission = await FirebaseAuthService.getSubmission(selectedStudent.submissionId);
+      setSubmissionDetails({
+        ...detailed,
+        firebaseData: firebaseSubmission
+      });
+      setNewScore(scoreToUpdate);
+    } catch (error) {
+      console.error('Error updating score:', error);
+      alert('Failed to update score. Please try again.');
+    }
+  };
+
+  const handlePublishResult = async () => {
+    if (!window.confirm('Publish this result? The student will be able to see their score.')) {
       return;
     }
 
     try {
-      // Publish in both backend and Firebase
-      const result = await BackendService.publishExamResults(examId);
-      await FirebaseAuthService.publishExamSubmissions(examId);
+      await FirebaseAuthService.publishSubmission(selectedStudent.submissionId);
+      await BackendService.publishSingleSubmission(selectedStudent.submissionId);
+      alert('Result published successfully! Student can now view their score.');
       
-      alert(`Successfully published ${result.published_count} result(s) for ${result.exam_title}`);
-      // Reload data to reflect changes
-      await loadAllData();
+      // Refresh data
+      const firebaseSubmission = await FirebaseAuthService.getSubmission(selectedStudent.submissionId);
+      setSubmissionDetails({
+        ...submissionDetails,
+        firebaseData: firebaseSubmission
+      });
     } catch (error) {
-      console.error('Error publishing exam results:', error);
-      alert('Failed to publish exam results. Please try again.');
-    }
-  };
-
-  const handlePublishSingleSubmission = async (submissionId) => {
-    if (!window.confirm('Are you sure you want to publish this result? The student will be able to see their score.')) {
-      return;
-    }
-
-    try {
-      // Publish in both backend and Firebase
-      await BackendService.publishSingleSubmission(submissionId);
-      await FirebaseAuthService.publishSubmission(submissionId);
-      
-      alert('Result published successfully!');
-      // Reload data to reflect changes
-      await loadAllData();
-    } catch (error) {
-      console.error('Error publishing submission:', error);
+      console.error('Error publishing result:', error);
       alert('Failed to publish result. Please try again.');
     }
   };
 
-  const getFilteredAndSortedSubmissions = () => {
-    let filtered = [...submissions];
-
-    // Apply search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(sub => {
-        const student = students[sub.studentUid];
-        const exam = exams[sub.examId];
-        return (
-          student?.name?.toLowerCase().includes(query) ||
-          student?.email?.toLowerCase().includes(query) ||
-          exam?.title?.toLowerCase().includes(query) ||
-          sub.id?.toLowerCase().includes(query)
-        );
-      });
-    }
-
-    // Apply exam filter
-    if (examFilter !== 'all') {
-      filtered = filtered.filter(sub => sub.examId === examFilter);
-    }
-
-    // Apply status filter
-    if (statusFilter !== 'all') {
-      if (statusFilter === 'passed') {
-        filtered = filtered.filter(sub => {
-          const percentage = (sub.score / sub.totalQuestions) * 100;
-          return percentage >= 60;
-        });
-      } else if (statusFilter === 'failed') {
-        filtered = filtered.filter(sub => {
-          const percentage = (sub.score / sub.totalQuestions) * 100;
-          return percentage < 60;
-        });
-      } else if (statusFilter === 'manual') {
-        filtered = filtered.filter(sub => sub.manuallyGraded === true);
-      }
-    }
-
-    // Sort
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'date':
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        case 'score':
-          return b.score - a.score;
-        case 'percentage':
-          const percA = (a.score / a.totalQuestions) * 100;
-          const percB = (b.score / b.totalQuestions) * 100;
-          return percB - percA;
-        case 'student':
-          const studentA = students[a.studentUid]?.name || '';
-          const studentB = students[b.studentUid]?.name || '';
-          return studentA.localeCompare(studentB);
-        default:
-          return 0;
-      }
-    });
-
-    return filtered;
-  };
-
-  const exportToCSV = () => {
-    const filtered = getFilteredAndSortedSubmissions();
+  const getFilteredTests = () => {
+    if (!searchQuery) return tests;
     
-    const headers = [
-      'Submission ID',
-      'Student Name',
-      'Student Email',
-      'Exam Title',
-      'Score',
-      'Total Questions',
-      'Percentage',
-      'Status',
-      'Manually Graded',
-      'Submitted At'
-    ];
-
-    const rows = filtered.map(sub => {
-      const student = students[sub.studentUid] || {};
-      const exam = exams[sub.examId] || {};
-      const percentage = ((sub.score / sub.totalQuestions) * 100).toFixed(2);
-      const status = percentage >= 60 ? 'Passed' : 'Failed';
-
-      return [
-        sub.id,
-        student.name || 'Unknown',
-        student.email || 'N/A',
-        exam.title || 'Unknown Exam',
-        sub.score,
-        sub.totalQuestions,
-        `${percentage}%`,
-        status,
-        sub.manuallyGraded ? 'Yes' : 'No',
-        new Date(sub.createdAt).toLocaleString()
-      ];
-    });
-
-    const csv = [headers, ...rows]
-      .map(row => row.map(cell => `"${cell}"`).join(','))
-      .join('\n');
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `submissions_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
+    const query = searchQuery.toLowerCase();
+    return tests.filter(test => 
+      test.examTitle.toLowerCase().includes(query)
+    );
   };
 
-  const getStatistics = () => {
-    const total = submissions.length;
-    const passed = submissions.filter(sub => {
-      const percentage = (sub.score / sub.totalQuestions) * 100;
-      return percentage >= 60;
-    }).length;
-    const failed = total - passed;
-    const avgScore = submissions.length > 0
-      ? submissions.reduce((sum, sub) => sum + (sub.score / sub.totalQuestions) * 100, 0) / submissions.length
-      : 0;
-    const manuallyGraded = submissions.filter(sub => sub.manuallyGraded).length;
-
-    return { total, passed, failed, avgScore, manuallyGraded };
+  const getFilteredStudents = () => {
+    if (!searchQuery) return students;
+    
+    const query = searchQuery.toLowerCase();
+    return students.filter(student => 
+      student.name.toLowerCase().includes(query) ||
+      student.email.toLowerCase().includes(query)
+    );
   };
-
-  const stats = getStatistics();
-  const filteredSubmissions = getFilteredAndSortedSubmissions();
-  const uniqueExams = [...new Set(submissions.map(s => s.examId))];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-2" />
-          <p className="text-gray-600">Loading submissions...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     );
   }
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Submission Management</h1>
-          <p className="text-gray-600 mt-1">Review, grade, and manage all student test submissions</p>
-        </div>
-        <button
-          onClick={loadAllData}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <RefreshCw className="w-4 h-4" />
-          Refresh
-        </button>
-      </div>
+  // LEVEL 1: Tests List View
+  if (view === 'tests') {
+    const filteredTests = getFilteredTests();
 
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Total Submissions</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
-            </div>
-            <FileText className="w-8 h-8 text-blue-600" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border border-green-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Passed (≥60%)</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">{stats.passed}</p>
-            </div>
-            <TrendingUp className="w-8 h-8 text-green-600" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border border-red-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Failed (&lt;60%)</p>
-              <p className="text-2xl font-bold text-red-600 mt-1">{stats.failed}</p>
-            </div>
-            <TrendingDown className="w-8 h-8 text-red-600" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border border-purple-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Average Score</p>
-              <p className="text-2xl font-bold text-purple-600 mt-1">{stats.avgScore.toFixed(1)}%</p>
-            </div>
-            <Award className="w-8 h-8 text-purple-600" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border border-orange-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Manually Graded</p>
-              <p className="text-2xl font-bold text-orange-600 mt-1">{stats.manuallyGraded}</p>
-            </div>
-            <Edit className="w-8 h-8 text-orange-600" />
-          </div>
-        </div>
-      </div>
-
-      {/* Filters and Search */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Search */}
-          <div className="md:col-span-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search students, exams..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-
-          {/* Exam Filter */}
+    return (
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-center">
           <div>
-            <select
-              value={examFilter}
-              onChange={(e) => setExamFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">All Exams</option>
-              {uniqueExams.map(examId => (
-                <option key={examId} value={examId}>
-                  {exams[examId]?.title || 'Unknown Exam'}
-                </option>
-              ))}
-            </select>
+            <h1 className="text-2xl font-bold text-gray-900">Test Submissions</h1>
+            <p className="text-gray-600 mt-1">Review and manage completed tests</p>
           </div>
-
-          {/* Status Filter */}
-          <div>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">All Status</option>
-              <option value="passed">Passed (≥60%)</option>
-              <option value="failed">Failed (&lt;60%)</option>
-              <option value="manual">Manually Graded</option>
-            </select>
-          </div>
-
-          {/* Sort By */}
-          <div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="date">Sort by Date</option>
-              <option value="score">Sort by Score</option>
-              <option value="percentage">Sort by Percentage</option>
-              <option value="student">Sort by Student</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="mt-4 flex justify-end gap-3">
-          {examFilter !== 'all' && (
-            <button
-              onClick={() => handlePublishExamResults(examFilter)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              <Send className="w-4 h-4" />
-              Publish All Results for Selected Exam
-            </button>
-          )}
           <button
-            onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            onClick={loadTests}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            <Download className="w-4 h-4" />
-            Export to CSV
+            <RefreshCw className="w-4 h-4" />
+            Refresh
           </button>
         </div>
-      </div>
 
-      {/* Submissions Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Search */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search tests..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        {/* Tests Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredTests.length === 0 ? (
+            <div className="col-span-full text-center py-12 text-gray-500">
+              {tests.length === 0 ? 'No test submissions yet' : 'No tests match your search'}
+            </div>
+          ) : (
+            filteredTests.map((test) => (
+              <div
+                key={test.examId}
+                onClick={() => handleTestClick(test)}
+                className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      {test.examTitle}
+                    </h3>
+                    <div className="flex items-center text-sm text-gray-500 mb-1">
+                      <Clock className="w-4 h-4 mr-2" />
+                      {Math.floor(test.examDuration / 60)} minutes
+                    </div>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      {new Date(test.latestSubmission).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </div>
+                
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-blue-600">
+                      <Users className="w-5 h-5 mr-2" />
+                      <span className="font-semibold text-lg">{test.submissionCount}</span>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {test.submissionCount === 1 ? 'participant' : 'participants'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // LEVEL 2: Students List View
+  if (view === 'students') {
+    const filteredStudents = getFilteredStudents();
+
+    return (
+      <div className="space-y-6">
+        {/* Header with Back Button */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleBackToTests}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Back to Tests
+          </button>
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-gray-900">{selectedTest?.examTitle}</h1>
+            <p className="text-gray-600 mt-1">{students.length} student{students.length !== 1 ? 's' : ''} completed this test</p>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search students..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        {/* Students Table */}
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
@@ -416,170 +360,233 @@ export function SubmissionManagement() {
                   Student
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Exam
+                  Email
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Score
+                  Submission Time
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Percentage
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Published
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Submitted
+                  Result Status
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  Action
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredSubmissions.length === 0 ? (
+              {filteredStudents.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
-                    {submissions.length === 0 ? 'No submissions yet' : 'No submissions match your filters'}
+                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                    {students.length === 0 ? 'No students yet' : 'No students match your search'}
                   </td>
                 </tr>
               ) : (
-                filteredSubmissions.map((submission) => {
-                  const student = students[submission.studentUid] || {};
-                  const exam = exams[submission.examId] || {};
-                  const percentage = ((submission.score / submission.totalQuestions) * 100).toFixed(1);
-                  const isPassed = percentage >= 60;
-
-                  return (
-                    <tr key={submission.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center">
-                          <img
-                            src={student.photoURL || 'https://via.placeholder.com/40'}
-                            alt={student.name}
-                            className="w-10 h-10 rounded-full"
-                          />
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {student.name || 'Unknown'}
-                            </div>
-                            <div className="text-sm text-gray-500">{student.email || 'N/A'}</div>
+                filteredStudents.map((student) => (
+                  <tr 
+                    key={student.submissionId} 
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleStudentClick(student)}
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        <img
+                          src={student.photoURL}
+                          alt={student.name}
+                          className="w-10 h-10 rounded-full"
+                        />
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">
+                            {student.name}
                           </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">{exam.title || 'Unknown Exam'}</div>
-                        <div className="text-sm text-gray-500">
-                          {exam.duration ? `${Math.floor(exam.duration / 60)} mins` : 'N/A'}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
-                          {submission.score}/{submission.totalQuestions}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                            <div
-                              className={`h-2 rounded-full ${
-                                isPassed ? 'bg-green-600' : 'bg-red-600'
-                              }`}
-                              style={{ width: `${percentage}%` }}
-                            />
-                          </div>
-                          <span className="text-sm font-medium text-gray-900">{percentage}%</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex flex-col gap-1">
-                          <span
-                            className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                              isPassed
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}
-                          >
-                            {isPassed ? (
-                              <CheckCircle className="w-3 h-3" />
-                            ) : (
-                              <XCircle className="w-3 h-3" />
-                            )}
-                            {isPassed ? 'Passed' : 'Failed'}
-                          </span>
-                          {submission.manuallyGraded && (
-                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                              <Edit className="w-3 h-3" />
-                              Manual
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {submission.isPublished ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <Unlock className="w-3 h-3" />
-                            Published
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                            <Lock className="w-3 h-3" />
-                            Pending
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center text-sm text-gray-900">
-                          <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                          {new Date(submission.createdAt).toLocaleDateString()}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {new Date(submission.createdAt).toLocaleTimeString()}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex items-center gap-2 justify-end">
-                          {!submission.isPublished && (
-                            <button
-                              onClick={() => handlePublishSingleSubmission(submission.id)}
-                              className="text-purple-600 hover:text-purple-900 flex items-center gap-1"
-                              title="Publish result to student"
-                            >
-                              <Send className="w-4 h-4" />
-                              Publish
-                            </button>
-                          )}
-                          <button
-                            onClick={() => handleViewSubmission(submission)}
-                            className="text-blue-600 hover:text-blue-900 flex items-center gap-1"
-                          >
-                            <Eye className="w-4 h-4" />
-                            Review
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900">{student.email}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900">
+                        {new Date(student.submittedAt).toLocaleDateString()}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {new Date(student.submittedAt).toLocaleTimeString()}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {student.isPublished ? (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          <Unlock className="w-3 h-3" />
+                          Result Published
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                          <Lock className="w-3 h-3" />
+                          Pending Review
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <ChevronRight className="w-5 h-5 text-gray-400 inline-block" />
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
         </div>
       </div>
+    );
+  }
 
-      {/* Submission Review Modal */}
-      {showReviewModal && selectedSubmission && (
-        <FirebaseSubmissionReview
-          submissionId={selectedSubmission.id}
-          onClose={() => {
-            setShowReviewModal(false);
-            setSelectedSubmission(null);
-            loadAllData(); // Refresh data after review
-          }}
-        />
-      )}
-    </div>
-  );
+  // LEVEL 3: Detailed Answer Review
+  if (view === 'review' && submissionDetails) {
+    return (
+      <div className="space-y-6">
+        {/* Header with Back Button */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleBackToStudents}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Back to Students
+          </button>
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-gray-900">Answer Review</h1>
+            <p className="text-gray-600 mt-1">{selectedStudent?.name} - {selectedTest?.examTitle}</p>
+          </div>
+        </div>
+
+        {/* Student Info Card */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <img
+                src={selectedStudent?.photoURL}
+                alt={selectedStudent?.name}
+                className="w-16 h-16 rounded-full"
+              />
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">{selectedStudent?.name}</h2>
+                <p className="text-gray-600">{selectedStudent?.email}</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Submitted on {new Date(selectedStudent?.submittedAt).toLocaleString()}
+                </p>
+              </div>
+            </div>
+            
+            <div className="text-right">
+              <div className="flex items-center gap-4">
+                {/* Score Display/Edit */}
+                <div className="text-center">
+                  <p className="text-sm text-gray-600 mb-2">Score</p>
+                  {editingScore ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        min="0"
+                        max={submissionDetails.submission.total_questions}
+                        value={newScore}
+                        onChange={(e) => setNewScore(parseInt(e.target.value) || 0)}
+                        className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center"
+                      />
+                      <button
+                        onClick={() => {
+                          handleScoreUpdate(newScore);
+                          setEditingScore(false);
+                        }}
+                        className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditingScore(false);
+                          setNewScore(submissionDetails.firebaseData?.score || submissionDetails.submission.score);
+                        }}
+                        className="px-3 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <p className="text-3xl font-bold text-blue-600">
+                        {submissionDetails.firebaseData?.score || submissionDetails.submission.score}/{submissionDetails.submission.total_questions}
+                      </p>
+                      <button
+                        onClick={() => setEditingScore(true)}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 text-sm"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Publish Button */}
+                {!submissionDetails.firebaseData?.isPublished && (
+                  <button
+                    onClick={handlePublishResult}
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  >
+                    <Send className="w-4 h-4" />
+                    Publish Result
+                  </button>
+                )}
+                
+                {submissionDetails.firebaseData?.isPublished && (
+                  <div className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-800 rounded-lg">
+                    <CheckCircle className="w-4 h-4" />
+                    Published
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Answers List */}
+        <div className="bg-white rounded-lg border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">Student Answers</h3>
+            <p className="text-sm text-gray-600 mt-1">Review all answers submitted by the student</p>
+          </div>
+          
+          <div className="divide-y divide-gray-200">
+            {submissionDetails.sections.map((section) => (
+              <div key={section.id} className="p-6">
+                <h4 className="text-md font-semibold text-gray-900 mb-4">
+                  {section.title}
+                </h4>
+                <div className="space-y-4">
+                  {section.questions.map((question) => (
+                    <div key={question.id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
+                          {question.index}
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-700 mb-2">
+                          Student's Answer:
+                        </p>
+                        <div className="bg-white border border-gray-200 rounded-lg px-4 py-3">
+                          <p className="text-gray-900">
+                            {question.student_answer || <span className="text-gray-400 italic">No answer provided</span>}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 }
