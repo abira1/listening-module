@@ -316,4 +316,29 @@ export const BackendService = {
       throw new Error('Failed to update submission score');
     }
   },
+
+  // Result publishing operations (Admin only)
+  publishExamResults: async (examId) => {
+    try {
+      const response = await api.put(`/admin/exams/${examId}/publish-results`, {}, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error publishing exam results:', error);
+      throw new Error('Failed to publish exam results');
+    }
+  },
+
+  publishSingleSubmission: async (submissionId) => {
+    try {
+      const response = await api.put(`/admin/submissions/${submissionId}/publish`, {}, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error publishing submission:', error);
+      throw new Error('Failed to publish submission');
+    }
+  },
 };
