@@ -308,6 +308,27 @@ class FirebaseAuthService {
   }
 
   /**
+   * Update submission with question marks and calculated score (admin only)
+   */
+  async updateSubmissionWithMarks(submissionId, calculatedScore, questionMarks) {
+    try {
+      const submissionRef = ref(database, `submissions/${submissionId}`);
+      const updateData = {
+        score: calculatedScore,
+        questionMarks: questionMarks,
+        manuallyGraded: true,
+        updatedAt: new Date().toISOString()
+      };
+      
+      await update(submissionRef, updateData);
+      return updateData;
+    } catch (error) {
+      console.error('Error updating submission with marks:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Publish submission results - makes scores visible to students (admin only)
    */
   async publishSubmission(submissionId) {
