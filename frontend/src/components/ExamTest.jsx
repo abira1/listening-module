@@ -11,19 +11,24 @@ import { useAuth } from '../contexts/AuthContext';
 export function ExamTest() {
   const { examId } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, user, loading: authLoading } = useAuth();
   const [currentScreen, setCurrentScreen] = useState('confirmDetails');
   const [exam, setExam] = useState(null);
   const [loading, setLoading] = useState(true);
   const audioRef = useRef(null);
 
-  // Check authentication before allowing exam access
+  // Check authentication and approval status before allowing exam access
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      // Redirect to login if not authenticated
-      navigate('/student');
+    if (!authLoading) {
+      if (!isAuthenticated) {
+        // Redirect to login if not authenticated
+        navigate('/student');
+      } else if (user && user.status !== 'approved') {
+        // Only approved students can take exams
+        navigate('/waiting-approval');
+      }
     }
-  }, [isAuthenticated, authLoading, navigate]);
+  }, [isAuthenticated, user, authLoading, navigate]);
 
   useEffect(() => {
     const loadExam = async () => {
