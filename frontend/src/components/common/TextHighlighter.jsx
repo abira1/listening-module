@@ -11,9 +11,10 @@ import NotePopup from './NotePopup';
  * Features:
  * - Precise text highlighting using Range API
  * - Multiple independent highlights
- * - Note-taking on highlighted text
+ * - Note-taking with or without highlighting
+ * - Clickable note icons to edit notes
  * - Clear individual or all highlights
- * - No persistence after exam ends
+ * - No persistence after exam ends (session-only)
  */
 
 const TextHighlighter = ({ children, enabled = true }) => {
@@ -28,7 +29,6 @@ const TextHighlighter = ({ children, enabled = true }) => {
   // Keep ref in sync with state
   useEffect(() => {
     highlightsRef.current = highlights;
-    console.log('Highlights updated:', highlights);
   }, [highlights]);
 
   // Close menus when clicking outside
@@ -37,7 +37,7 @@ const TextHighlighter = ({ children, enabled = true }) => {
       if (contextMenu && !e.target.closest('.context-menu')) {
         setContextMenu(null);
       }
-      if (notePopup && !e.target.closest('.note-popup') && !e.target.closest('.highlighted-text')) {
+      if (notePopup && !e.target.closest('.note-popup') && !e.target.closest('.highlighted-text') && !e.target.closest('.note-icon')) {
         setNotePopup(null);
       }
     };
@@ -50,8 +50,8 @@ const TextHighlighter = ({ children, enabled = true }) => {
   const handleMouseUp = useCallback((e) => {
     if (!enabled) return;
 
-    // Ignore if clicking on existing highlight controls
-    if (e.target.closest('.context-menu') || e.target.closest('.note-popup')) {
+    // Ignore if clicking on existing highlight controls or note icons
+    if (e.target.closest('.context-menu') || e.target.closest('.note-popup') || e.target.closest('.note-icon')) {
       return;
     }
 
@@ -82,10 +82,27 @@ const TextHighlighter = ({ children, enabled = true }) => {
       setContextMenu({
         x: rect.left + scrollX + (rect.width / 2), // Center horizontally
         y: rect.bottom + scrollY + 5, // 5px below selection
-        type: 'highlight'
+        type: 'selection' // Show both Highlight and Notes options
       });
     }
   }, [enabled]);
+
+  // Handle click on note icon
+  const handleNoteIconClick = useCallback((e, highlightId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const highlight = highlightsRef.current.find(h => h.id === highlightId);
+    if (highlight) {
+      const rect = e.target.getBoundingClientRect();
+      setNotePopup({
+        highlightId: highlightId,
+        x: rect.left + window.pageXOffset,
+        y: rect.bottom + window.pageYOffset + 5,
+        currentNote: highlight.note || ''
+      });
+    }
+  }, []);
 
   // Handle right-click on highlighted text
   const handleContextMenu = useCallback((e) => {
@@ -97,10 +114,7 @@ const TextHighlighter = ({ children, enabled = true }) => {
       e.preventDefault();
       
       const highlightId = highlightedElement.dataset.highlightId;
-      // Use ref to get latest highlights state
       const highlight = highlightsRef.current.find(h => h.id === highlightId);
-
-      console.log('Right-click on highlight:', highlightId, highlight);
 
       if (highlight) {
         // Get highlight element position for better menu placement
@@ -115,14 +129,12 @@ const TextHighlighter = ({ children, enabled = true }) => {
           highlightId: highlightId,
           highlight: highlight
         });
-      } else {
-        console.warn('Highlight not found in state:', highlightId);
       }
     }
   }, [enabled]);
 
   // Apply highlight using Range API
-  const applyHighlight = useCallback(() => {
+  const applyHighlight = useCallback((withNote = false) => {
     if (!selectedRange) return;
 
     try {
@@ -136,6 +148,8 @@ const TextHighlighter = ({ children, enabled = true }) => {
       highlightSpan.className = 'highlighted-text';
       highlightSpan.style.backgroundColor = '#fef08a'; // Tailwind yellow-200
       highlightSpan.style.cursor = 'pointer';
+      highlightSpan.style.position = 'relative';
+      highlightSpan.style.display = 'inline';
       highlightSpan.setAttribute('data-highlight-id', highlightId);
 
       // Use Range API to wrap the selected content
@@ -149,6 +163,18 @@ const TextHighlighter = ({ children, enabled = true }) => {
         // Insert the highlight span at the range position
         range.insertNode(highlightSpan);
         
+        // Create note icon element
+        const noteIcon = document.createElement('span');
+        noteIcon.className = 'note-icon';
+        noteIcon.style.cssText = 'cursor: pointer; font-size: 14px; margin-left: 2px; vertical-align: super;';
+        noteIcon.textContent = '📝';
+        noteIcon.title = 'Click to edit note';
+        noteIcon.style.display = 'none'; // Hidden by default
+        noteIcon.onclick = (e) => handleNoteIconClick(e, highlightId);
+        
+        // Insert note icon after highlight
+        highlightSpan.parentNode.insertBefore(noteIcon, highlightSpan.nextSibling);
+        
         // Clear the selection
         window.getSelection().removeAllRanges();
 
@@ -157,10 +183,24 @@ const TextHighlighter = ({ children, enabled = true }) => {
           id: highlightId,
           text: text,
           note: null,
-          element: highlightSpan
+          element: highlightSpan,
+          noteIconElement: noteIcon
         };
 
         setHighlights(prev => [...prev, newHighlight]);
+        
+        // If user wants to add note immediately, open note popup
+        if (withNote) {
+          setTimeout(() => {
+            const rect = highlightSpan.getBoundingClientRect();
+            setNotePopup({
+              highlightId: highlightId,
+              x: rect.left + window.pageXOffset,
+              y: rect.bottom + window.pageYOffset + 5,
+              currentNote: ''
+            });
+          }, 100);
+        }
         
       } catch (err) {
         console.error('Error applying highlight:', err);
@@ -172,48 +212,104 @@ const TextHighlighter = ({ children, enabled = true }) => {
     } catch (error) {
       console.error('Error in applyHighlight:', error);
     }
-  }, [selectedRange]);
+  }, [selectedRange, handleNoteIconClick]);
 
-  // Add note to highlight
-  const addNote = useCallback((highlightId) => {
-    const highlight = highlightsRef.current.find(h => h.id === highlightId);
-    if (!highlight) {
-      console.error('Highlight not found for adding note:', highlightId);
-      return;
+  // Add note only (without highlighting)
+  const addNoteOnly = useCallback(() => {
+    if (!selectedRange) return;
+
+    try {
+      const { range, text } = selectedRange;
+      
+      // Create unique ID for this note
+      const highlightId = `note-${Date.now()}-${highlightIdCounter.current++}`;
+
+      // Create span element for note (no yellow background)
+      const noteSpan = document.createElement('span');
+      noteSpan.className = 'highlighted-text note-only';
+      noteSpan.style.backgroundColor = 'transparent';
+      noteSpan.style.cursor = 'pointer';
+      noteSpan.style.position = 'relative';
+      noteSpan.style.display = 'inline';
+      noteSpan.setAttribute('data-highlight-id', highlightId);
+
+      try {
+        // Extract the contents of the range
+        const contents = range.extractContents();
+        
+        // Append the contents to our note span
+        noteSpan.appendChild(contents);
+        
+        // Insert the note span at the range position
+        range.insertNode(noteSpan);
+        
+        // Create note icon element
+        const noteIcon = document.createElement('span');
+        noteIcon.className = 'note-icon';
+        noteIcon.style.cssText = 'cursor: pointer; font-size: 14px; margin-left: 2px; vertical-align: super;';
+        noteIcon.textContent = '📝';
+        noteIcon.title = 'Click to edit note';
+        noteIcon.onclick = (e) => handleNoteIconClick(e, highlightId);
+        
+        // Insert note icon after span
+        noteSpan.parentNode.insertBefore(noteIcon, noteSpan.nextSibling);
+        
+        // Clear the selection
+        window.getSelection().removeAllRanges();
+
+        // Store note data
+        const newHighlight = {
+          id: highlightId,
+          text: text,
+          note: null,
+          element: noteSpan,
+          noteIconElement: noteIcon,
+          isNoteOnly: true
+        };
+
+        setHighlights(prev => [...prev, newHighlight]);
+        
+        // Open note popup immediately
+        setTimeout(() => {
+          const rect = noteSpan.getBoundingClientRect();
+          setNotePopup({
+            highlightId: highlightId,
+            x: rect.left + window.pageXOffset,
+            y: rect.bottom + window.pageYOffset + 5,
+            currentNote: ''
+          });
+        }, 100);
+        
+      } catch (err) {
+        console.error('Error adding note:', err);
+      }
+
+      setContextMenu(null);
+      setSelectedRange(null);
+
+    } catch (error) {
+      console.error('Error in addNoteOnly:', error);
     }
-
-    console.log('Adding note to highlight:', highlightId, 'Current note:', highlight.note);
-
-    const rect = highlight.element.getBoundingClientRect();
-    setNotePopup({
-      highlightId: highlightId,
-      x: rect.left + window.pageXOffset,
-      y: rect.bottom + window.pageYOffset + 5,
-      currentNote: highlight.note || ''
-    });
-
-    setContextMenu(null);
-  }, []);
+  }, [selectedRange, handleNoteIconClick]);
 
   // Save note
   const saveNote = useCallback((highlightId, noteText) => {
     const trimmedNote = noteText.trim();
-    console.log('Saving note for highlight:', highlightId, 'Note:', trimmedNote);
 
     setHighlights(prev => {
       const updated = prev.map(h => {
         if (h.id === highlightId) {
           const hasNote = trimmedNote !== '';
-          // Update the element's data attribute for CSS styling
-          if (h.element) {
-            h.element.setAttribute('data-has-note', hasNote.toString());
-            console.log('Set data-has-note attribute:', hasNote);
+          
+          // Show/hide note icon based on whether note exists
+          if (h.noteIconElement) {
+            h.noteIconElement.style.display = hasNote ? 'inline' : 'none';
           }
+          
           return { ...h, note: trimmedNote || null };
         }
         return h;
       });
-      console.log('Updated highlights after save:', updated);
       return updated;
     });
     
@@ -224,13 +320,15 @@ const TextHighlighter = ({ children, enabled = true }) => {
   const clearHighlight = useCallback((highlightId) => {
     const highlight = highlightsRef.current.find(h => h.id === highlightId);
     if (!highlight) {
-      console.error('Highlight not found for clearing:', highlightId);
       return;
     }
 
-    console.log('Clearing highlight:', highlightId);
-
     try {
+      // Remove note icon first
+      if (highlight.noteIconElement && highlight.noteIconElement.parentNode) {
+        highlight.noteIconElement.parentNode.removeChild(highlight.noteIconElement);
+      }
+      
       // Get the highlight element
       const highlightElement = highlight.element;
       
@@ -258,6 +356,12 @@ const TextHighlighter = ({ children, enabled = true }) => {
   const clearAllHighlights = useCallback(() => {
     highlights.forEach(highlight => {
       try {
+        // Remove note icon
+        if (highlight.noteIconElement && highlight.noteIconElement.parentNode) {
+          highlight.noteIconElement.parentNode.removeChild(highlight.noteIconElement);
+        }
+        
+        // Remove highlight
         const highlightElement = highlight.element;
         if (highlightElement && highlightElement.parentNode) {
           const parent = highlightElement.parentNode;
@@ -289,8 +393,22 @@ const TextHighlighter = ({ children, enabled = true }) => {
           x={contextMenu.x}
           y={contextMenu.y}
           type={contextMenu.type}
-          onHighlight={applyHighlight}
-          onAddNote={() => addNote(contextMenu.highlightId)}
+          onHighlight={() => applyHighlight(false)}
+          onHighlightAndNote={() => applyHighlight(true)}
+          onNoteOnly={addNoteOnly}
+          onAddNote={() => {
+            const highlight = highlightsRef.current.find(h => h.id === contextMenu.highlightId);
+            if (highlight) {
+              const rect = highlight.element.getBoundingClientRect();
+              setNotePopup({
+                highlightId: contextMenu.highlightId,
+                x: rect.left + window.pageXOffset,
+                y: rect.bottom + window.pageYOffset + 5,
+                currentNote: highlight.note || ''
+              });
+              setContextMenu(null);
+            }
+          }}
           onClearHighlight={() => clearHighlight(contextMenu.highlightId)}
           onClearAll={clearAllHighlights}
           hasHighlights={highlights.length > 0}
