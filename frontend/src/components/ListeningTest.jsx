@@ -188,12 +188,8 @@ export function ListeningTest({ examId, audioRef }) {
         alert('Test submitted successfully! Your answers have been saved.');
       }
       
-      // Redirect based on authentication
-      if (isAuthenticated && user) {
-        navigate('/student/dashboard');
-      } else {
-        navigate('/');
-      }
+      // Show completion screen instead of auto-redirect
+      setSubmissionComplete(true);
     } catch (error) {
       console.error('Error submitting exam:', error);
       
