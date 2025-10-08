@@ -73,11 +73,15 @@ const TextHighlighter = ({ children, enabled = true }) => {
         text: selectedText
       });
 
-      // Show context menu for highlighting
+      // Get selection rectangle for better positioning
       const rect = range.getBoundingClientRect();
+      const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+      // Position menu right below the selection
       setContextMenu({
-        x: e.pageX,
-        y: e.pageY,
+        x: rect.left + scrollX + (rect.width / 2), // Center horizontally
+        y: rect.bottom + scrollY + 5, // 5px below selection
         type: 'highlight'
       });
     }
