@@ -429,8 +429,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Homepage Authentication Protection"
-    - "Google OAuth Authentication System"
+    - "Manual Submission Marking System"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
