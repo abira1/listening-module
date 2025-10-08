@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Search, Filter, Edit, Trash2, Copy, Upload, MoreHorizontal, Volume2, PlayIcon, PauseIcon, Loader, AlertCircle, CheckCircle } from 'lucide-react';
 import { BackendService } from '../../services/BackendService';
 import { useToast } from '../common/Toast';
+import { useAuth } from '../../contexts/AuthContext';
 
 export function TestManagement() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,6 +14,7 @@ export function TestManagement() {
   const [newlyCreatedExamId, setNewlyCreatedExamId] = useState(null);
   const navigate = useNavigate();
   const { showToast, ToastContainer } = useToast();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchExams();
