@@ -572,44 +572,118 @@ export function SubmissionManagement() {
           </div>
         </div>
 
-        {/* Answers List */}
+        {/* Interactive Answer Review */}
         <div className="bg-white rounded-lg border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Student Answers</h3>
-            <p className="text-sm text-gray-600 mt-1">Review all answers submitted by the student</p>
+          <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+            <h3 className="text-lg font-semibold text-gray-900">Interactive Answer Review</h3>
+            <p className="text-sm text-gray-600 mt-1">Mark each answer as correct (✔) or incorrect (✖). Score updates automatically.</p>
           </div>
           
           <div className="divide-y divide-gray-200">
             {submissionDetails.sections.map((section) => (
               <div key={section.id} className="p-6">
-                <h4 className="text-md font-semibold text-gray-900 mb-4">
+                <h4 className="text-md font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-600" />
                   {section.title}
                 </h4>
-                <div className="space-y-4">
-                  {section.questions.map((question) => (
-                    <div key={question.id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-                      <div className="flex-shrink-0">
-                        <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
-                          {question.index}
+                <div className="space-y-3">
+                  {section.questions.map((question) => {
+                    const mark = questionMarks[question.index];
+                    const isCorrect = mark === 'correct';
+                    const isIncorrect = mark === 'incorrect';
+                    const isUnmarked = !mark;
+                    
+                    return (
+                      <div 
+                        key={question.id} 
+                        className={`flex items-center gap-4 p-4 rounded-lg border-2 transition-all ${
+                          isCorrect ? 'bg-green-50 border-green-300' : 
+                          isIncorrect ? 'bg-red-50 border-red-300' : 
+                          'bg-gray-50 border-gray-200'
+                        }`}
+                      >
+                        {/* Question Number */}
+                        <div className="flex-shrink-0">
+                          <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${
+                            isCorrect ? 'bg-green-600 text-white' :
+                            isIncorrect ? 'bg-red-600 text-white' :
+                            'bg-gray-400 text-white'
+                          }`}>
+                            {question.index}
+                          </div>
+                        </div>
+                        
+                        {/* Student Answer */}
+                        <div className="flex-1">
+                          <p className="text-xs font-medium text-gray-600 mb-1">Student's Answer:</p>
+                          <div className="bg-white border border-gray-300 rounded-lg px-4 py-2">
+                            <p className={`font-medium ${
+                              isCorrect ? 'text-green-900' :
+                              isIncorrect ? 'text-red-900' :
+                              'text-gray-900'
+                            }`}>
+                              {question.student_answer || <span className="text-gray-400 italic">No answer provided</span>}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        {/* Action Buttons */}
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleMarkQuestion(question.index, 'correct')}
+                            disabled={submissionDetails.firebaseData?.isPublished}
+                            className={`p-3 rounded-lg border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                              isCorrect 
+                                ? 'bg-green-600 border-green-600 text-white scale-110 shadow-lg' 
+                                : 'bg-white border-green-300 text-green-600 hover:bg-green-50 hover:scale-105'
+                            }`}
+                            title="Mark as correct (+1 point)"
+                          >
+                            <CheckCircle className="w-6 h-6" />
+                          </button>
+                          <button
+                            onClick={() => handleMarkQuestion(question.index, 'incorrect')}
+                            disabled={submissionDetails.firebaseData?.isPublished}
+                            className={`p-3 rounded-lg border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                              isIncorrect 
+                                ? 'bg-red-600 border-red-600 text-white scale-110 shadow-lg' 
+                                : 'bg-white border-red-300 text-red-600 hover:bg-red-50 hover:scale-105'
+                            }`}
+                            title="Mark as incorrect (0 points)"
+                          >
+                            <XCircle className="w-6 h-6" />
+                          </button>
                         </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-700 mb-2">
-                          Student's Answer:
-                        </p>
-                        <div className="bg-white border border-gray-200 rounded-lg px-4 py-3">
-                          <p className="text-gray-900">
-                            {question.student_answer || <span className="text-gray-400 italic">No answer provided</span>}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}
           </div>
         </div>
+        
+        {/* Marking Instructions */}
+        {!submissionDetails.firebaseData?.isPublished && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                  <span className="text-lg">ℹ️</span>
+                </div>
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-semibold text-blue-900 mb-1">How to use:</h4>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Click the <CheckCircle className="w-4 h-4 inline text-green-600" /> button to mark an answer as correct (+1 point)</li>
+                  <li>• Click the <XCircle className="w-4 h-4 inline text-red-600" /> button to mark an answer as incorrect (0 points)</li>
+                  <li>• The score updates automatically as you mark each answer</li>
+                  <li>• Click "Publish Result" when you're done to make the score visible to the student</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
