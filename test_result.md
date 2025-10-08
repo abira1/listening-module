@@ -445,6 +445,18 @@ frontend:
         agent: "testing"
         comment: "🎯 HIERARCHICAL SUBMISSION MANAGEMENT FIX VERIFICATION COMPLETED! All 7 critical test scenarios for the fixed detailed answer sheet view passed perfectly: ✅ GET /api/exams/ielts-listening-practice-test-1/full returns 200 OK with complete structure (exam object with id/title/duration_seconds, sections array) ✅ Question Structure Verified: Found exactly 40 questions across 4 sections, all questions have proper index field (1-40), type field, and answer_key in payload ✅ Question Indexing Correct: Questions properly indexed from 1 to 40 sequentially ✅ Firebase Compatibility Confirmed: Backend question structure fully supports Firebase submission matching logic (answers[question.index] gives student's answer) ✅ Sample questions show proper structure: Question 1 (short_answer, answer_key: 'part-time'), Question 2 (short_answer, answer_key: 'weekend'), etc. ✅ Data structure supports answer review UI: Admin can see student's answer for each question by matching Firebase answers object with backend question indices. The fix for the issue where clicking on student was showing loading and returning to student list is working correctly - the system can now properly fetch submission data from Firebase and combine it with exam structure from backend for detailed answer sheet view."
 
+  - task: "Interactive Scoring System for Admin Answer Review"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/admin/SubmissionManagement.jsx, /app/frontend/src/services/FirebaseAuthService.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented complete interactive scoring system for admin answer sheet review. Features: (1) Interactive marking - Each question has tick (✔) and cross (✖) buttons for admin to mark as correct/incorrect. (2) Real-time score calculation - Score auto-updates as admin marks questions. Tick adds 1 point, cross adds 0. (3) Visual feedback - Green background for correct (ticked), red for incorrect (crossed), gray for unmarked. Question numbers change color accordingly. (4) Question marks persistence - If result already published, existing marks are loaded and displayed. (5) Unmarked by default - All questions start unmarked unless result was previously published. (6) No manual score override - Score is purely calculated from tick marks count. (7) Enhanced UI - Beautiful gradient header, clear instructions card, section-based organization. (8) Publish workflow - Clicking 'Publish Result' saves marks and score to Firebase, publishes to both Firebase and backend, shows success message, then auto-redirects to student list after 2 seconds. (9) Published state - Once published, tick/cross buttons are disabled (view-only mode). (10) Added updateSubmissionWithMarks() method to FirebaseAuthService to save questionMarks object and calculated score. Frontend restarted successfully. Ready for comprehensive testing!"
+
   - task: "Enhanced Timer with 3D Design and Auto-Submit"
     implemented: true
     working: true
