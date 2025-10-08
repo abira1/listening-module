@@ -80,7 +80,10 @@ export function SubmissionManagement() {
     }
 
     try {
+      // Publish in both backend and Firebase
       const result = await BackendService.publishExamResults(examId);
+      await FirebaseAuthService.publishExamSubmissions(examId);
+      
       alert(`Successfully published ${result.published_count} result(s) for ${result.exam_title}`);
       // Reload data to reflect changes
       await loadAllData();
@@ -96,7 +99,10 @@ export function SubmissionManagement() {
     }
 
     try {
+      // Publish in both backend and Firebase
       await BackendService.publishSingleSubmission(submissionId);
+      await FirebaseAuthService.publishSubmission(submissionId);
+      
       alert('Result published successfully!');
       // Reload data to reflect changes
       await loadAllData();
