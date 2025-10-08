@@ -1160,6 +1160,84 @@ async def get_exam_status(exam_id: str):
         logger.error(f"Error fetching exam status: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch exam status")
 
+# Result Publishing Endpoints (Admin only)
+@api_router.put("/admin/exams/{exam_id}/publish-results")
+async def publish_exam_results(
+    exam_id: str,
+    request: Request
+):
+    """Admin only: Publish all results for an exam - makes all submission scores visible to students"""
+    require_admin_access(request)
+    
+    try:
+        # Check if exam exists
+        exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+        if not exam:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        # Update all submissions for this exam to published
+        now = get_timestamp()
+        result = await db.submissions.update_many(
+            {"exam_id": exam_id, "is_published": False},
+            {
+                "$set": {
+                    "is_published": True,
+                    "published_at": now
+                }
+            }
+        )
+        
+        return {
+            "message": "Results published successfully",
+            "exam_id": exam_id,
+            "exam_title": exam.get("title", ""),
+            "published_count": result.modified_count,
+            "published_at": now
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error publishing exam results: {e}")
+        raise HTTPException(status_code=500, detail="Failed to publish exam results")
+
+@api_router.put("/admin/submissions/{submission_id}/publish")
+async def publish_single_submission(
+    submission_id: str,
+    request: Request
+):
+    """Admin only: Publish a single submission result"""
+    require_admin_access(request)
+    
+    try:
+        # Check if submission exists
+        submission = await db.submissions.find_one({"id": submission_id}, {"_id": 0})
+        if not submission:
+            raise HTTPException(status_code=404, detail="Submission not found")
+        
+        # Update submission to published
+        now = get_timestamp()
+        result = await db.submissions.update_one(
+            {"id": submission_id},
+            {
+                "$set": {
+                    "is_published": True,
+                    "published_at": now
+                }
+            }
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Submission not found")
+        
+        # Return updated submission
+        updated_submission = await db.submissions.find_one({"id": submission_id}, {"_id": 0})
+        return Submission(**updated_submission)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error publishing submission: {e}")
+        raise HTTPException(status_code=500, detail="Failed to publish submission")
+
 # Legacy status endpoints
 @api_router.get("/")
 async def root():
