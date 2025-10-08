@@ -59,6 +59,9 @@ async def init_ielts_test():
         "is_demo": False,
         "question_count": 40,
         "submission_count": 0,
+        "is_active": False,
+        "started_at": None,
+        "stopped_at": None,
     }
     
     await db.exams.insert_one(exam_data)
