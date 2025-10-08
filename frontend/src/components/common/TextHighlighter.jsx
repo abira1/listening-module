@@ -213,8 +213,13 @@ const TextHighlighter = ({ children, enabled = true }) => {
 
   // Clear specific highlight
   const clearHighlight = useCallback((highlightId) => {
-    const highlight = highlights.find(h => h.id === highlightId);
-    if (!highlight) return;
+    const highlight = highlightsRef.current.find(h => h.id === highlightId);
+    if (!highlight) {
+      console.error('Highlight not found for clearing:', highlightId);
+      return;
+    }
+
+    console.log('Clearing highlight:', highlightId);
 
     try {
       // Get the highlight element
@@ -238,7 +243,7 @@ const TextHighlighter = ({ children, enabled = true }) => {
     }
 
     setContextMenu(null);
-  }, [highlights]);
+  }, []);
 
   // Clear all highlights
   const clearAllHighlights = useCallback(() => {
