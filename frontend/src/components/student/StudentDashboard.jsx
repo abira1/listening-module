@@ -20,6 +20,11 @@ export function StudentDashboard() {
     }
 
     if (user) {
+      // Check if user is approved
+      if (user.status !== 'approved') {
+        navigate('/waiting-approval');
+        return;
+      }
       loadDashboardData();
     }
   }, [user, authLoading, navigate]);
