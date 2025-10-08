@@ -12,52 +12,82 @@ export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Subscribe to Firebase auth state changes
+    // Subscribe to Firebase auth state changes - STUDENT ONLY
     const unsubscribe = FirebaseAuthService.onAuthStateChange(async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          // Check if user is admin
+          // Check if user is admin - reject admin emails from student context
           const adminStatus = FirebaseAuthService.isAdminEmail(firebaseUser.email);
-          setIsAdmin(adminStatus);
+          
+          if (adminStatus) {
+            // Admin users should not be in student context
+            // Check if there's a stored student session
+            const storedStudent = sessionStorage.getItem('studentUser');
+            if (!storedStudent) {
+              setUser(null);
+              setIsAuthenticated(false);
+              setIsAdmin(false);
+              setLoading(false);
+              return;
+            }
+          }
 
-          // Get student profile from Firebase if not admin
+          // Get student profile from Firebase
           let userData = {
             uid: firebaseUser.uid,
             email: firebaseUser.email,
             name: firebaseUser.displayName,
             photoURL: firebaseUser.photoURL,
-            isAdmin: adminStatus
+            isAdmin: false
           };
 
-          if (!adminStatus) {
-            // Get student profile
-            const profile = await FirebaseAuthService.getStudentProfile(firebaseUser.uid);
-            if (profile) {
-              userData = { ...userData, ...profile };
-            } else {
-              // Create basic profile for new user
-              userData.profileCompleted = false;
-            }
+          // Get student profile
+          const profile = await FirebaseAuthService.getStudentProfile(firebaseUser.uid);
+          if (profile) {
+            userData = { ...userData, ...profile };
+          } else {
+            // Create basic profile for new user
+            userData.profileCompleted = false;
           }
 
+          // Store student session separately from admin
+          sessionStorage.setItem('studentUser', JSON.stringify(userData));
           setUser(userData);
           setIsAuthenticated(true);
+          setIsAdmin(false);
         } catch (error) {
-          console.error('Error loading user profile:', error);
+          console.error('Error loading student profile:', error);
           setUser({
             uid: firebaseUser.uid,
             email: firebaseUser.email,
             name: firebaseUser.displayName,
             photoURL: firebaseUser.photoURL,
-            isAdmin: FirebaseAuthService.isAdminEmail(firebaseUser.email),
+            isAdmin: false,
             profileCompleted: false
           });
           setIsAuthenticated(true);
+          setIsAdmin(false);
         }
       } else {
-        setUser(null);
-        setIsAuthenticated(false);
-        setIsAdmin(false);
+        // Check if student session exists in sessionStorage
+        const storedStudent = sessionStorage.getItem('studentUser');
+        if (storedStudent) {
+          try {
+            const userData = JSON.parse(storedStudent);
+            setUser(userData);
+            setIsAuthenticated(true);
+            setIsAdmin(false);
+          } catch (error) {
+            sessionStorage.removeItem('studentUser');
+            setUser(null);
+            setIsAuthenticated(false);
+            setIsAdmin(false);
+          }
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
+          setIsAdmin(false);
+        }
       }
       setLoading(false);
     });
