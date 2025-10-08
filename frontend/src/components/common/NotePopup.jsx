@@ -55,7 +55,7 @@ const NotePopup = ({ x, y, highlightId, currentNote, onSave, onClose }) => {
     >
       <div className="mb-2">
         <label className="text-xs font-semibold text-gray-700 mb-1 block">
-          Add Note
+          {currentNote ? 'Edit Note' : 'Add Note'}
         </label>
         <textarea
           ref={textareaRef}
