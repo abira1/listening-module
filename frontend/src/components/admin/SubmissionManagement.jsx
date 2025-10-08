@@ -202,7 +202,8 @@ export function SubmissionManagement() {
     setView('students');
     setSelectedStudent(null);
     setSubmissionDetails(null);
-    setEditingScore(false);
+    setQuestionMarks({});
+    setCalculatedScore(0);
   };
 
   const handleScoreUpdate = async (scoreToUpdate) => {
