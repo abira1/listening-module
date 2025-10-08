@@ -535,61 +535,29 @@ export function SubmissionManagement() {
             
             <div className="text-right">
               <div className="flex items-center gap-4">
-                {/* Score Display/Edit */}
+                {/* Score Display - Auto-calculated */}
                 <div className="text-center">
-                  <p className="text-sm text-gray-600 mb-2">Score</p>
-                  {editingScore ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="number"
-                        min="0"
-                        max={submissionDetails.submission.total_questions}
-                        value={newScore}
-                        onChange={(e) => setNewScore(parseInt(e.target.value) || 0)}
-                        className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center"
-                      />
-                      <button
-                        onClick={() => {
-                          handleScoreUpdate(newScore);
-                          setEditingScore(false);
-                        }}
-                        className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditingScore(false);
-                          setNewScore(submissionDetails.firebaseData?.score || submissionDetails.submission.score);
-                        }}
-                        className="px-3 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-                      >
-                        Cancel
-                      </button>
+                  <p className="text-sm text-gray-600 mb-2">Current Score</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-3xl font-bold text-blue-600">
+                      {calculatedScore}/{submissionDetails.submission.total_questions}
+                    </p>
+                    <div className="text-xs text-gray-500">
+                      ({Math.round((calculatedScore / submissionDetails.submission.total_questions) * 100)}%)
                     </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <p className="text-3xl font-bold text-blue-600">
-                        {submissionDetails.firebaseData?.score || submissionDetails.submission.score}/{submissionDetails.submission.total_questions}
-                      </p>
-                      <button
-                        onClick={() => setEditingScore(true)}
-                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 text-sm"
-                      >
-                        Edit
-                      </button>
-                    </div>
-                  )}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Auto-calculated from marks</p>
                 </div>
 
                 {/* Publish Button */}
                 {!submissionDetails.firebaseData?.isPublished && (
                   <button
                     onClick={handlePublishResult}
-                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                    disabled={isPublishing}
+                    className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Send className="w-4 h-4" />
-                    Publish Result
+                    <Send className="w-5 h-5" />
+                    {isPublishing ? 'Publishing...' : 'Publish Result'}
                   </button>
                 )}
                 
