@@ -287,6 +287,7 @@ export function StudentManagement() {
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Score</th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Result</th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Date</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
                 </tr>
               </thead>
               <tbody>
