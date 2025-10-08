@@ -201,6 +201,9 @@ async def create_exam(exam_data: ExamCreate):
             "is_demo": exam_data.is_demo,
             "question_count": 0,
             "submission_count": 0,
+            "is_active": False,
+            "started_at": None,
+            "stopped_at": None,
         }
         
         # Insert exam
