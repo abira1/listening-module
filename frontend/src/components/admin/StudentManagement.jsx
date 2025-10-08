@@ -365,6 +365,18 @@ export function StudentManagement() {
           </div>
         </div>
       )}
+
+      {/* Submission Review Modal */}
+      {reviewingSubmission && (
+        <SubmissionReview
+          submissionId={reviewingSubmission}
+          onClose={() => setReviewingSubmission(null)}
+          onScoreUpdated={() => {
+            // Reload data to show updated scores
+            loadData();
+          }}
+        />
+      )}
     </div>
   );
 }
