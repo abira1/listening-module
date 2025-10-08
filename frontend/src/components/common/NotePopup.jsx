@@ -11,10 +11,19 @@ const NotePopup = ({ x, y, highlightId, currentNote, onSave, onClose }) => {
   const [noteText, setNoteText] = useState(currentNote || '');
   const textareaRef = useRef(null);
 
+  // Update noteText when currentNote prop changes
+  useEffect(() => {
+    setNoteText(currentNote || '');
+    console.log('NotePopup opened with note:', currentNote);
+  }, [currentNote]);
+
   useEffect(() => {
     // Focus on textarea when popup opens
     if (textareaRef.current) {
       textareaRef.current.focus();
+      // Move cursor to end of text
+      textareaRef.current.selectionStart = textareaRef.current.value.length;
+      textareaRef.current.selectionEnd = textareaRef.current.value.length;
     }
   }, []);
 
