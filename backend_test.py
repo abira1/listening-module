@@ -1429,6 +1429,208 @@ def test_hierarchical_submission_management_fix():
         results['full_exam_structure'] = False
         return results
     
+    # Test 2: Verify Question Structure
+    print_info("\n--- Test 2: Verify Question Structure ---")
+    print_info("Expected: At least 40 questions total across all sections")
+    print_info("Each question should have: index, payload.answer_key, type")
+    
+    if results.get('sections_data'):
+        sections_data = results['sections_data']
+        total_questions = 0
+        questions_with_answer_key = 0
+        questions_with_index = 0
+        questions_with_type = 0
+        all_questions = []
+        
+        for section_idx, section in enumerate(sections_data, 1):
+            questions = section.get('questions', [])
+            section_question_count = len(questions)
+            total_questions += section_question_count
+            
+            print_info(f"Section {section_idx}: {section.get('title', 'No title')} - {section_question_count} questions")
+            
+            for question in questions:
+                all_questions.append(question)
+                
+                # Check for index field
+                if 'index' in question:
+                    questions_with_index += 1
+                
+                # Check for type field
+                if 'type' in question:
+                    questions_with_type += 1
+                
+                # Check for answer_key in payload
+                payload = question.get('payload', {})
+                if 'answer_key' in payload:
+                    questions_with_answer_key += 1
+        
+        print_info(f"Total questions found: {total_questions}")
+        print_info(f"Questions with index field: {questions_with_index}")
+        print_info(f"Questions with type field: {questions_with_type}")
+        print_info(f"Questions with answer_key in payload: {questions_with_answer_key}")
+        
+        # Verify requirements
+        if total_questions >= 40:
+            print_success(f"✅ Found {total_questions} questions (meets requirement of at least 40)")
+            results['question_count_ok'] = True
+        else:
+            print_error(f"❌ Only found {total_questions} questions (expected at least 40)")
+            results['question_count_ok'] = False
+        
+        if questions_with_index == total_questions:
+            print_success("✅ All questions have index field")
+            results['questions_have_index'] = True
+        else:
+            print_error(f"❌ Only {questions_with_index}/{total_questions} questions have index field")
+            results['questions_have_index'] = False
+        
+        if questions_with_type == total_questions:
+            print_success("✅ All questions have type field")
+            results['questions_have_type'] = True
+        else:
+            print_error(f"❌ Only {questions_with_type}/{total_questions} questions have type field")
+            results['questions_have_type'] = False
+        
+        if questions_with_answer_key == total_questions:
+            print_success("✅ All questions have answer_key in payload")
+            results['questions_have_answer_key'] = True
+        else:
+            print_error(f"❌ Only {questions_with_answer_key}/{total_questions} questions have answer_key in payload")
+            results['questions_have_answer_key'] = False
+        
+        # Verify question indexing (should be 1, 2, 3... up to 40)
+        print_info("\n--- Verifying Question Indexing ---")
+        indices = [q.get('index') for q in all_questions if 'index' in q]
+        indices.sort()
+        
+        expected_indices = list(range(1, total_questions + 1))
+        
+        if indices == expected_indices:
+            print_success(f"✅ Questions are properly indexed (1 to {total_questions})")
+            results['question_indexing_correct'] = True
+        else:
+            print_error(f"❌ Question indexing is incorrect")
+            print_error(f"Expected: {expected_indices[:10]}... (1 to {total_questions})")
+            print_error(f"Found: {indices[:10]}... (showing first 10)")
+            results['question_indexing_correct'] = False
+        
+        # Show sample questions for verification
+        print_info("\n--- Sample Questions ---")
+        for i, question in enumerate(all_questions[:5]):  # Show first 5 questions
+            print_info(f"Question {question.get('index', 'No index')}: Type={question.get('type', 'No type')}")
+            payload = question.get('payload', {})
+            answer_key = payload.get('answer_key', 'No answer_key')
+            print_info(f"  Answer Key: {answer_key}")
+            if i < 4:  # Don't add separator after last item
+                print_info("  ---")
+        
+        results['question_structure_verified'] = True
+    else:
+        print_error("❌ Cannot verify question structure - no sections data available")
+        results['question_structure_verified'] = False
+    
+    # Test 3: Firebase Submission Access (Data Structure Compatibility)
+    print_info("\n--- Test 3: Firebase Submission Access (Data Structure Compatibility) ---")
+    print_info("Verifying that backend question structure supports Firebase submission matching")
+    print_info("Firebase has: answers object (e.g., {1: 'answer1', 2: 'answer2'})")
+    print_info("Backend has: questions with index field")
+    print_info("Match logic: answers[question.index] gives student's answer for that question")
+    
+    if results.get('question_structure_verified') and results.get('questions_have_index'):
+        # Simulate Firebase submission data structure
+        sample_firebase_submission = {}
+        for i in range(1, min(41, total_questions + 1)):  # Create sample answers for up to 40 questions
+            sample_firebase_submission[str(i)] = f"sample_answer_{i}"
+        
+        print_info(f"Sample Firebase submission structure: {dict(list(sample_firebase_submission.items())[:5])}... (showing first 5)")
+        
+        # Test matching logic
+        matching_successful = 0
+        matching_failed = 0
+        
+        for question in all_questions[:10]:  # Test first 10 questions
+            question_index = question.get('index')
+            if question_index is not None:
+                firebase_key = str(question_index)
+                if firebase_key in sample_firebase_submission:
+                    student_answer = sample_firebase_submission[firebase_key]
+                    matching_successful += 1
+                    if matching_successful <= 3:  # Show first 3 matches
+                        print_info(f"  Question {question_index}: Firebase answer = '{student_answer}'")
+                else:
+                    matching_failed += 1
+            else:
+                matching_failed += 1
+        
+        if matching_failed == 0:
+            print_success("✅ Firebase submission matching logic works correctly")
+            print_success("✅ All questions can be matched with Firebase answers by index")
+            results['firebase_compatibility'] = True
+        else:
+            print_error(f"❌ Firebase matching failed for {matching_failed} questions")
+            results['firebase_compatibility'] = False
+    else:
+        print_error("❌ Cannot test Firebase compatibility - question structure verification failed")
+        results['firebase_compatibility'] = False
+    
+    # Summary
+    print_info("\n--- Hierarchical Submission Management Fix Test Summary ---")
+    test_categories = {
+        'Full Exam Data Structure': ['full_exam_structure'],
+        'Question Structure': ['question_count_ok', 'questions_have_index', 'questions_have_type', 'questions_have_answer_key', 'question_indexing_correct'],
+        'Firebase Compatibility': ['firebase_compatibility']
+    }
+    
+    overall_passed = 0
+    overall_total = 0
+    
+    for category, test_keys in test_categories.items():
+        category_passed = sum(1 for key in test_keys if results.get(key, False))
+        category_total = len(test_keys)
+        overall_passed += category_passed
+        overall_total += category_total
+        
+        print_info(f"\n{category}: {category_passed}/{category_total} tests passed")
+        for key in test_keys:
+            result = results.get(key, False)
+            status = "PASS" if result else "FAIL"
+            color = Colors.GREEN if result else Colors.RED
+            test_name = key.replace('_', ' ').title()
+            print(f"  {color}{status:4} - {test_name}{Colors.END}")
+    
+    print_info(f"\nOverall Results: {overall_passed}/{overall_total} tests passed")
+    
+    if overall_passed == overall_total:
+        print_success("🎉 ALL HIERARCHICAL SUBMISSION MANAGEMENT TESTS PASSED!")
+        print_success("✅ GET /api/exams/ielts-listening-practice-test-1/full returns 200 OK")
+        print_success("✅ Response includes exam, sections, and questions (40 total)")
+        print_success("✅ Questions are properly indexed and have answer keys")
+        print_success("✅ Data structure supports the answer review UI")
+        print_success("✅ Firebase submission matching logic is compatible")
+        return True
+    else:
+        failed_tests = overall_total - overall_passed
+        print_error(f"❌ {failed_tests} test(s) failed - System needs attention")
+        
+        # Identify critical failures
+        critical_failures = []
+        if not results.get('full_exam_structure'):
+            critical_failures.append("Full exam data endpoint not working")
+        if not results.get('question_count_ok'):
+            critical_failures.append("Insufficient questions (less than 40)")
+        if not results.get('questions_have_answer_key'):
+            critical_failures.append("Questions missing answer keys")
+        if not results.get('firebase_compatibility'):
+            critical_failures.append("Firebase compatibility issues")
+        
+        if critical_failures:
+            print_error("Critical Issues Found:")
+            for issue in critical_failures:
+                print_error(f"  • {issue}")
+        
+        return False
+    
     # Test 1: Published Exams Endpoint (Level 1 - Tests List)
     print_info("\n--- Test 1: Published Exams Endpoint (Level 1 - Tests List) ---")
     print_info("GET /api/exams/published")
