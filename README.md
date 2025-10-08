@@ -294,9 +294,51 @@ Once authenticated, students can:
 
 ## 📊 Database Schema
 
-### Collections
+### Firebase Realtime Database
 
-**exams**
+**students/** - Student profiles
+```javascript
+{
+  "{uid}": {
+    uid: String,
+    email: String,
+    name: String,
+    photoURL: String,
+    phoneNumber: String,
+    institution: String,
+    department: String,
+    rollNumber: String,
+    profileCompleted: Boolean,
+    createdAt: ISO Timestamp,
+    updatedAt: ISO Timestamp
+  }
+}
+```
+
+**submissions/** - Exam submissions
+```javascript
+{
+  "{submissionId}": {
+    id: String,
+    examId: String,
+    examTitle: String,
+    studentUid: String,
+    studentName: String,
+    studentEmail: String,
+    answers: Object,
+    score: Number,
+    totalQuestions: Number,
+    percentage: Number,
+    startedAt: ISO Timestamp,
+    finishedAt: ISO Timestamp,
+    createdAt: ISO Timestamp
+  }
+}
+```
+
+### MongoDB Collections (Backend)
+
+**exams** - Exam definitions (hardcoded or managed via admin)
 ```javascript
 {
   id: String,
@@ -315,7 +357,7 @@ Once authenticated, students can:
 }
 ```
 
-**sections**
+**sections** - Exam sections
 ```javascript
 {
   id: String,
@@ -325,7 +367,7 @@ Once authenticated, students can:
 }
 ```
 
-**questions**
+**questions** - Exam questions (stored in backend, not Firebase)
 ```javascript
 {
   id: String,
@@ -333,21 +375,12 @@ Once authenticated, students can:
   section_id: String,
   index: Number,
   type: String, // 'short_answer', 'multiple_choice', 'map_labeling', 'diagram_labeling'
-  payload: Object, // Question-specific data
+  payload: Object, // Question-specific data with answer_key
   marks: Number,
   created_by: String,
   is_demo: Boolean
 }
 ```
-
-**submissions**
-```javascript
-{
-  id: String,
-  exam_id: String,
-  user_id_or_session: String,
-  started_at: String,
-  finished_at: String,
   answers: Object, // { "1": "answer1", "2": "B", ... }
   progress_percent: Number,
   last_playback_time: Number
