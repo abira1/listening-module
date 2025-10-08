@@ -109,6 +109,7 @@ class FirebaseAuthService {
         department: profileData.department || '',
         rollNumber: profileData.rollNumber || '',
         profileCompleted: profileData.profileCompleted || false,
+        status: profileData.status || 'pending', // pending, approved, rejected
         createdAt: profileData.createdAt || timestamp,
         updatedAt: timestamp
       };
@@ -136,6 +137,44 @@ class FirebaseAuthService {
       return updateData;
     } catch (error) {
       console.error('Error updating student profile:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Approve student account (admin only)
+   */
+  async approveStudent(uid) {
+    try {
+      return await this.updateStudentProfile(uid, { status: 'approved' });
+    } catch (error) {
+      console.error('Error approving student:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Reject student account (admin only)
+   */
+  async rejectStudent(uid) {
+    try {
+      return await this.updateStudentProfile(uid, { status: 'rejected' });
+    } catch (error) {
+      console.error('Error rejecting student:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Toggle student active status (admin only)
+   */
+  async toggleStudentStatus(uid, isActive) {
+    try {
+      return await this.updateStudentProfile(uid, { 
+        status: isActive ? 'approved' : 'inactive'
+      });
+    } catch (error) {
+      console.error('Error toggling student status:', error);
       throw error;
     }
   }
