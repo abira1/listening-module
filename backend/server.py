@@ -81,6 +81,9 @@ class Exam(BaseModel):
     is_demo: bool = False
     question_count: int = 0
     submission_count: int = 0
+    is_active: bool = False
+    started_at: Optional[str] = None
+    stopped_at: Optional[str] = None
 
 # Section Models
 class Section(BaseModel):
