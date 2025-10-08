@@ -511,69 +511,71 @@ export function ListeningTest({ examId, audioRef }) {
       {/* Main Content - Add padding-top to account for fixed header */}
       <main className={`flex-1 p-6 pb-32 ${isHeaderHidden ? 'pt-20' : 'pt-36'}`}>
         <div className="max-w-5xl mx-auto">
-          <div className="bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 mb-6">
-            <div className="flex justify-between items-center mb-4 pb-3 border-b-2 border-gray-200">
-              <h2 className="text-xl font-bold text-gray-800">
-                SECTION {currentSectionIndex} — Questions {sectionData.questions[0]?.index}-{sectionData.questions[sectionData.questions.length - 1]?.index}
-              </h2>
-              <div className="text-sm text-gray-600">
-                <span className="font-semibold">{answeredCount} / {totalQuestions}</span> answered
+          <TextHighlighter enabled={!examFinished && !isSubmitting}>
+            <div className="bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 mb-6">
+              <div className="flex justify-between items-center mb-4 pb-3 border-b-2 border-gray-200">
+                <h2 className="text-xl font-bold text-gray-800">
+                  SECTION {currentSectionIndex} — Questions {sectionData.questions[0]?.index}-{sectionData.questions[sectionData.questions.length - 1]?.index}
+                </h2>
+                <div className="text-sm text-gray-600">
+                  <span className="font-semibold">{answeredCount} / {totalQuestions}</span> answered
+                </div>
+              </div>
+
+              {/* Show image for map labeling section */}
+              {currentSectionIndex === 2 && sectionData.questions[0]?.payload?.image_url && (
+                <div className="mb-6 bg-gray-50 p-4 rounded border border-gray-300">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">
+                    Label the map below. Choose the correct letter, A–I:
+                  </p>
+                  <img
+                    src={sectionData.questions[0].payload.image_url}
+                    alt="Ferry Map"
+                    className="max-w-full h-auto mx-auto border-2 border-gray-300 rounded"
+                  />
+                </div>
+              )}
+
+              {/* Show image for diagram labeling section */}
+              {currentSectionIndex === 4 && sectionData.questions[0]?.payload?.image_url && (
+                <div className="mb-6 bg-gray-50 p-4 rounded border border-gray-300">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">
+                    Complete the notes on the diagram below. Write ONE WORD ONLY for each answer:
+                  </p>
+                  <img
+                    src={sectionData.questions[0].payload.image_url}
+                    alt="Fission Reactor Diagram"
+                    className="max-w-full h-auto mx-auto border-2 border-gray-300 rounded"
+                  />
+                </div>
+              )}
+
+              {/* Section Instructions */}
+              {currentSectionIndex === 1 && (
+                <div className="mb-4 p-3 bg-blue-50 rounded border border-blue-200">
+                  <p className="text-sm text-gray-700">
+                    <strong>Complete the notes below.</strong><br />
+                    Write <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> for each answer.
+                  </p>
+                </div>
+              )}
+
+              {currentSectionIndex === 3 && (
+                <div className="mb-4 p-3 bg-blue-50 rounded border border-blue-200">
+                  <p className="text-sm text-gray-700">
+                    Questions 21-25: <strong>Choose the correct answer.</strong><br />
+                    Questions 26-28: Write <strong>ONE WORD ONLY</strong> for each answer.<br />
+                    Questions 29-30: <strong>Choose the correct answer.</strong>
+                  </p>
+                </div>
+              )}
+
+              {/* All Questions in Current Section */}
+              <div className="space-y-2">
+                {sectionData.questions.map((question) => renderQuestion(question))}
               </div>
             </div>
-
-            {/* Show image for map labeling section */}
-            {currentSectionIndex === 2 && sectionData.questions[0]?.payload?.image_url && (
-              <div className="mb-6 bg-gray-50 p-4 rounded border border-gray-300">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
-                  Label the map below. Choose the correct letter, A–I:
-                </p>
-                <img
-                  src={sectionData.questions[0].payload.image_url}
-                  alt="Ferry Map"
-                  className="max-w-full h-auto mx-auto border-2 border-gray-300 rounded"
-                />
-              </div>
-            )}
-
-            {/* Show image for diagram labeling section */}
-            {currentSectionIndex === 4 && sectionData.questions[0]?.payload?.image_url && (
-              <div className="mb-6 bg-gray-50 p-4 rounded border border-gray-300">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
-                  Complete the notes on the diagram below. Write ONE WORD ONLY for each answer:
-                </p>
-                <img
-                  src={sectionData.questions[0].payload.image_url}
-                  alt="Fission Reactor Diagram"
-                  className="max-w-full h-auto mx-auto border-2 border-gray-300 rounded"
-                />
-              </div>
-            )}
-
-            {/* Section Instructions */}
-            {currentSectionIndex === 1 && (
-              <div className="mb-4 p-3 bg-blue-50 rounded border border-blue-200">
-                <p className="text-sm text-gray-700">
-                  <strong>Complete the notes below.</strong><br />
-                  Write <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> for each answer.
-                </p>
-              </div>
-            )}
-
-            {currentSectionIndex === 3 && (
-              <div className="mb-4 p-3 bg-blue-50 rounded border border-blue-200">
-                <p className="text-sm text-gray-700">
-                  Questions 21-25: <strong>Choose the correct answer.</strong><br />
-                  Questions 26-28: Write <strong>ONE WORD ONLY</strong> for each answer.<br />
-                  Questions 29-30: <strong>Choose the correct answer.</strong>
-                </p>
-              </div>
-            )}
-
-            {/* All Questions in Current Section */}
-            <div className="space-y-2">
-              {sectionData.questions.map((question) => renderQuestion(question))}
-            </div>
-          </div>
+          </TextHighlighter>
         </div>
       </main>
 
