@@ -1630,6 +1630,34 @@ def test_hierarchical_submission_management_fix():
                 print_error(f"  • {issue}")
         
         return False
+
+def run_hierarchical_submission_fix_tests():
+    """Run Fixed Hierarchical Submission Management System Tests"""
+    print(f"{Colors.BOLD}{Colors.BLUE}")
+    print("=" * 80)
+    print("  IELTS Platform - Fixed Hierarchical Submission Management System Tests")
+    print("=" * 80)
+    print(f"{Colors.END}")
+    
+    print_info(f"Testing backend at: {BACKEND_URL}")
+    print_info(f"Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print_info("Focus: Test fixed hierarchical submission management system - detailed answer sheet view")
+    
+    return test_hierarchical_submission_management_fix()
+
+def test_enhanced_hierarchical_submission_management():
+    """Test Enhanced Hierarchical Submission Management System Backend Endpoints"""
+    print_test_header("Enhanced Hierarchical Submission Management System Tests")
+    
+    print_info("Testing the enhanced hierarchical submission management system backend endpoints:")
+    print_info("Level 1 - Tests List: GET /api/exams/published")
+    print_info("Level 2 - Students List: GET /api/exams/{exam_id}/submissions")
+    print_info("Level 3 - Answer Review: GET /api/submissions/{submission_id}/detailed")
+    print_info("Score Update: PUT /api/submissions/{submission_id}/score (protected)")
+    print_info("Publish Single Submission: PUT /api/admin/submissions/{submission_id}/publish (protected)")
+    
+    results = {}
+    exam_id = "ielts-listening-practice-test-1"  # Use the IELTS exam ID as specified
     
     # Test 1: Published Exams Endpoint (Level 1 - Tests List)
     print_info("\n--- Test 1: Published Exams Endpoint (Level 1 - Tests List) ---")
