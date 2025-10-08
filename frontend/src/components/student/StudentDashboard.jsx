@@ -245,7 +245,7 @@ export function StudentDashboard() {
                       </div>
                       {!isActive && !isCompleted && (
                         <div className="mb-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-700 text-center">
-                          Waiting for admin to start this test...
+                          Please wait for the test to begin.
                         </div>
                       )}
                       <button
