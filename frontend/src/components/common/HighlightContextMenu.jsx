@@ -5,7 +5,7 @@ import React from 'react';
  * 
  * Context menu that appears when:
  * 1. User selects text (shows "Highlight" option)
- * 2. User right-clicks highlighted text (shows "Add Note", "Clear Highlight", "Clear All")
+ * 2. User right-clicks highlighted text (shows note if exists, "Add/Edit Note", "Clear Highlight", "Clear All")
  */
 
 const HighlightContextMenu = ({
@@ -16,7 +16,8 @@ const HighlightContextMenu = ({
   onAddNote,
   onClearHighlight,
   onClearAll,
-  hasHighlights
+  hasHighlights,
+  currentNote
 }) => {
   return (
     <div
@@ -24,6 +25,8 @@ const HighlightContextMenu = ({
       style={{
         left: `${x}px`,
         top: `${y}px`,
+        maxWidth: '320px',
+        minWidth: '200px'
       }}
     >
       {type === 'highlight' && (
@@ -38,6 +41,21 @@ const HighlightContextMenu = ({
 
       {type === 'highlighted' && (
         <>
+          {/* Display saved note if exists */}
+          {currentNote && (
+            <div className="px-4 py-3 border-b border-gray-200 bg-blue-50">
+              <div className="flex items-start gap-2 mb-1">
+                <svg className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <div className="flex-1">
+                  <p className="text-xs font-semibold text-blue-900 mb-1">Your Note:</p>
+                  <p className="text-sm text-gray-700 whitespace-pre-wrap break-words">{currentNote}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <button
             onClick={onAddNote}
             className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 flex items-center gap-2"
@@ -45,7 +63,7 @@ const HighlightContextMenu = ({
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
-            Add Note
+            {currentNote ? 'Edit Note' : 'Add Note'}
           </button>
           
           <button
