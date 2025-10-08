@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import FirebaseAuthService from '../../services/FirebaseAuthService';
 import { BackendService } from '../../services/BackendService';
-import { SubmissionReview } from './SubmissionReview';
+import { FirebaseSubmissionReview } from './FirebaseSubmissionReview';
 
 export function SubmissionManagement() {
   const [submissions, setSubmissions] = useState([]);
