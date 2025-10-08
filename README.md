@@ -75,6 +75,7 @@ A comprehensive web application for administering IELTS Listening tests with Fir
 - Python 3.8+
 - MongoDB
 - Supervisor (for process management)
+- Firebase account (for deployment)
 
 ### Installation
 
@@ -90,7 +91,16 @@ cd /app/frontend
 yarn install
 ```
 
-2. **Configure Environment Variables**
+2. **Configure Firebase**
+
+The app is configured with Firebase project: `ielts-listening-module`
+
+Firebase configuration is already set in `/app/frontend/src/config/firebase.js`:
+- Project ID: ielts-listening-module
+- Database URL: https://ielts-listening-module-default-rtdb.firebaseio.com/
+- Authentication: Google OAuth enabled
+
+3. **Configure Environment Variables**
 
 Backend `.env`:
 ```bash
@@ -104,7 +114,7 @@ Frontend `.env`:
 REACT_APP_BACKEND_URL=https://your-domain.com
 ```
 
-3. **Initialize Default Test**
+4. **Initialize Default Test**
 
 ```bash
 cd /app/backend
