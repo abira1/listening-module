@@ -1,22 +1,33 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Header } from './Header';
 import { ConfirmDetails } from './ConfirmDetails';
 import { SoundTest } from './SoundTest';
 import { ListeningInstructions } from './ListeningInstructions';
 import { ListeningTest } from './ListeningTest';
 import { BackendService } from '../services/BackendService';
+import { useAuth } from '../contexts/AuthContext';
 
 export function ExamTest() {
   const { examId } = useParams();
+  const navigate = useNavigate();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [currentScreen, setCurrentScreen] = useState('confirmDetails');
   const [exam, setExam] = useState(null);
   const [loading, setLoading] = useState(true);
   const audioRef = useRef(null);
 
+  // Check authentication before allowing exam access
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      // Redirect to login if not authenticated
+      navigate('/student');
+    }
+  }, [isAuthenticated, authLoading, navigate]);
+
   useEffect(() => {
     const loadExam = async () => {
-      if (examId) {
+      if (examId && isAuthenticated) {
         try {
           const examData = await BackendService.getExam(examId);
           setExam(examData);
@@ -28,8 +39,10 @@ export function ExamTest() {
       }
     };
 
-    loadExam();
-  }, [examId]);
+    if (!authLoading) {
+      loadExam();
+    }
+  }, [examId, isAuthenticated, authLoading]);
 
   const handleContinue = () => {
     if (currentScreen === 'confirmDetails') {
