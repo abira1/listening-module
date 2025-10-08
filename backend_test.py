@@ -1376,6 +1376,59 @@ def test_hierarchical_submission_management_fix():
     results = {}
     exam_id = "ielts-listening-practice-test-1"  # Specific exam ID from review request
     
+    # Test 1: Get Full Exam Data Endpoint
+    print_info("\n--- Test 1: Get Full Exam Data Endpoint ---")
+    print_info(f"Testing: GET /api/exams/{exam_id}/full")
+    print_info("Expected: Complete structure with exam object, sections array, questions with answer_key")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/{exam_id}/full", timeout=10)
+        if response.status_code == 200:
+            full_exam_data = response.json()
+            print_success(f"✅ Full exam data retrieved successfully - Status: {response.status_code}")
+            
+            # Verify structure
+            if "exam" in full_exam_data and "sections" in full_exam_data:
+                exam_data = full_exam_data["exam"]
+                sections_data = full_exam_data["sections"]
+                
+                print_success("✅ Response contains required structure (exam, sections)")
+                print_info(f"Exam ID: {exam_data.get('id')}")
+                print_info(f"Exam Title: {exam_data.get('title')}")
+                print_info(f"Duration: {exam_data.get('duration_seconds')} seconds")
+                print_info(f"Sections Count: {len(sections_data)}")
+                
+                # Verify exam object has required fields
+                exam_required_fields = ['id', 'title', 'duration_seconds']
+                exam_missing_fields = [field for field in exam_required_fields if field not in exam_data]
+                
+                if not exam_missing_fields:
+                    print_success("✅ Exam object contains all required fields (id, title, duration_seconds)")
+                    results['full_exam_structure'] = True
+                    results['exam_data'] = exam_data
+                    results['sections_data'] = sections_data
+                else:
+                    print_error(f"❌ Exam object missing required fields: {exam_missing_fields}")
+                    results['full_exam_structure'] = False
+            else:
+                print_error("❌ Response missing required structure (exam, sections)")
+                print_error(f"Available keys: {list(full_exam_data.keys())}")
+                results['full_exam_structure'] = False
+        elif response.status_code == 404:
+            print_error(f"❌ Exam not found - Status: {response.status_code}")
+            print_error(f"The exam ID '{exam_id}' may not exist or may not be initialized")
+            results['full_exam_structure'] = False
+            return results  # Cannot continue without exam data
+        else:
+            print_error(f"❌ Full exam data retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['full_exam_structure'] = False
+            return results
+    except Exception as e:
+        print_error(f"❌ Full exam data request error: {str(e)}")
+        results['full_exam_structure'] = False
+        return results
+    
     # Test 1: Published Exams Endpoint (Level 1 - Tests List)
     print_info("\n--- Test 1: Published Exams Endpoint (Level 1 - Tests List) ---")
     print_info("GET /api/exams/published")
