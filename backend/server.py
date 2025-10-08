@@ -1048,12 +1048,10 @@ async def delete_student(
 @api_router.put("/admin/exams/{exam_id}/start")
 async def start_exam(
     exam_id: str,
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
+    request: Request
 ):
     """Admin only: Start an exam - enables students to take the test"""
-    user = await AuthService.get_current_user(request, db, session_token)
-    AuthService.require_admin(user, ADMIN_EMAILS)
+    require_admin_access(request)
     
     try:
         # Check if exam exists
