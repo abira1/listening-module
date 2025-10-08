@@ -10,19 +10,11 @@ export function AdminLogin() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // If authenticated and admin, redirect to admin dashboard
-    if (isAuthenticated && isAdmin && !authLoading) {
+    // If authenticated as admin, redirect to admin dashboard
+    if (isAuthenticated && !authLoading) {
       navigate('/admin');
     }
-    
-    // If authenticated but not admin, show error and redirect
-    if (isAuthenticated && !isAdmin && !authLoading) {
-      setError('Access Denied: Your email is not authorized for admin access.');
-      setTimeout(() => {
-        navigate('/');
-      }, 3000);
-    }
-  }, [isAuthenticated, isAdmin, authLoading, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   const handleGoogleLogin = async () => {
     setProcessing(true);
