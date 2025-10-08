@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Clock, CheckCircle, XCircle, RefreshCw, LogOut } from 'lucide-react';
 import FirebaseAuthService from '../../services/FirebaseAuthService';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../../config/firebase';
 
 export function WaitingForApproval() {
   const navigate = useNavigate();
@@ -25,6 +27,32 @@ export function WaitingForApproval() {
       }
     }
   }, [user, authLoading, navigate]);
+
+  // Real-time status monitoring
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    // Set up real-time listener for student status
+    const studentRef = ref(database, `students/${user.uid}/status`);
+    
+    const unsubscribe = onValue(studentRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const newStatus = snapshot.val();
+        console.log('Status updated in real-time:', newStatus);
+        setStatus(newStatus);
+        
+        // Automatically redirect to dashboard when approved
+        if (newStatus === 'approved') {
+          setTimeout(() => {
+            window.location.href = '/student/dashboard';
+          }, 1500); // Small delay to show success message
+        }
+      }
+    });
+
+    // Cleanup listener on unmount
+    return () => unsubscribe();
+  }, [user?.uid]);
 
   const handleCheckStatus = async () => {
     setChecking(true);
