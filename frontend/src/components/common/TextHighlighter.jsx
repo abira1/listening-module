@@ -23,6 +23,13 @@ const TextHighlighter = ({ children, enabled = true }) => {
   const [selectedRange, setSelectedRange] = useState(null);
   const containerRef = useRef(null);
   const highlightIdCounter = useRef(0);
+  const highlightsRef = useRef(highlights);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    highlightsRef.current = highlights;
+    console.log('Highlights updated:', highlights);
+  }, [highlights]);
 
   // Close menus when clicking outside
   useEffect(() => {
