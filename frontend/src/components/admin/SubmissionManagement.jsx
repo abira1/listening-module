@@ -31,9 +31,10 @@ export function SubmissionManagement() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Score editing state
-  const [editingScore, setEditingScore] = useState(false);
-  const [newScore, setNewScore] = useState(0);
+  // Interactive scoring state
+  const [questionMarks, setQuestionMarks] = useState({}); // { questionIndex: 'correct' | 'incorrect' }
+  const [calculatedScore, setCalculatedScore] = useState(0);
+  const [isPublishing, setIsPublishing] = useState(false);
 
   useEffect(() => {
     loadTests();
