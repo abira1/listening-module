@@ -570,6 +570,7 @@ async def create_submission(
         new_submission = {
             "id": submission_id,
             "exam_id": submission_data.exam_id,
+            "exam_title": exam.get("title", ""),
             "user_id_or_session": user_id,
             "started_at": submission_data.started_at or now,
             "finished_at": submission_data.finished_at or now,
@@ -580,7 +581,9 @@ async def create_submission(
             "total_questions": total_questions,
             "correct_answers": correct_count,
             "student_name": user.get("full_name", "Anonymous") if user else "Anonymous",
-            "student_email": user.get("email", "") if user else ""
+            "student_email": user.get("email", "") if user else "",
+            "is_published": False,
+            "published_at": None
         }
         
         await db.submissions.insert_one({**new_submission, "_id": submission_id})
@@ -590,6 +593,12 @@ async def create_submission(
             {"id": submission_data.exam_id},
             {"$inc": {"submission_count": 1}, "$set": {"updated_at": get_timestamp()}}
         )
+        
+        # Return submission WITHOUT score for students (score hidden until published)
+        submission_response = {**new_submission}
+        # Remove score fields from response
+        del submission_response["score"]
+        del submission_response["correct_answers"]
         
         return Submission(**new_submission)
     except HTTPException:
