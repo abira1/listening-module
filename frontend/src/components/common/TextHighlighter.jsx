@@ -103,9 +103,14 @@ const TextHighlighter = ({ children, enabled = true }) => {
       console.log('Right-click on highlight:', highlightId, highlight);
 
       if (highlight) {
+        // Get highlight element position for better menu placement
+        const rect = highlightedElement.getBoundingClientRect();
+        const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
         setContextMenu({
-          x: e.pageX,
-          y: e.pageY,
+          x: rect.left + scrollX + (rect.width / 2), // Center horizontally
+          y: rect.bottom + scrollY + 5, // 5px below highlight
           type: 'highlighted',
           highlightId: highlightId,
           highlight: highlight
