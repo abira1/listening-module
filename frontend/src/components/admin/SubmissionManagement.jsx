@@ -13,7 +13,10 @@ import {
   Calendar,
   User,
   FileText,
-  Edit
+  Edit,
+  Send,
+  Lock,
+  Unlock
 } from 'lucide-react';
 import FirebaseAuthService from '../../services/FirebaseAuthService';
 import { BackendService } from '../../services/BackendService';
