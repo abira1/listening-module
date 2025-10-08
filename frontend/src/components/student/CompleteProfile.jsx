@@ -60,8 +60,15 @@ export function CompleteProfile() {
         throw new Error('Please fill in all required fields');
       }
 
-      await completeProfile(formData);
-      navigate('/student/dashboard');
+      // Set status as pending - admin approval required
+      const profileDataWithStatus = {
+        ...formData,
+        status: 'pending'
+      };
+
+      await completeProfile(profileDataWithStatus);
+      // Redirect to waiting for approval page
+      navigate('/waiting-approval');
     } catch (err) {
       console.error('Profile completion error:', err);
       setError(err.message || 'Failed to save profile. Please try again.');
