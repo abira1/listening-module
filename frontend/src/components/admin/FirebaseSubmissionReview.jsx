@@ -261,9 +261,9 @@ export function FirebaseSubmissionReview({ submissionId, onClose }) {
         <div className="p-6 max-h-96 overflow-y-auto">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Detailed Answer Review</h3>
           
-          {submission.answers && Object.keys(submission.answers).length > 0 && exam ? (
+          {submission.answers && Object.keys(submission.answers).length > 0 && sections.length > 0 ? (
             <div className="space-y-4">
-              {exam.sections?.map((section) => (
+              {sections.map((section) => (
                 <div key={section.id} className="mb-6">
                   <h4 className="text-md font-semibold text-gray-800 mb-3 bg-gray-100 px-4 py-2 rounded">
                     {section.title}
