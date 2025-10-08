@@ -149,21 +149,40 @@ export function ListeningTest({ examId, audioRef }) {
     }
 
     try {
-      // Create submission in database
-      const submissionData = {
+      // Get auto-grading from backend
+      const backendSubmissionData = {
         exam_id: examId,
-        user_id_or_session: isAuthenticated && user ? user.id : `anonymous_${Date.now()}`,
+        user_id_or_session: isAuthenticated && user ? user.uid : `anonymous_${Date.now()}`,
         answers: answers,
         started_at: new Date().toISOString(),
         finished_at: new Date().toISOString(),
         progress_percent: 100,
       };
 
-      const submission = await BackendService.createSubmission(submissionData);
+      const gradedSubmission = await BackendService.createSubmission(backendSubmissionData);
+      
+      // Save to Firebase if user is authenticated
+      if (isAuthenticated && user?.uid) {
+        const firebaseSubmissionData = {
+          examId: examId,
+          examTitle: examData?.exam?.title || 'IELTS Listening Test',
+          studentUid: user.uid,
+          studentName: user.name || user.displayName,
+          studentEmail: user.email,
+          answers: answers,
+          score: gradedSubmission.score,
+          totalQuestions: gradedSubmission.total_questions,
+          percentage: Math.round((gradedSubmission.score / gradedSubmission.total_questions) * 100),
+          startedAt: backendSubmissionData.started_at,
+          finishedAt: backendSubmissionData.finished_at
+        };
+        
+        await FirebaseAuthService.saveSubmission(firebaseSubmissionData);
+      }
       
       // Show completion message with score
-      if (submission && submission.score !== undefined) {
-        alert(`Test submitted successfully!\n\nYour Score: ${submission.score}/${submission.total_questions}\nPercentage: ${Math.round((submission.score/submission.total_questions)*100)}%`);
+      if (gradedSubmission && gradedSubmission.score !== undefined) {
+        alert(`Test submitted successfully!\n\nYour Score: ${gradedSubmission.score}/${gradedSubmission.total_questions}\nPercentage: ${Math.round((gradedSubmission.score/gradedSubmission.total_questions)*100)}%`);
       } else {
         alert('Test submitted successfully! Your answers have been saved.');
       }
