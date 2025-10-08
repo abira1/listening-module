@@ -226,24 +226,37 @@ export function SubmissionManagement() {
   };
 
   const handlePublishResult = async () => {
-    if (!window.confirm('Publish this result? The student will be able to see their score.')) {
+    if (!window.confirm(`Publish this result with score ${calculatedScore}/${submissionDetails.submission.total_questions}? The student will be able to see their score.`)) {
       return;
     }
 
     try {
+      setIsPublishing(true);
+      
+      // Save marks and calculated score to Firebase
+      await FirebaseAuthService.updateSubmissionWithMarks(
+        selectedStudent.submissionId,
+        calculatedScore,
+        questionMarks
+      );
+      
+      // Publish to both Firebase and backend
       await FirebaseAuthService.publishSubmission(selectedStudent.submissionId);
       await BackendService.publishSingleSubmission(selectedStudent.submissionId);
-      alert('Result published successfully! Student can now view their score.');
       
-      // Refresh data
-      const firebaseSubmission = await FirebaseAuthService.getSubmission(selectedStudent.submissionId);
-      setSubmissionDetails({
-        ...submissionDetails,
-        firebaseData: firebaseSubmission
-      });
+      // Show success message
+      alert('✅ Result published successfully! The student can now view their score.');
+      
+      // Wait 2 seconds then redirect to student list
+      setTimeout(() => {
+        handleBackToStudents();
+        setIsPublishing(false);
+      }, 2000);
+      
     } catch (error) {
       console.error('Error publishing result:', error);
       alert('Failed to publish result. Please try again.');
+      setIsPublishing(false);
     }
   };
 
