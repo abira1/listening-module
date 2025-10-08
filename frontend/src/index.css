@@ -93,6 +93,7 @@ code {
   border-radius: 2px;
   cursor: pointer;
   position: relative;
+  display: inline;
   transition: background-color 0.2s ease;
 }
 
@@ -100,20 +101,27 @@ code {
   background-color: #fde047 !important; /* Tailwind yellow-300 */
 }
 
-.highlighted-text[data-has-note="true"]::after {
-  content: "📝";
-  font-size: 10px;
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #3b82f6;
-  color: white;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Note-only mode (no highlight background) */
+.highlighted-text.note-only {
+  background-color: transparent !important;
+}
+
+.highlighted-text.note-only:hover {
+  background-color: #f3f4f6 !important; /* Light gray on hover */
+}
+
+/* Note icon styles */
+.note-icon {
+  display: inline;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 2px;
+  vertical-align: super;
+  transition: transform 0.2s ease;
+}
+
+.note-icon:hover {
+  transform: scale(1.2);
 }
 
 /* Prevent text selection issues with highlighting */
