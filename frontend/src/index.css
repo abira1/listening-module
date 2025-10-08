@@ -126,9 +126,39 @@ code {
 
 /* Context menu animation */
 .context-menu {
-  animation: fadeIn 0.15s ease-in;
+  animation: contextMenuAppear 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   max-height: 80vh;
   overflow-y: auto;
+  position: relative;
+}
+
+/* Small arrow at top of context menu */
+.context-menu::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #e5e7eb;
+  z-index: 1;
+}
+
+.context-menu::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid white;
+  z-index: 2;
 }
 
 .context-menu::-webkit-scrollbar {
@@ -149,30 +179,60 @@ code {
   background: #94a3b8;
 }
 
-@keyframes fadeIn {
+@keyframes contextMenuAppear {
   from {
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateX(-50%) translateY(-8px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
 /* Note popup animation */
 .note-popup {
-  animation: slideIn 0.2s ease-out;
+  animation: notePopupAppear 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
-@keyframes slideIn {
+/* Small arrow at top of note popup */
+.note-popup::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #93c5fd;
+  z-index: 1;
+}
+
+.note-popup::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+  z-index: 2;
+}
+
+@keyframes notePopupAppear {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateX(-50%) translateY(-10px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
