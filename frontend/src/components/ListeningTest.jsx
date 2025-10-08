@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BackendService } from '../services/BackendService';
+import { useAuth } from '../contexts/AuthContext';
 import { Clock, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function ListeningTest({ examId, audioRef }) {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
   const [examData, setExamData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1); // Changed from currentSection
