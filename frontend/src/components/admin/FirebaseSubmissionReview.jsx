@@ -365,10 +365,16 @@ export function FirebaseSubmissionReview({ submissionId, onClose }) {
                 </div>
               ))}
             </div>
-          ) : !exam ? (
+          ) : sections.length === 0 && loading ? (
             <div className="text-center py-8 text-gray-500">
               <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
               <p>Loading exam questions...</p>
+            </div>
+          ) : sections.length === 0 ? (
+            <div className="text-center py-8 text-yellow-600 bg-yellow-50 rounded-lg border border-yellow-200 p-4">
+              <AlertCircle className="w-12 h-12 mx-auto mb-4" />
+              <p className="font-semibold">Unable to load exam questions</p>
+              <p className="text-sm mt-2">The exam questions could not be loaded. Please ensure the exam still exists.</p>
             </div>
           ) : (
             <div className="text-center py-8 text-gray-500">
