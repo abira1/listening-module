@@ -308,6 +308,59 @@ class FirebaseAuthService {
   }
 
   /**
+   * Publish submission results - makes scores visible to students (admin only)
+   */
+  async publishSubmission(submissionId) {
+    try {
+      const submissionRef = ref(database, `submissions/${submissionId}`);
+      const updateData = {
+        isPublished: true,
+        publishedAt: new Date().toISOString()
+      };
+      
+      await update(submissionRef, updateData);
+      return updateData;
+    } catch (error) {
+      console.error('Error publishing submission:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Publish all submissions for an exam (admin only)
+   */
+  async publishExamSubmissions(examId) {
+    try {
+      const submissionsRef = ref(database, 'submissions');
+      const snapshot = await get(submissionsRef);
+      
+      if (snapshot.exists()) {
+        const submissionsObj = snapshot.val();
+        const updates = {};
+        let count = 0;
+        
+        Object.keys(submissionsObj).forEach(key => {
+          if (submissionsObj[key].examId === examId && !submissionsObj[key].isPublished) {
+            updates[`submissions/${key}/isPublished`] = true;
+            updates[`submissions/${key}/publishedAt`] = new Date().toISOString();
+            count++;
+          }
+        });
+        
+        if (count > 0) {
+          await update(ref(database), updates);
+        }
+        
+        return { count };
+      }
+      return { count: 0 };
+    } catch (error) {
+      console.error('Error publishing exam submissions:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Get single submission by ID
    */
   async getSubmission(submissionId) {
