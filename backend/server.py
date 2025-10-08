@@ -171,7 +171,7 @@ class SessionExchange(BaseModel):
     session_id: str
 
 # Admin emails configuration
-ADMIN_EMAILS = ["shahsultanweb@gmail.com"]
+ADMIN_EMAILS = ["shahsultanweb@gmail.com", "aminulislam004474@gmail.com"]
 
 # Utility functions
 def generate_id():
