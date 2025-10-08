@@ -233,16 +233,33 @@ export function SubmissionManagement() {
     try {
       setIsPublishing(true);
       
-      // Save marks and calculated score to Firebase
+      console.log('Publishing result for submission:', selectedStudent.submissionId);
+      console.log('Calculated score:', calculatedScore);
+      console.log('Question marks:', questionMarks);
+      
+      // Step 1: Save marks and calculated score to Firebase
+      console.log('Step 1: Updating submission with marks...');
       await FirebaseAuthService.updateSubmissionWithMarks(
         selectedStudent.submissionId,
         calculatedScore,
         questionMarks
       );
+      console.log('Step 1: Success - Marks saved to Firebase');
       
-      // Publish to both Firebase and backend
+      // Step 2: Publish to Firebase
+      console.log('Step 2: Publishing to Firebase...');
       await FirebaseAuthService.publishSubmission(selectedStudent.submissionId);
-      await BackendService.publishSingleSubmission(selectedStudent.submissionId);
+      console.log('Step 2: Success - Published to Firebase');
+      
+      // Step 3: Publish to backend (if it fails, continue anyway)
+      try {
+        console.log('Step 3: Publishing to backend...');
+        await BackendService.publishSingleSubmission(selectedStudent.submissionId);
+        console.log('Step 3: Success - Published to backend');
+      } catch (backendError) {
+        console.warn('Backend publish failed (non-critical):', backendError);
+        // Continue anyway as Firebase is the primary database
+      }
       
       // Show success message
       alert('✅ Result published successfully! The student can now view their score.');
@@ -255,7 +272,12 @@ export function SubmissionManagement() {
       
     } catch (error) {
       console.error('Error publishing result:', error);
-      alert('Failed to publish result. Please try again.');
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        stack: error.stack
+      });
+      alert(`Failed to publish result: ${error.message || 'Unknown error'}. Please check console for details.`);
       setIsPublishing(false);
     }
   };
