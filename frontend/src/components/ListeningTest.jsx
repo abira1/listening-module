@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BackendService } from '../services/BackendService';
+import FirebaseAuthService from '../services/FirebaseAuthService';
 import { useAuth } from '../contexts/AuthContext';
 import { Clock, Volume2, ChevronLeft, ChevronRight, HelpCircle, EyeOff, User } from 'lucide-react';
 
