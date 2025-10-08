@@ -408,6 +408,18 @@ frontend:
       - working: true
         agent: "main"
         comment: "Enhanced exam header: Made header FIXED to screen (position: fixed, top: 0, z-index: 50). Implemented Hide functionality - clicking Hide button toggles visibility of top logo section while keeping bottom info bar visible. Button text changes to 'Show' when hidden. Added dynamic padding to main content (pt-36 when full header shown, pt-20 when hidden) to prevent content overlap. State management with isHeaderHidden useState hook. Frontend restarted successfully."
+  
+  - task: "Manual Submission Marking System"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py, /app/frontend/src/components/admin/SubmissionReview.jsx, /app/frontend/src/components/admin/StudentManagement.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented complete manual marking system for teachers/admins. Backend: Added GET /api/submissions/{id}/detailed endpoint to fetch submission with all questions, student answers, and correct answers. Added PUT /api/submissions/{id}/score endpoint for teachers to update scores manually (admin-only, requires authentication). Frontend: Created SubmissionReview modal component showing all questions with student answers vs correct answers, color-coded (green=correct, red=incorrect). Added inline score editing with save functionality. Updated StudentManagement.jsx to add 'Review' button in submissions table. Added 'Manual' badge for manually graded submissions. Updated scores automatically reflect in student dashboard. All services restarted successfully."
 
 metadata:
   created_by: "main_agent"
