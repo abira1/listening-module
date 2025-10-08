@@ -407,6 +407,35 @@ export function ListeningTest({ examId, audioRef }) {
   const endQuestionIndex = Math.min((currentQuestionGroup + 1) * 10, totalQuestions);
   const totalGroups = Math.ceil(totalQuestions / 10);
 
+  // Show completion screen if submission is complete
+  if (submissionComplete) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-blue-50">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mx-4 text-center">
+          <div className="mb-6">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Test Completed!</h2>
+            <p className="text-gray-600 mb-6">
+              Your test has been submitted successfully. Thank you for taking the IELTS Listening Test.
+            </p>
+          </div>
+          <div className="space-y-3">
+            <button
+              onClick={() => navigate(isAuthenticated ? '/student/dashboard' : '/')}
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 font-medium"
+            >
+              {isAuthenticated ? 'Go to Dashboard' : 'Return to Home'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen w-full bg-blue-50">
       {/* Header - Two-section design - FIXED TO TOP */}
