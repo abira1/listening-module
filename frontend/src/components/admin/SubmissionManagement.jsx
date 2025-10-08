@@ -518,6 +518,19 @@ export function SubmissionManagement() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        {submission.isPublished ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <Unlock className="w-3 h-3" />
+                            Published
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            <Lock className="w-3 h-3" />
+                            Pending
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center text-sm text-gray-900">
                           <Calendar className="w-4 h-4 mr-2 text-gray-400" />
                           {new Date(submission.createdAt).toLocaleDateString()}
@@ -527,13 +540,25 @@ export function SubmissionManagement() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          onClick={() => handleViewSubmission(submission)}
-                          className="text-blue-600 hover:text-blue-900 flex items-center gap-1 ml-auto"
-                        >
-                          <Eye className="w-4 h-4" />
-                          Review
-                        </button>
+                        <div className="flex items-center gap-2 justify-end">
+                          {!submission.isPublished && (
+                            <button
+                              onClick={() => handlePublishSingleSubmission(submission.id)}
+                              className="text-purple-600 hover:text-purple-900 flex items-center gap-1"
+                              title="Publish result to student"
+                            >
+                              <Send className="w-4 h-4" />
+                              Publish
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleViewSubmission(submission)}
+                            className="text-blue-600 hover:text-blue-900 flex items-center gap-1"
+                          >
+                            <Eye className="w-4 h-4" />
+                            Review
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
