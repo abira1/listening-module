@@ -131,6 +131,41 @@ class Submission(BaseModel):
     answers: Dict[str, Any]
     progress_percent: int = 0
     last_playback_time: int = 0
+    score: Optional[int] = None
+    total_questions: Optional[int] = None
+    correct_answers: Optional[int] = None
+    student_name: Optional[str] = None
+    student_email: Optional[str] = None
+
+# Student Models
+class StudentProfileComplete(BaseModel):
+    full_name: str
+    phone_number: str
+    institution: str
+    department: str
+    roll_number: Optional[str] = None
+    profile_picture: Optional[str] = None
+
+class Student(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str
+    email: str
+    full_name: str
+    phone_number: str
+    institution: str
+    department: str
+    roll_number: Optional[str] = None
+    profile_picture: Optional[str] = None
+    google_id: str
+    created_at: str
+    updated_at: str
+
+class SessionExchange(BaseModel):
+    session_id: str
+
+# Admin emails configuration
+ADMIN_EMAILS = ["shahsultanweb@gmail.com"]
 
 # Utility functions
 def generate_id():
