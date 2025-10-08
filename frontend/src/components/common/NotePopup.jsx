@@ -28,6 +28,7 @@ const NotePopup = ({ x, y, highlightId, currentNote, onSave, onClose }) => {
   }, []);
 
   const handleSave = () => {
+    console.log('Saving note from popup:', noteText);
     onSave(highlightId, noteText);
   };
 
