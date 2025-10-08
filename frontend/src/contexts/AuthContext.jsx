@@ -128,6 +128,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const refreshUserProfile = async () => {
+    try {
+      if (!user?.uid) throw new Error('No user logged in');
+      
+      const profile = await FirebaseAuthService.getStudentProfile(user.uid);
+      if (profile) {
+        setUser(prev => ({ ...prev, ...profile }));
+        return profile;
+      }
+      return user;
+    } catch (error) {
+      console.error('Refresh profile error:', error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -136,7 +152,8 @@ export const AuthProvider = ({ children }) => {
     loginWithGoogle,
     logout,
     updateUserProfile,
-    completeProfile
+    completeProfile,
+    refreshUserProfile
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
