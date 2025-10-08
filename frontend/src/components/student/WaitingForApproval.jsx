@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Clock, CheckCircle, XCircle, RefreshCw, LogOut } from 'lucide-react';
@@ -8,9 +8,10 @@ import { database } from '../../config/firebase';
 
 export function WaitingForApproval() {
   const navigate = useNavigate();
-  const { user, logout, loading: authLoading } = useAuth();
+  const { user, logout, loading: authLoading, refreshUserProfile } = useAuth();
   const [checking, setChecking] = useState(false);
   const [status, setStatus] = useState('pending');
+  const isRedirecting = useRef(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -18,41 +19,56 @@ export function WaitingForApproval() {
       return;
     }
 
-    if (user) {
+    if (user && !isRedirecting.current) {
       setStatus(user.status || 'pending');
       
       // If approved, redirect to dashboard
       if (user.status === 'approved') {
-        navigate('/student/dashboard');
+        isRedirecting.current = true;
+        navigate('/student/dashboard', { replace: true });
       }
     }
   }, [user, authLoading, navigate]);
 
   // Real-time status monitoring
   useEffect(() => {
-    if (!user?.uid) return;
+    if (!user?.uid || isRedirecting.current) return;
 
     // Set up real-time listener for student status
     const studentRef = ref(database, `students/${user.uid}/status`);
     
-    const unsubscribe = onValue(studentRef, (snapshot) => {
-      if (snapshot.exists()) {
+    const unsubscribe = onValue(studentRef, async (snapshot) => {
+      if (snapshot.exists() && !isRedirecting.current) {
         const newStatus = snapshot.val();
         console.log('Status updated in real-time:', newStatus);
         setStatus(newStatus);
         
         // Automatically redirect to dashboard when approved
         if (newStatus === 'approved') {
-          setTimeout(() => {
-            window.location.href = '/student/dashboard';
-          }, 1500); // Small delay to show success message
+          isRedirecting.current = true;
+          
+          try {
+            // Update the user profile in AuthContext first
+            await refreshUserProfile();
+            
+            // Show success message briefly
+            setTimeout(() => {
+              navigate('/student/dashboard', { replace: true });
+            }, 1500);
+          } catch (error) {
+            console.error('Error refreshing profile:', error);
+            // Fallback: redirect anyway
+            setTimeout(() => {
+              navigate('/student/dashboard', { replace: true });
+            }, 1500);
+          }
         }
       }
     });
 
     // Cleanup listener on unmount
     return () => unsubscribe();
-  }, [user?.uid]);
+  }, [user?.uid, refreshUserProfile, navigate]);
 
   const handleCheckStatus = async () => {
     setChecking(true);
