@@ -256,6 +256,7 @@ const TextHighlighter = ({ children, enabled = true }) => {
           onClearHighlight={() => clearHighlight(contextMenu.highlightId)}
           onClearAll={clearAllHighlights}
           hasHighlights={highlights.length > 0}
+          currentNote={contextMenu.highlight?.note || null}
         />
       )}
 
