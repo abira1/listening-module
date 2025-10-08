@@ -6,6 +6,7 @@ import { BackendService } from '../../services/BackendService';
 export function FirebaseSubmissionReview({ submissionId, onClose }) {
   const [submission, setSubmission] = useState(null);
   const [exam, setExam] = useState(null);
+  const [sections, setSections] = useState([]);
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
