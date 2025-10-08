@@ -38,6 +38,18 @@ export function StudentDashboard() {
       const publishedExams = await BackendService.getPublishedExams();
       setExams(publishedExams);
 
+      // Load initial exam statuses
+      const statuses = {};
+      for (const exam of publishedExams) {
+        try {
+          const status = await BackendService.getExamStatus(exam.id);
+          statuses[exam.id] = status;
+        } catch (error) {
+          console.error(`Error loading status for exam ${exam.id}:`, error);
+        }
+      }
+      setExamStatuses(statuses);
+
       // Load student's submissions from Firebase
       if (user?.uid) {
         const studentSubmissions = await FirebaseAuthService.getStudentSubmissions(user.uid);
@@ -54,6 +66,27 @@ export function StudentDashboard() {
       setLoading(false);
     }
   };
+
+  // Poll exam statuses every 3 seconds
+  useEffect(() => {
+    if (exams.length === 0) return;
+
+    const pollStatuses = async () => {
+      const statuses = {};
+      for (const exam of exams) {
+        try {
+          const status = await BackendService.getExamStatus(exam.id);
+          statuses[exam.id] = status;
+        } catch (error) {
+          console.error(`Error polling status for exam ${exam.id}:`, error);
+        }
+      }
+      setExamStatuses(statuses);
+    };
+
+    const interval = setInterval(pollStatuses, 3000);
+    return () => clearInterval(interval);
+  }, [exams]);
 
   const handleLogout = async () => {
     await logout();
