@@ -163,6 +163,7 @@ export function ListeningTest({ examId, audioRef }) {
       const gradedSubmission = await BackendService.createSubmission(backendSubmissionData);
       
       // Save to Firebase if user is authenticated
+      // Note: Backend auto-grades but doesn't return score until admin publishes
       if (isAuthenticated && user?.uid) {
         const firebaseSubmissionData = {
           examId: examId,
@@ -171,22 +172,19 @@ export function ListeningTest({ examId, audioRef }) {
           studentName: user.name || user.displayName,
           studentEmail: user.email,
           answers: answers,
-          score: gradedSubmission.score,
+          score: null, // Score hidden until published by admin
           totalQuestions: gradedSubmission.total_questions,
-          percentage: Math.round((gradedSubmission.score / gradedSubmission.total_questions) * 100),
+          percentage: null, // Percentage hidden until published
           startedAt: backendSubmissionData.started_at,
-          finishedAt: backendSubmissionData.finished_at
+          finishedAt: backendSubmissionData.finished_at,
+          isPublished: false
         };
         
         await FirebaseAuthService.saveSubmission(firebaseSubmissionData);
       }
       
-      // Show completion message with score
-      if (gradedSubmission && gradedSubmission.score !== undefined) {
-        alert(`Test submitted successfully!\n\nYour Score: ${gradedSubmission.score}/${gradedSubmission.total_questions}\nPercentage: ${Math.round((gradedSubmission.score/gradedSubmission.total_questions)*100)}%`);
-      } else {
-        alert('Test submitted successfully! Your answers have been saved.');
-      }
+      // Show completion message WITHOUT score (score hidden until admin publishes)
+      alert('Test submitted successfully! Your answers have been saved.\n\nResults will be available once your instructor publishes them.');
       
       // Show completion screen instead of auto-redirect
       setSubmissionComplete(true);
