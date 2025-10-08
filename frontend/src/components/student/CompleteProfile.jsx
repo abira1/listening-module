@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { AuthService } from '../../services/AuthService';
-import { User, Phone, Building, BookOpen, IdCard, Loader2 } from 'lucide-react';
+import { Camera, Loader2 } from 'lucide-react';
 
 export function CompleteProfile() {
   const navigate = useNavigate();
-  const { user, updateUser, loading: authLoading } = useAuth();
+  const { user, completeProfile, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    full_name: '',
-    phone_number: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
     institution: '',
     department: '',
-    roll_number: '',
-    profile_picture: ''
+    rollNumber: '',
+    photoURL: ''
   });
 
   useEffect(() => {
@@ -26,16 +26,17 @@ export function CompleteProfile() {
 
     if (user) {
       setFormData({
-        full_name: user.full_name || '',
-        phone_number: user.phone_number || '',
+        name: user.name || user.displayName || '',
+        email: user.email || '',
+        phoneNumber: user.phoneNumber || '',
         institution: user.institution || '',
         department: user.department || '',
-        roll_number: user.roll_number || '',
-        profile_picture: user.profile_picture || ''
+        rollNumber: user.rollNumber || '',
+        photoURL: user.photoURL || ''
       });
 
-      // If profile is already complete, redirect to dashboard
-      if (user.profile_completed && user.phone_number && user.institution) {
+      // If profile already completed, redirect to dashboard
+      if (user.profileCompleted && user.phoneNumber && user.institution) {
         navigate('/student/dashboard');
       }
     }
@@ -50,27 +51,27 @@ export function CompleteProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
+    setError('');
 
     try {
       // Validate required fields
-      if (!formData.full_name || !formData.phone_number || !formData.institution || !formData.department) {
+      if (!formData.name || !formData.phoneNumber || !formData.institution) {
         throw new Error('Please fill in all required fields');
       }
 
-      const updatedUser = await AuthService.completeProfile(formData);
-      updateUser(updatedUser);
+      await completeProfile(formData);
       navigate('/student/dashboard');
     } catch (err) {
-      setError(err.message || 'Failed to update profile');
+      console.error('Profile completion error:', err);
+      setError(err.message || 'Failed to save profile. Please try again.');
       setLoading(false);
     }
   };
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
       </div>
     );
@@ -82,15 +83,21 @@ export function CompleteProfile() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              {formData.profile_picture ? (
-                <img src={formData.profile_picture} alt="Profile" className="w-20 h-20 rounded-full" />
-              ) : (
-                <User className="w-10 h-10 text-white" />
-              )}
-            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Complete Your Profile</h1>
-            <p className="text-gray-600">Tell us a bit more about yourself</p>
+            <p className="text-gray-600">Please provide your details to continue</p>
+          </div>
+
+          {/* Profile Picture */}
+          <div className="flex justify-center mb-8">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                {formData.photoURL ? (
+                  <img src={formData.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <Camera className="w-10 h-10 text-gray-400" />
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Error Message */}
@@ -102,109 +109,96 @@ export function CompleteProfile() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Full Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Full Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
-                  name="full_name"
-                  value={formData.full_name}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter your full name"
                 />
               </div>
-            </div>
 
-            {/* Email (locked) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={user?.email || ''}
-                disabled
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
-              />
-            </div>
+              {/* Email (locked) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  disabled
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
+                />
+              </div>
 
-            {/* Phone Number */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              {/* Phone Number */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="tel"
-                  name="phone_number"
-                  value={formData.phone_number}
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
                   onChange={handleChange}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter your phone number"
                 />
               </div>
-            </div>
 
-            {/* Institution */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Institution / University <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              {/* Institution */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Institution <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   name="institution"
                   value={formData.institution}
                   onChange={handleChange}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your institution name"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your institution"
                 />
               </div>
-            </div>
 
-            {/* Department */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Department / Major <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <BookOpen className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              {/* Department */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Department
+                </label>
                 <input
                   type="text"
                   name="department"
                   value={formData.department}
                   onChange={handleChange}
-                  required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your department or major"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your department"
                 />
               </div>
-            </div>
 
-            {/* Roll Number (optional) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Roll / Student ID (Optional)
-              </label>
-              <div className="relative">
-                <IdCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              {/* Roll Number */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Roll Number / Student ID
+                </label>
                 <input
                   type="text"
-                  name="roll_number"
-                  value={formData.roll_number}
+                  name="rollNumber"
+                  value={formData.rollNumber}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your roll or student ID"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your roll number"
                 />
               </div>
             </div>
@@ -213,7 +207,7 @@ export function CompleteProfile() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -221,7 +215,7 @@ export function CompleteProfile() {
                   Saving...
                 </>
               ) : (
-                'Continue to Dashboard'
+                'Complete Profile'
               )}
             </button>
           </form>

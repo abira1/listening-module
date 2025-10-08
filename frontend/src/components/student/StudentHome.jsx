@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { AuthService } from '../../services/AuthService';
 import { Loader2 } from 'lucide-react';
 
 export function StudentHome() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login, isAuthenticated, user, loading: authLoading } = useAuth();
+  const { loginWithGoogle, isAuthenticated, user, loading: authLoading } = useAuth();
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 
@@ -15,59 +13,26 @@ export function StudentHome() {
     // Check if already authenticated
     if (isAuthenticated && user && !authLoading) {
       // Check if profile is completed
-      if (user.profile_completed === false || !user.phone_number || !user.institution) {
+      if (user.profileCompleted === false || !user.phoneNumber || !user.institution) {
         navigate('/complete-profile');
       } else {
         navigate('/student/dashboard');
       }
-      return;
     }
+  }, [isAuthenticated, user, authLoading, navigate]);
 
-    // Check for session_id in URL fragment
-    const hash = window.location.hash;
-    if (hash && hash.includes('session_id=')) {
-      processSessionId(hash);
-    }
-  }, [isAuthenticated, user, authLoading]);
-
-  const processSessionId = async (hash) => {
+  const handleGoogleLogin = async () => {
     setProcessing(true);
     setError('');
 
     try {
-      // Extract session_id from hash
-      const params = new URLSearchParams(hash.substring(1));
-      const sessionId = params.get('session_id');
-
-      if (!sessionId) {
-        throw new Error('No session ID found');
-      }
-
-      // Exchange session_id for user data
-      const response = await login(sessionId);
-
-      // Clean URL
-      window.history.replaceState(null, '', window.location.pathname);
-
-      // Redirect based on user status
-      if (response.is_new_user || !response.user.phone_number || !response.user.institution) {
-        navigate('/complete-profile');
-      } else {
-        navigate('/student/dashboard');
-      }
+      await loginWithGoogle();
+      // Navigation will be handled by useEffect after auth state updates
     } catch (err) {
-      setError(err.message || 'Authentication failed. Please try again.');
+      console.error('Login error:', err);
+      setError(err.message || 'Failed to sign in with Google. Please try again.');
       setProcessing(false);
-      // Clean URL on error too
-      window.history.replaceState(null, '', window.location.pathname);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    // Redirect URL should be this same page to process session_id
-    const redirectUrl = window.location.origin + '/student';
-    const loginUrl = AuthService.getLoginUrl(redirectUrl);
-    window.location.href = loginUrl;
   };
 
   if (authLoading || processing) {
@@ -106,7 +71,8 @@ export function StudentHome() {
           {/* Login Button */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 rounded-lg px-6 py-3 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm"
+            disabled={processing}
+            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 rounded-lg px-6 py-3 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -114,7 +80,9 @@ export function StudentHome() {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            <span className="text-gray-700 font-medium">Login with Google</span>
+            <span className="text-gray-700 font-medium">
+              {processing ? 'Signing in...' : 'Login with Google'}
+            </span>
           </button>
 
           {/* Footer */}
