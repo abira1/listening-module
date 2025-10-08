@@ -470,9 +470,23 @@ export function ListeningTest({ examId, audioRef }) {
           
           <div className="flex items-center gap-3">
             <Clock className="w-5 h-5" />
-            <span className={`text-base font-semibold ${timeRemaining < 120 ? 'text-red-400' : ''}`}>
-              {formatTime(timeRemaining)} left | Part {currentSectionIndex}
-            </span>
+            <div 
+              className={`px-4 py-2 rounded-lg font-bold text-lg transition-all duration-500 ${
+                timeRemaining < 120 
+                  ? 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg shadow-red-500/50 animate-pulse-slow' 
+                  : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/50'
+              }`}
+              style={{
+                transform: timeRemaining < 120 ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: timeRemaining < 120 
+                  ? '0 0 20px rgba(239, 68, 68, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.3)' 
+                  : '0 0 10px rgba(59, 130, 246, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3)',
+              }}
+            >
+              <span className="drop-shadow-lg">
+                {formatTime(timeRemaining)} left | Part {currentSectionIndex}
+              </span>
+            </div>
           </div>
           
           <div className="flex items-center gap-3">
