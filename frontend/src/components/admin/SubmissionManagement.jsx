@@ -325,7 +325,7 @@ export function SubmissionManagement() {
             >
               <option value="all">All Status</option>
               <option value="passed">Passed (≥60%)</option>
-              <option value="failed">Failed (<60%)</option>
+              <option value="failed">Failed (&lt;60%)</option>
               <option value="manual">Manually Graded</option>
             </select>
           </div>
