@@ -355,8 +355,8 @@ export function ReadingTest({ examId }) {
         </div>
       </header>
 
-      {/* Main Content Area - Split Screen */}
-      <div className={`flex-1 flex ${isHeaderHidden ? 'pt-16' : 'pt-32'} pb-28`}>
+      {/* Main Content - Split Screen with Passage on left, Questions on right */}
+      <main className="flex-1 flex pb-32" style={{ paddingTop: isHeaderHidden ? '80px' : '136px' }}>
         {/* Left Side: Reading Passage */}
         <div className="w-1/2 bg-white border-r border-gray-300 overflow-y-auto">
           <div className="p-8" id="highlightable-content">
@@ -370,7 +370,7 @@ export function ReadingTest({ examId }) {
         </div>
 
         {/* Right Side: Questions */}
-        <div className="w-1/2 bg-gray-50 overflow-y-auto">
+        <div className="w-1/2 bg-blue-50 overflow-y-auto">
           <div className="p-8">
             <h2 className="text-xl font-bold text-gray-800 mb-6">
               Questions {currentSection?.questions[0]?.index} - {currentSection?.questions[currentSection?.questions.length - 1]?.index}
@@ -379,9 +379,10 @@ export function ReadingTest({ examId }) {
               <div 
                 key={question.index} 
                 data-question-index={question.index}
-                className={`mb-6 ${currentQuestionIndex === question.index ? 'ring-2 ring-blue-500 rounded-lg' : ''}`}
+                className={`mb-6 ${currentQuestionIndex === question.index ? 'ring-2 ring-blue-500 rounded-lg p-2' : ''}`}
+                onClick={() => setCurrentQuestionIndex(question.index)}
               >
-                <div className="flex items-start mb-2">
+                <div className="flex items-start">
                   <span className="font-bold text-gray-900 mr-2">{question.index}.</span>
                   <div className="flex-1">
                     {renderQuestionComponent(question)}
@@ -391,69 +392,149 @@ export function ReadingTest({ examId }) {
             ))}
           </div>
         </div>
-      </div>
+      </main>
 
-      {/* Footer Navigation Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg" style={{ height: '110px' }}>
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center space-x-2">
+      {/* QTI-Style Footer Navigation */}
+      <footer 
+        role="navigation" 
+        className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg"
+        style={{ height: '100px' }}
+      >
+        <h1 className="reader-only">Navigation</h1>
+        
+        {/* Navigation Bar Container */}
+        <div className="relative h-full">
+          {/* Review Checkbox */}
+          <div id="review-checkbox">
+            <label htmlFor="mark-for-review-input">
               <input
+                id="mark-for-review-input"
                 type="checkbox"
+                connect-function="mark-for-review"
                 checked={reviewMarked.has(currentQuestionIndex)}
                 onChange={() => toggleReviewMark(currentQuestionIndex)}
-                className="h-4 w-4"
+                aria-label="Mark current question for review"
               />
-              <label className="text-sm text-gray-700">Review</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => navigateToQuestion(Math.max(1, currentQuestionIndex - 1))}
-                disabled={currentQuestionIndex === 1}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 text-white rounded transition-colors text-sm"
-              >
-                <ChevronLeft className="h-4 w-4 inline" /> Previous
-              </button>
-              <button
-                onClick={() => navigateToQuestion(Math.min(40, currentQuestionIndex + 1))}
-                disabled={currentQuestionIndex === 40}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 text-white rounded transition-colors text-sm"
-              >
-                Next <ChevronRight className="h-4 w-4 inline" />
-              </button>
-              <button
-                onClick={handleSubmitExam}
-                disabled={isSubmitting}
-                className="px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded font-semibold transition-colors"
-              >
-                {isSubmitting ? 'Submitting...' : 'Submit Test'}
-              </button>
-            </div>
+              Review
+            </label>
           </div>
-          
-          {/* Question navigation buttons */}
-          <div className="flex flex-wrap gap-1">
-            {allQuestions.map((question) => {
-              const section = examData.sections.find(s => s.questions.some(q => q.index === question.index));
-              const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
-              const isMarked = reviewMarked.has(question.index);
+
+          {/* Main Navigation Bar - QTI Style with View Toggle */}
+          <div id="navigation-bar" className={isNavMaximised ? 'maximised' : 'minimised'}>
+            <div connect-class="testPart" connect-identifier="IELTS_READING_TEST">
+              <ul>
+                {examData?.sections.map((section) => (
+                  <li 
+                    key={section.id}
+                    connect-class="assessmentSection" 
+                    connect-identifier={`Passage${section.index}`}
+                  >
+                    <span className="section-label">Passage {section.index}</span>
+                    <ul>
+                      {section.questions.map((question) => {
+                        const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
+                        const isCurrent = currentQuestionIndex === question.index;
+                        const isMarkedForReview = reviewMarked.has(question.index);
+                        
+                        let connectState = '';
+                        if (isCurrent) connectState += 'current ';
+                        if (isAnswered) connectState += 'completed ';
+                        if (isMarkedForReview) connectState += 'marked-for-review';
+                        
+                        return (
+                          <li 
+                            key={question.id}
+                            connect-class="assessmentItemRef" 
+                            connect-identifier={`IELTS-Q${question.index}`}
+                          >
+                            <a
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigateToQuestion(question.index);
+                              }}
+                              onMouseEnter={(e) => showTooltip(e, question)}
+                              onMouseLeave={hideTooltip}
+                              onFocus={(e) => showTooltip(e, question)}
+                              onBlur={hideTooltip}
+                              connect-state={connectState.trim()}
+                              title={`Question ${question.index}`}
+                            >
+                              <span className="question-label">Question </span>
+                              <span className="question-number">{question.index}</span>
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* View Toggle Controls */}
+            <div className="views">
+              <a
+                href="#"
+                className="minimise"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNavView();
+                }}
+                title="switch view to navigation summary"
+                role="button"
+                aria-label="Switch to compact navigation view"
+              >
+                <span>navigation summary</span>
+              </a>
               
-              return (
-                <button
-                  key={question.index}
-                  onClick={() => navigateToQuestion(question.index)}
-                  className={`w-10 h-10 text-sm font-medium rounded transition-all ${getQuestionButtonColor(question.index)} ${
-                    isMarked ? 'ring-2 ring-yellow-400' : ''
-                  }`}
-                  title={`Q${question.index} - Section ${section?.index || ''}`}
-                >
-                  {question.index}
-                </button>
-              );
-            })}
+              <a
+                href="#"
+                className="maximise"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNavView();
+                }}
+                title="switch view to navigation details"
+                role="button"
+                aria-label="Switch to detailed navigation view"
+              >
+                <span>navigation details</span>
+              </a>
+            </div>
           </div>
+
+          {/* Previous Button */}
+          <button
+            data-function="previous"
+            disabled={currentQuestionIndex <= 1}
+            onClick={() => navigateToQuestion(Math.max(1, currentQuestionIndex - 1))}
+            title="Previous Question"
+            aria-label="Go to previous question"
+          >
+            <span className="reader-only">Previous Question</span>
+          </button>
+
+          {/* Next Button */}
+          <button
+            data-function="next"
+            disabled={currentQuestionIndex >= totalQuestions}
+            onClick={() => {
+              if (currentQuestionIndex < totalQuestions) {
+                navigateToQuestion(currentQuestionIndex + 1);
+              } else {
+                handleSubmitExam();
+              }
+            }}
+            title={currentQuestionIndex >= totalQuestions ? "Submit Test" : "Next Question"}
+            aria-label={currentQuestionIndex >= totalQuestions ? "Submit Test" : "Go to next question"}
+          >
+            <span className="reader-only">
+              {currentQuestionIndex >= totalQuestions ? "Submit Test" : "Next Question"}
+            </span>
+          </button>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
