@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BackendService } from '../services/BackendService';
 import FirebaseAuthService from '../services/FirebaseAuthService';
 import { useAuth } from '../contexts/AuthContext';
-import { Clock, ChevronLeft, ChevronRight, HelpCircle, EyeOff, User } from 'lucide-react';
+import { Clock, User, HelpCircle, EyeOff } from 'lucide-react';
 import { MatchingParagraphs } from './reading/MatchingParagraphs';
 import { SentenceCompletion } from './reading/SentenceCompletion';
 import { TrueFalseNotGiven } from './reading/TrueFalseNotGiven';
