@@ -1291,8 +1291,9 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_db():
-    """Initialize IELTS test on startup"""
+    """Initialize IELTS tests on startup"""
     await init_ielts_test()
+    await init_reading_test()
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
