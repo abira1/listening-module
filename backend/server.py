@@ -95,6 +95,7 @@ class Section(BaseModel):
     exam_id: str
     index: int
     title: str
+    passage_text: Optional[str] = None  # For reading passages
 
 # Question Models
 class QuestionCreate(BaseModel):
