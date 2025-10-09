@@ -387,6 +387,23 @@
     background-color: #333;
 }
 
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):hover .question-number,
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):focus .question-number {
+    color: #fff !important;
+    border-bottom-color: #fff !important;
+}
+
+/* Ensure completed state takes priority over all other states */
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
+    background-color: #222 !important;
+    border: 1px solid #222 !important;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
+    color: #fff !important;
+    border-bottom: 3px solid #fff !important;
+}
+
 /* ================================================
    VIEW TOGGLE CONTROLS
    ================================================ */
