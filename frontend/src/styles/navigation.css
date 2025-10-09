@@ -364,18 +364,31 @@
     color: #fff !important;
 }
 
-/* Completed state - White box with black number and underline */
-#navigation-bar [connect-class~=testPart] a[connect-state~=completed]:not([connect-state~=current]) {
-    background-color: #fff;
+/* Completed state - White box with black number and underline (HIGHEST PRIORITY) */
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
+    background-color: #fff !important;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
     color: #000 !important;
-    border-color: #fff;
+    border-color: #fff !important;
 }
 
-#navigation-bar [connect-class~=testPart] a[connect-state~=completed]:not([connect-state~=current]) .question-number {
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
     border-bottom: 2px solid #000 !important;
     color: #000 !important;
     padding: 0 3px;
     display: inline-block;
+}
+
+/* Ensure completed state takes priority in maximised view */
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
+    background-color: #fff !important;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
+    border: 1px solid #ddd !important;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
+    color: #000 !important;
+    border-bottom: 2px solid #000 !important;
 }
 
 /* Marked for review - Circular border with yellow glow */
@@ -387,34 +400,25 @@
     box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
 }
 
-/* Hover state for all questions */
-#navigation-bar [connect-class~=testPart] ul a:hover,
-#navigation-bar [connect-class~=testPart] ul a:focus {
+/* Hover state for all questions (except completed) */
+#navigation-bar [connect-class~=testPart] ul a:not([connect-state~=completed]):hover,
+#navigation-bar [connect-class~=testPart] ul a:not([connect-state~=completed]):focus {
     transform: scale(1.1);
     z-index: 10;
 }
 
-/* Hover on completed questions */
+/* Hover on completed questions - keep white background */
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):hover,
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):focus {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0 !important;
+    transform: scale(1.1);
+    z-index: 10;
 }
 
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):hover .question-number,
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):focus .question-number {
     color: #000 !important;
     border-bottom-color: #000 !important;
-}
-
-/* Ensure completed state takes priority over all other states */
-#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
-    background-color: #fff !important;
-    border: 1px solid #ddd !important;
-}
-
-#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
-    color: #000 !important;
-    border-bottom: 2px solid #000 !important;
 }
 
 /* ================================================
