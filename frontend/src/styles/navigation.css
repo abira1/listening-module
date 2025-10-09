@@ -1,0 +1,299 @@
+/* QTI-Style Navigation Bar CSS */
+
+/* Previous/Next Buttons */
+[data-function~="next"],
+[data-function~="previous"] {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+[data-function~="next"] {
+    right: 0;
+}
+
+[data-function~="next"]::before {
+    content: '›';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
+
+[data-function~="previous"] {
+    right: 56px;
+}
+
+[data-function~="previous"]::before {
+    content: '‹';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
+
+[data-function~="next"]:hover,
+[data-function~="next"]:focus {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: scale(1.05);
+}
+
+[data-function~="previous"]:hover,
+[data-function~="previous"]:focus {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: scale(1.05);
+}
+
+/* Hide when disabled/no href */
+[data-function~="previous"][disabled],
+[data-function~="next"][disabled] {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Review Checkbox */
+#review-checkbox {
+    bottom: 0.85em;
+    display: block;
+    left: 0.5em;
+    position: absolute;
+    font-size: 0.9em;
+    cursor: pointer;
+    user-select: none;
+}
+
+#review-checkbox input[type="checkbox"] {
+    vertical-align: -0.15em;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+}
+
+#review-checkbox label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Hover Popup (Page Identifier) */
+#pageIdentifier {
+    border-radius: 5px;
+    position: absolute;
+    font-size: 0.9em;
+    margin-bottom: 1em;
+    background: #333;
+    border: 1px solid #202020;
+    padding: 8px 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    z-index: 3;
+    bottom: 2.9em;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+#pageIdentifier p {
+    margin: 0;
+    padding: 2px 0;
+}
+
+/* Arrow pointing down to navigation item */
+#pageIdentifier::after {
+    content: '';
+    width: 0;
+    height: 0;
+    line-height: 0;
+    border-left: 0.8em solid transparent;
+    border-right: 0.8em solid transparent;
+    border-top: 0.8em solid rgba(0, 0, 0, 0.55);
+    position: absolute;
+    bottom: -0.9em;
+    left: 50%;
+    margin-left: -0.8em;
+}
+
+/* Navigation Bar Container */
+#navigation-bar {
+    margin-left: 5.3em;
+    margin-right: 8.3em;
+    position: relative;
+    padding-right: 30px;
+}
+
+/* Fixed View (Maximised/Detailed) */
+#navigation-bar {
+    border: 1px solid #e5e7eb;
+    border-bottom: 0;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 1.0em;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0.5em 0.5em 0 0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Test Part and Assessment Section */
+[data-class~="testPart"] {
+    position: relative;
+}
+
+[data-class~="assessmentSection"] {
+    margin-bottom: 0.5em;
+}
+
+.section-label {
+    display: none;
+}
+
+/* Question List */
+#navigation-bar [data-class~="testPart"] ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+}
+
+#navigation-bar [data-class~="testPart"] ul li {
+    display: inline-block;
+}
+
+/* Question Button Base Styles */
+#navigation-bar [data-class~="testPart"] ul a {
+    overflow: hidden;
+    color: #fff;
+    position: relative;
+    display: block;
+    margin-right: 0.143em;
+    margin-bottom: 0.5em;
+    border: 1px solid black;
+    width: 2em;
+    height: 2em;
+    background-size: contain;
+    line-height: 2em;
+    font-weight: bold;
+    border-radius: 2px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Default state - Not attempted (Black background) */
+#navigation-bar [data-class~="testPart"] ul a {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Completed state - Answered (White background with underline) */
+#navigation-bar [data-class~="testPart"] a[data-state~="completed"]:not([data-state~="current"]) {
+    border-color: #d1d5db;
+    background-color: #fff;
+    color: #000;
+}
+
+#navigation-bar [data-class~="testPart"] a[data-state~="completed"] span {
+    border-bottom: 2px solid currentColor;
+    padding: 0 2px;
+    display: inline-block;
+}
+
+/* Current state - Active question (Blue border/background) */
+#navigation-bar [data-class~="testPart"] ul a[data-state~="current"] {
+    border-color: #34b2f1;
+    background-color: #34b2f1;
+    background-image: linear-gradient(135deg, #34b2f1 0%, #1098dc 100%);
+    color: #fff;
+    text-shadow: 0 0 2px #000, 0 0 2px #000;
+    box-shadow: 0 0 8px rgba(52, 178, 241, 0.6);
+}
+
+/* Marked for review - Circle shape */
+#navigation-bar [data-class~="testPart"] a[data-state~="marked-for-review"] {
+    border-radius: 50% !important;
+    border-width: 2px;
+}
+
+/* Hover/Focus state */
+#navigation-bar [data-class~="testPart"] ul a:hover,
+#navigation-bar [data-class~="testPart"] ul a:focus {
+    color: #3bf !important;
+    transform: scale(1.1);
+    z-index: 2;
+}
+
+/* Question Label - Hidden visually but accessible to screen readers */
+#navigation-bar .question-label {
+    position: absolute;
+    display: block;
+    top: auto;
+    left: -100000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.question-number {
+    position: relative;
+    z-index: 1;
+}
+
+/* Reader-only elements */
+.reader-only {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Navigation bar when questions exist */
+#navigation-bar:not(:empty) {
+    min-height: 60px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #navigation-bar {
+        margin-left: 3em;
+        margin-right: 6em;
+    }
+    
+    #navigation-bar [data-class~="testPart"] ul a {
+        width: 1.8em;
+        height: 1.8em;
+        line-height: 1.8em;
+        font-size: 12px;
+    }
+    
+    [data-function~="next"],
+    [data-function~="previous"] {
+        width: 48px;
+        height: 48px;
+    }
+    
+    [data-function~="previous"] {
+        right: 48px;
+    }
+}
