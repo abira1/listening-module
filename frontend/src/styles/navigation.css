@@ -314,7 +314,41 @@
     text-shadow: 0 0 2px #000, 0 0 2px #000;
 }
 
-/* Question Label - Hidden visually but accessible to screen readers */
+/* ================================================
+   VIEW TOGGLE CONTROLS
+   ================================================ */
+#navigation-bar .views {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+}
+
+#navigation-bar .minimise {
+    width: 28px;
+    height: 28px;
+    background: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/qkgf8kz2_iconMinimise.png") no-repeat left top;
+    display: block;
+    cursor: pointer;
+    border: none;
+    overflow: hidden;
+}
+
+#navigation-bar .maximise {
+    width: 28px;
+    height: 28px;
+    background: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/83opzicx_iconMaximise.png") no-repeat left top;
+    display: block;
+    cursor: pointer;
+    border: none;
+    overflow: hidden;
+}
+
+/* Hide buttons based on view state */
+#navigation-bar.minimised .minimise,
+#navigation-bar.maximised .maximise,
+#navigation-bar a.minimise span,
+#navigation-bar a.maximise span,
+#navigation-bar.minimised .section-label,
 #navigation-bar .question-label {
     position: absolute;
     display: block;
@@ -325,6 +359,7 @@
     overflow: hidden;
 }
 
+/* Question Label - Hidden visually but accessible to screen readers */
 .question-number {
     position: relative;
     z-index: 1;
@@ -337,11 +372,6 @@
     width: 1px;
     height: 1px;
     overflow: hidden;
-}
-
-/* Navigation bar when questions exist */
-#navigation-bar:not(:empty) {
-    min-height: 60px;
 }
 
 /* Responsive adjustments */
