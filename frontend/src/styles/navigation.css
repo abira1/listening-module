@@ -316,16 +316,16 @@
    QUESTION STATE INDICATORS (All Views)
    ================================================ */
 
-/* Default state - Black text with gray underline */
+/* Default state - Black box with white number and gray underline */
 #navigation-bar [connect-class~=testPart] ul a .question-number {
     border-bottom: 2px solid #999;
     padding: 0 3px;
     display: inline-block;
     transition: all 0.3s ease;
-    color: #000;
+    color: #fff;
 }
 
-/* Current state - Blue text with blue underline (thicker) */
+/* Current state - Blue number with blue underline (thicker) */
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=current] {
     color: #007BFF !important;
     background-color: transparent;
@@ -341,7 +341,6 @@
 /* Current state hover */
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=current]:hover,
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=current]:focus {
-    color: #0056b3;
     transform: scale(1.05);
 }
 
@@ -351,16 +350,16 @@
     color: #0056b3;
 }
 
-/* Completed state - White text with white underline on dark gray background */
+/* Completed state - White box with black number and underline */
 #navigation-bar [connect-class~=testPart] a[connect-state~=completed]:not([connect-state~=current]) {
-    background-color: #222;
-    color: #fff !important;
-    border-color: #222;
+    background-color: #fff;
+    color: #000 !important;
+    border-color: #fff;
 }
 
 #navigation-bar [connect-class~=testPart] a[connect-state~=completed]:not([connect-state~=current]) .question-number {
-    border-bottom: 3px solid #fff !important;
-    color: #fff !important;
+    border-bottom: 2px solid #000 !important;
+    color: #000 !important;
     padding: 0 3px;
     display: inline-block;
 }
