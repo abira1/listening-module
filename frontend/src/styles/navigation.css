@@ -374,17 +374,29 @@
     overflow: hidden;
 }
 
-/* Responsive adjustments */
+/* ================================================
+   CLEARFIX FOR FLOATING ELEMENTS
+   ================================================ */
+#navigation-bar [connect|class~=testPart]:after,
+#navigation-bar [connect|class~=assessmentSection] > ul:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* ================================================
+   RESPONSIVE ADJUSTMENTS
+   ================================================ */
 @media (max-width: 768px) {
     #navigation-bar {
         margin-left: 3em;
         margin-right: 6em;
     }
     
-    #navigation-bar [data-class~="testPart"] ul a {
-        width: 1.8em;
-        height: 1.8em;
-        line-height: 1.8em;
+    #navigation-bar.maximised [connect|class~=testPart] ul a {
+        width: 1.4em;
+        height: 1.4em;
+        line-height: 1.4em;
         font-size: 12px;
     }
     
