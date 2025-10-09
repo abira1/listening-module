@@ -411,11 +411,11 @@ export function ReadingTest({ examId }) {
       </header>
 
       {/* Main Content - Split Screen with Passage on left, Questions on right */}
-      <main className="flex-1 flex pb-32" style={{ paddingTop: isHeaderHidden ? '80px' : '136px' }}>
-        {/* Left Side: Reading Passage */}
-        <div className="w-1/2 bg-white border-r border-gray-300 overflow-y-auto">
-          <div className="p-8" id="highlightable-content">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+      <main className="flex-1 flex pb-32" style={{ paddingTop: isHeaderHidden ? '80px' : '136px' }} id="highlightable-content">
+        {/* Left Side: Reading Passage - 60% width */}
+        <div className="w-[60%] bg-white border-r-2 border-gray-300 overflow-y-auto">
+          <div className="p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
               {currentSection?.title}
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -424,21 +424,30 @@ export function ReadingTest({ examId }) {
           </div>
         </div>
 
-        {/* Right Side: Questions */}
-        <div className="w-1/2 bg-blue-50 overflow-y-auto">
-          <div className="p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
-              Questions {currentSection?.questions[0]?.index} - {currentSection?.questions[currentSection?.questions.length - 1]?.index}
-            </h2>
+        {/* Right Side: Questions - 40% width */}
+        <div className="w-[40%] bg-gray-50 overflow-y-auto">
+          <div className="p-6">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-2">
+                Questions {currentSection?.questions[0]?.index} - {currentSection?.questions[currentSection?.questions.length - 1]?.index}
+              </h2>
+              <p className="text-sm text-gray-700">
+                Choose the correct answer for each question.
+              </p>
+            </div>
             {currentSection?.questions.map((question) => (
               <div 
                 key={question.index} 
                 data-question-index={question.index}
-                className={`mb-6 ${currentQuestionIndex === question.index ? 'ring-2 ring-blue-500 rounded-lg p-2' : ''}`}
+                className={`mb-6 p-4 bg-white rounded-lg border-2 transition-all ${
+                  currentQuestionIndex === question.index 
+                    ? 'border-blue-500 shadow-md' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
                 onClick={() => setCurrentQuestionIndex(question.index)}
               >
                 <div className="flex items-start">
-                  <span className="font-bold text-gray-900 mr-2">{question.index}.</span>
+                  <span className="font-bold text-gray-900 mr-3 text-lg">{question.index}.</span>
                   <div className="flex-1">
                     {renderQuestionComponent(question)}
                   </div>
