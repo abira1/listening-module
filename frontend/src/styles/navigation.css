@@ -66,44 +66,71 @@
 
 /* ================================================
    HOVER TOOLTIP (Page Identifier)
-   Only shown in minimised view
+   Shows in both views with status information
    ================================================ */
 #pageIdentifier {
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
     position: absolute;
-    font-size: 0.9em;
+    font-size: 0.85em;
     margin-bottom: 1em;
-    background: #333 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==) repeat-x left top;
-    border: 1px solid #202020;
-    padding: 3px;
-    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-    color: #fff;
-    z-index: 3;
-    bottom: 2.9em;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: #000;
+    z-index: 100;
+    bottom: 3.5em;
     pointer-events: none;
     display: none;
+    white-space: nowrap;
 }
 
 #pageIdentifier p {
     margin: 0;
+    padding: 2px 0;
     text-align: left;
+    font-weight: 500;
+}
+
+#pageIdentifier .tooltip-status {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 2px;
+}
+
+/* Status colors in tooltip */
+#pageIdentifier .status-current {
+    color: #007BFF;
+    font-weight: bold;
+}
+
+#pageIdentifier .status-completed {
+    color: #222;
+}
+
+#pageIdentifier .status-review {
+    color: #FFD700;
+}
+
+#pageIdentifier .status-unanswered {
+    color: #999;
 }
 
 /* Arrow pointing down to navigation item */
-#pageIdentifier span {
+#pageIdentifier span.tooltip-arrow {
     width: 0;
     height: 0;
     line-height: 0;
-    border-left: 0.8em solid transparent;
-    border-right: 0.8em solid transparent;
-    border-top: 0.8em solid;
-    border-top-color: rgba(0, 0, 0, 0.55);
+    border-left: 0.6em solid transparent;
+    border-right: 0.6em solid transparent;
+    border-top: 0.6em solid #fff;
     position: absolute;
-    bottom: -0.9em;
+    bottom: -0.6em;
     left: 50%;
-    margin-left: -0.8em;
+    margin-left: -0.6em;
+    filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.1));
 }
 
 /* ================================================
