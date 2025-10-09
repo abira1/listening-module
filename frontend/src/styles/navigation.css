@@ -198,76 +198,120 @@
     float: left;
 }
 
-/* Question Button Base Styles with Background Image */
-#navigation-bar [data-class~="testPart"] ul a {
+/* ================================================
+   QUESTION BUTTON BASE STYLES
+   ================================================ */
+#navigation-bar [connect|class~=testPart] ul a {
     overflow: hidden;
     color: #fff;
     position: relative;
     display: block;
+    background-color: #000;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png");
+    text-align: center;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* ================================================
+   MINIMISED VIEW - QUESTION BUTTONS
+   ================================================ */
+#navigation-bar.minimised [connect|class~=testPart] ul a {
+    margin: 3px 1px 0.2em 0;
+    padding-left: 1em;
+    width: 1em;
+    height: 1em;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* MINIMISED - Current question as TRIANGLE */
+#navigation-bar.minimised [connect|class~=testPart] ul a[connect|state~=current] {
+    width: 0;
+    height: 0;
+    z-index: 1;
+    margin: 0 -2px auto -2px;
+    padding: 0 1px 0 0;
+    border-left: 0.7em solid transparent;
+    background: none;
+    border-right: 0.7em solid transparent;
+    border-top: 1.2em solid #1098dc;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+#navigation-bar.minimised [connect|class~=testPart] ul a[connect|state~=current]:hover,
+#navigation-bar.minimised [connect|class~=testPart] ul a[connect|state~=current]:focus {
+    border-top: 1.2em solid #47b7ec;
+}
+
+/* ================================================
+   MAXIMISED VIEW - QUESTION BUTTONS
+   ================================================ */
+#navigation-bar.maximised [connect|class~=testPart] ul a {
     margin-right: 0.143em;
     margin-bottom: 0.5em;
     border: 1px solid black;
-    width: 2em;
-    height: 2em;
-    background-image: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/w8kvil7b_button.png");
+    width: 1.6em;
+    height: 1.6em;
+    -moz-background-size: contain;
     background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    line-height: 2em;
-    font-weight: bold;
-    border-radius: 2px;
-    text-align: center;
-    text-decoration: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s ease;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-/* Default state - Not attempted (Black background) */
-#navigation-bar [data-class~="testPart"] ul a {
-    background-color: #000;
+    line-height: 1.6em;
     color: #fff;
+    font-weight: bold;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
 }
 
-/* Completed state - Answered (White background with underline) */
-#navigation-bar [data-class~="testPart"] a[data-state~="completed"]:not([data-state~="current"]) {
-    border-color: #d1d5db;
+/* ================================================
+   QUESTION STATE INDICATORS (All Views)
+   ================================================ */
+
+/* Completed state - with underline */
+#navigation-bar [connect|class~=testPart] a[connect|state~=completed] span {
+    border-bottom: 2px solid #fff;
+    padding: 0 2px;
+}
+
+#navigation-bar [connect|class~=testPart] a[connect|state~=completed]:not([connect|state~=current]) span {
+    border-color: #000;
+}
+
+/* Completed state - white background */
+#navigation-bar [connect|class~=testPart] a[connect|state~=completed]:not([connect|state~=current]) {
+    border-color: #fff;
     background-color: #fff;
-    background-image: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/w8kvil7b_button.png");
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png");
     color: #000;
 }
 
-#navigation-bar [data-class~="testPart"] a[data-state~="completed"] span.question-number {
-    border-bottom: 2px solid currentColor;
-    padding: 0 2px;
-    display: inline-block;
-}
-
-/* Current state - Active question (Blue border/background) */
-#navigation-bar [data-class~="testPart"] ul a[data-state~="current"] {
-    border-color: #34b2f1;
-    background-color: #34b2f1;
-    background-image: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/w8kvil7b_button.png"),
-                      linear-gradient(135deg, #34b2f1 0%, #1098dc 100%);
-    color: #fff;
-    text-shadow: 0 0 2px #000, 0 0 2px #000;
-    box-shadow: 0 0 8px rgba(52, 178, 241, 0.6);
-}
-
-/* Marked for review - Circle shape */
-#navigation-bar [data-class~="testPart"] a[data-state~="marked-for-review"] {
+/* Marked for review - circle shape */
+#navigation-bar.maximised [connect|class~=testPart] a[connect|state~=marked-for-review],
+#navigation-bar.minimised [connect|class~=testPart] a[connect|state~=marked-for-review]:not([connect|state~=current]) {
+    -moz-border-radius: 50% !important;
     border-radius: 50% !important;
-    border-width: 2px;
-    border-color: #f59e0b;
 }
 
-/* Hover/Focus state */
-#navigation-bar [data-class~="testPart"] ul a:hover,
-#navigation-bar [data-class~="testPart"] ul a:focus {
+/* Hover and focus states */
+#navigation-bar [connect|class~=testPart] ul a:hover,
+#navigation-bar [connect|class~=testPart] ul a:focus,
+#navigation-bar [connect|class~=testPart] ul a[connect|state~=completed]:not([connect|state~=current]):hover,
+#navigation-bar [connect|class~=testPart] ul a[connect|state~=completed]:not([connect|state~=current]):focus {
+    background-image: none;
     color: #3bf !important;
-    transform: scale(1.1);
-    z-index: 2;
+}
+
+/* Current state */
+#navigation-bar [connect|class~=testPart] ul a[connect|state~=current],
+#navigation-bar [connect|class~=testPart] ul a[connect|state~=current]:hover,
+#navigation-bar [connect|class~=testPart] ul a[connect|state~=current]:focus {
+    border-color: #34b2f1;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png");
+    text-shadow: 0 0 2px #000, 0 0 2px #000;
 }
 
 /* Question Label - Hidden visually but accessible to screen readers */
