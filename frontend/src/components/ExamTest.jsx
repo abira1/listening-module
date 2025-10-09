@@ -113,9 +113,11 @@ export function ExamTest() {
     );
   }
 
+  const isReadingTest = exam?.exam_type === 'reading';
+
   return (
     <div className="flex flex-col min-h-screen w-full bg-gradient-to-b from-blue-50 to-blue-100">
-      <audio ref={audioRef} style={{ display: 'none' }} controls={false} />
+      {!isReadingTest && <audio ref={audioRef} style={{ display: 'none' }} controls={false} />}
       
       {currentScreen !== 'test' && <Header />}
       
@@ -123,14 +125,18 @@ export function ExamTest() {
         {currentScreen === 'confirmDetails' && (
           <ConfirmDetails onContinue={handleContinue} />
         )}
-        {currentScreen === 'soundTest' && (
+        {currentScreen === 'soundTest' && !isReadingTest && (
           <SoundTest onContinue={handleContinue} audioRef={audioRef} />
         )}
         {currentScreen === 'instructions' && (
           <ListeningInstructions onStart={handleContinue} examTitle={exam?.title} />
         )}
         {currentScreen === 'test' && (
-          <ListeningTest examId={examId} audioRef={audioRef} />
+          isReadingTest ? (
+            <ReadingTest examId={examId} />
+          ) : (
+            <ListeningTest examId={examId} audioRef={audioRef} />
+          )
         )}
       </main>
     </div>
