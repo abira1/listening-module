@@ -86,42 +86,36 @@ code {
 }
 
 
-/* Text Highlighting Styles */
+/* Text Highlighting Styles - Simplified */
 .highlighted-text {
-  background-color: #fef08a !important; /* Tailwind yellow-200 */
+  background-color: #fef08a !important; /* Yellow highlight */
   padding: 2px 0;
   border-radius: 2px;
   cursor: pointer;
-  position: relative;
   display: inline;
   transition: background-color 0.2s ease;
 }
 
 .highlighted-text:hover {
-  background-color: #fde047 !important; /* Tailwind yellow-300 */
+  background-color: #fde047 !important; /* Brighter yellow on hover */
 }
 
-/* Note-only mode (no highlight background) */
-.highlighted-text.note-only {
-  background-color: transparent !important;
+/* Notes Panel Styles */
+.notes-panel {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
-.highlighted-text.note-only:hover {
-  background-color: #f3f4f6 !important; /* Light gray on hover */
+.notes-panel .panel-header {
+  cursor: move;
 }
 
-/* Note icon styles */
-.note-icon {
-  display: inline;
-  cursor: pointer;
-  font-size: 14px;
-  margin-left: 2px;
-  vertical-align: super;
-  transition: transform 0.2s ease;
+.notes-panel .resize-handle {
+  cursor: se-resize;
+  z-index: 10;
 }
 
-.note-icon:hover {
-  transform: scale(1.2);
+.notes-panel .resize-handle:hover {
+  opacity: 0.8;
 }
 
 /* Prevent text selection issues with highlighting */
