@@ -142,72 +142,60 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-/* Test Part and Assessment Section */
-[data-class~="testPart"] {
-    position: relative;
+/* ================================================
+   TEST PART AND LAYOUT
+   ================================================ */
+#navigation-bar [connect|class~=testPart] ul,
+#navigation-bar [connect|class~=testPart] li,
+#navigation-bar [connect|class~=testPart] a {
+    display: block;
+    float: left;
 }
 
-[data-class~="testPart"] > ul {
+[connect|class~="testPart"] > ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8em;
 }
 
-[data-class~="assessmentSection"] {
-    margin-bottom: 0;
-}
-
-/* Section Header with Navigation Controls */
-.section-header {
-    display: flex;
-    align-items: center;
+[connect|class~="assessmentSection"] {
     margin-bottom: 0.5em;
-    gap: 0.5em;
 }
 
-/* Section Label - Visible for each section */
+/* Section Label */
 .section-label {
-    display: inline-block;
+    display: block;
+    float: left;
+    clear: left;
     font-weight: bold;
-    font-size: 0.9em;
+    font-size: 0.85em;
     color: #374151;
-    margin: 0;
+    margin: 0 0 0.3em 0;
+    padding: 0.2em 0.5em;
 }
 
-/* Section Navigation Container */
-.section-navigation {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 0.5em 0;
-    border-bottom: 1px solid #e5e7eb;
-    margin-bottom: 0.5em;
-}
-
-.section-navigation .current-section {
-    font-weight: bold;
-    font-size: 1em;
-    color: #1f2937;
-    min-width: 100px;
-    text-align: center;
+/* Hide section labels in minimised view */
+#navigation-bar.minimised .section-label {
+    position: absolute;
+    display: block;
+    top: auto;
+    left: -100000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }
 
 /* Question List within sections */
-#navigation-bar [data-class~="assessmentSection"] > ul {
+#navigation-bar [connect|class~="assessmentSection"] > ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3em;
+    display: block;
 }
 
-#navigation-bar [data-class~="assessmentSection"] > ul li {
+#navigation-bar [connect|class~="assessmentSection"] > ul li {
     display: inline-block;
+    float: left;
 }
 
 /* Question Button Base Styles with Background Image */
