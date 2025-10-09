@@ -5,6 +5,7 @@ import FirebaseAuthService from '../services/FirebaseAuthService';
 import { useAuth } from '../contexts/AuthContext';
 import { Clock, Volume2, ChevronLeft, ChevronRight, HelpCircle, EyeOff, User } from 'lucide-react';
 import TextHighlighter from './common/TextHighlighter';
+import NotesPanel from './common/NotesPanel';
 
 export function ListeningTest({ examId, audioRef }) {
   const navigate = useNavigate();
