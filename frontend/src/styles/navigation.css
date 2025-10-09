@@ -377,8 +377,8 @@
 /* ================================================
    CLEARFIX FOR FLOATING ELEMENTS
    ================================================ */
-#navigation-bar [connect|class~=testPart]:after,
-#navigation-bar [connect|class~=assessmentSection] > ul:after {
+#navigation-bar [connect-class~=testPart]:after,
+#navigation-bar [connect-class~=assessmentSection] > ul:after {
     content: "";
     display: table;
     clear: both;
