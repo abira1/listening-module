@@ -1,6 +1,6 @@
 /* QTI-Style Navigation Bar CSS */
 
-/* Previous/Next Buttons */
+/* Previous/Next Buttons with Background Image */
 [data-function~="next"],
 [data-function~="previous"] {
     display: block;
@@ -9,55 +9,34 @@
     width: 56px;
     height: 56px;
     overflow: hidden;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    border-radius: 4px;
+    background: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/gt2g11of_nav-buttons.png") no-repeat;
+    background-size: 224px 56px;
+    border: none;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 [data-function~="next"] {
     right: 0;
-}
-
-[data-function~="next"]::before {
-    content: '›';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 32px;
-    font-weight: bold;
-    color: white;
-}
-
-[data-function~="previous"] {
-    right: 56px;
-}
-
-[data-function~="previous"]::before {
-    content: '‹';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 32px;
-    font-weight: bold;
-    color: white;
+    background-position: left top;
 }
 
 [data-function~="next"]:hover,
 [data-function~="next"]:focus {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    transform: scale(1.05);
+    background-position: right top;
+}
+
+[data-function~="previous"] {
+    right: 56px;
+    background-position: left bottom;
 }
 
 [data-function~="previous"]:hover,
 [data-function~="previous"]:focus {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    transform: scale(1.05);
+    background-position: right bottom;
 }
 
-/* Hide when disabled/no href */
+/* Hide when disabled */
 [data-function~="previous"][disabled],
 [data-function~="next"][disabled] {
     opacity: 0.3;
