@@ -111,17 +111,6 @@ export function ReadingTest({ examId }) {
     setCurrentQuestionIndex(questionIndex);
     setVisitedQuestions((prev) => new Set([...prev, questionIndex]));
     
-    // Determine which section this question belongs to
-    let sectionIdx = 0;
-    if (questionIndex >= 1 && questionIndex <= 13) {
-      sectionIdx = 0; // Passage 1
-    } else if (questionIndex >= 14 && questionIndex <= 27) {
-      sectionIdx = 1; // Passage 2
-    } else if (questionIndex >= 28 && questionIndex <= 40) {
-      sectionIdx = 2; // Passage 3
-    }
-    setCurrentSectionIndex(sectionIdx);
-    
     setTimeout(() => {
       const questionElement = document.querySelector(`[data-question-index="${questionIndex}"]`);
       if (questionElement) {
@@ -131,6 +120,35 @@ export function ReadingTest({ examId }) {
         });
       }
     }, 100);
+  };
+
+  const toggleNavView = () => {
+    setIsNavMaximised(!isNavMaximised);
+  };
+
+  const showTooltip = (event, question) => {
+    // Tooltips are handled by CSS in navigation.css
+  };
+
+  const hideTooltip = () => {
+    // Tooltips are handled by CSS in navigation.css
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Get current section based on current question
+  const getCurrentSection = () => {
+    if (!examData) return null;
+    for (const section of examData.sections) {
+      if (section.questions.some(q => q.index === currentQuestionIndex)) {
+        return section;
+      }
+    }
+    return examData.sections[0];
   };
 
   const handleSubmitExam = async () => {
