@@ -86,36 +86,151 @@ code {
 }
 
 
-/* Text Highlighting Styles - Simplified */
-.highlighted-text {
-  background-color: #fef08a !important; /* Yellow highlight */
-  padding: 2px 0;
-  border-radius: 2px;
+/* QTI-style Text Highlighting */
+.ylw-hglted {
+  background-color: #ff0 !important; /* Bright yellow */
+  position: relative;
   cursor: pointer;
-  display: inline;
-  transition: background-color 0.2s ease;
 }
 
-.highlighted-text:hover {
-  background-color: #fde047 !important; /* Brighter yellow on hover */
+.ylw-hglted:hover {
+  background-color: #ffeb3b !important;
 }
 
-/* Notes Panel Styles */
-.notes-panel {
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+/* Orange notes indicator icon */
+.ylw-hglted .notesIcon {
+  z-index: 40;
+  display: none;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  top: -0.4em;
+  right: 0;
+  background-color: #ff6600;
+  border-radius: 50%;
 }
 
-.notes-panel .panel-header {
-  cursor: move;
+/* Context Menu for Highlighting */
+.highlight-context-menu {
+  position: fixed;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  min-width: 180px;
+  padding: 4px 0;
 }
 
-.notes-panel .resize-handle {
-  cursor: se-resize;
+.highlight-context-menu .menu-item {
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+}
+
+.highlight-context-menu .menu-item:hover {
+  background: #f5f5f5;
+}
+
+.highlight-context-menu .menu-icon {
+  font-size: 16px;
+  width: 20px;
+  display: inline-block;
+}
+
+.highlight-context-menu .menu-separator {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 4px 0;
+}
+
+/* QTI-style Note Widget */
+.note-widget {
+  position: fixed;
+  background-color: rgb(255, 240, 70); /* Yellow sticky note */
+  color: black !important;
+  width: 220px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  z-index: 9999;
+}
+
+.note-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: #333;
   z-index: 10;
 }
 
-.notes-panel .resize-handle:hover {
-  opacity: 0.8;
+.note-close:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.note-draghandle {
+  background-color: #db0; /* Dark yellow */
+  border-bottom: 1px solid #a80;
+  height: 28px;
+  cursor: move;
+  user-select: none;
+  border-radius: 6px 6px 0 0;
+}
+
+.note-content {
+  padding: 10px;
+}
+
+.note-highlight-text {
+  font-weight: bold;
+  margin-bottom: 8px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  font-size: 12px;
+  word-wrap: break-word;
+}
+
+.note-textarea {
+  width: 100%;
+  min-height: 180px;
+  border: none;
+  background: transparent;
+  resize: vertical;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  outline: none;
+  padding: 4px;
+  color: #000;
+}
+
+.note-textarea::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Ensure text highlighter container allows selection */
+#highlightable-content {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
 /* Prevent text selection issues with highlighting */
