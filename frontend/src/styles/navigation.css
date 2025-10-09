@@ -115,16 +115,14 @@
     margin-right: 8.3em;
     position: relative;
     padding-right: 30px;
-}
-
-/* Fixed View (Maximised/Detailed) */
-#navigation-bar {
     border: 1px solid #e5e7eb;
     border-bottom: 0;
-    padding-top: 0.5em;
-    padding-left: 0.5em;
+    padding-top: 0.6em;
+    padding-left: 0.6em;
     padding-right: 1.0em;
-    background: rgba(255, 255, 255, 0.95);
+    padding-bottom: 0.6em;
+    background: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/r2lcn28s_background.png") repeat,
+                rgba(255, 255, 255, 0.95);
     border-radius: 0.5em 0.5em 0 0;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 }
