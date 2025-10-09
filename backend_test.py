@@ -2901,6 +2901,26 @@ def run_hierarchical_submission_tests():
     
     return test_enhanced_hierarchical_submission_management()
 
+def run_reading_test_only():
+    """Run only the IELTS Reading Practice Test 1 verification"""
+    print(f"{Colors.BOLD}{Colors.BLUE}")
+    print("=" * 80)
+    print("  IELTS Reading Practice Test 1 - Backend Verification")
+    print("=" * 80)
+    print(f"{Colors.END}")
+    
+    print_info(f"Testing backend at: {BACKEND_URL}")
+    print_info(f"Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # Run the reading test
+    results = test_ielts_reading_practice_test_1()
+    
+    # Check if all tests passed
+    passed_tests = sum(1 for key, result in results.items() if key not in ['exam_data', 'sections_data', 'submission_data'] and result)
+    total_tests = len([key for key in results.keys() if key not in ['exam_data', 'sections_data', 'submission_data']])
+    
+    return passed_tests == total_tests
+
 if __name__ == "__main__":
     import sys
     
@@ -2918,6 +2938,8 @@ if __name__ == "__main__":
             success = run_hierarchical_submission_tests()
         elif sys.argv[1] == "--hierarchical-fix":
             success = run_hierarchical_submission_fix_tests()
+        elif sys.argv[1] == "--reading-test":
+            success = run_reading_test_only()
         else:
             print_error(f"Unknown test suite: {sys.argv[1]}")
             print_info("Available test suites:")
@@ -2927,10 +2949,11 @@ if __name__ == "__main__":
             print_info("  --test-control        : Run test control system tests")
             print_info("  --hierarchical        : Run enhanced hierarchical submission management tests")
             print_info("  --hierarchical-fix    : Run fixed hierarchical submission management tests (review request)")
-            print_info("  (no args)             : Run fixed hierarchical submission management tests")
+            print_info("  --reading-test        : Run IELTS Reading Practice Test 1 verification")
+            print_info("  (no args)             : Run IELTS Reading Practice Test 1 verification (current focus)")
             sys.exit(1)
     else:
-        # Run the hierarchical submission management fix tests as the default for this review
-        success = run_hierarchical_submission_fix_tests()
+        # Run the reading test as the default for this review request
+        success = run_reading_test_only()
     
     sys.exit(0 if success else 1)
