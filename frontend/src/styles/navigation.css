@@ -134,16 +134,31 @@
     position: relative;
 }
 
+[data-class~="testPart"] > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+}
+
 [data-class~="assessmentSection"] {
-    margin-bottom: 0.5em;
+    margin-bottom: 0;
 }
 
+/* Section Label - Visible for each section */
 .section-label {
-    display: none;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 0.85em;
+    color: #374151;
+    margin-right: 0.5em;
+    margin-bottom: 0.3em;
 }
 
-/* Question List */
-#navigation-bar [data-class~="testPart"] ul {
+/* Question List within sections */
+#navigation-bar [data-class~="assessmentSection"] > ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -152,11 +167,11 @@
     gap: 0.3em;
 }
 
-#navigation-bar [data-class~="testPart"] ul li {
+#navigation-bar [data-class~="assessmentSection"] > ul li {
     display: inline-block;
 }
 
-/* Question Button Base Styles */
+/* Question Button Base Styles with Background Image */
 #navigation-bar [data-class~="testPart"] ul a {
     overflow: hidden;
     color: #fff;
@@ -167,7 +182,10 @@
     border: 1px solid black;
     width: 2em;
     height: 2em;
+    background-image: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/w8kvil7b_button.png");
     background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     line-height: 2em;
     font-weight: bold;
     border-radius: 2px;
@@ -189,10 +207,11 @@
 #navigation-bar [data-class~="testPart"] a[data-state~="completed"]:not([data-state~="current"]) {
     border-color: #d1d5db;
     background-color: #fff;
+    background-image: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/w8kvil7b_button.png");
     color: #000;
 }
 
-#navigation-bar [data-class~="testPart"] a[data-state~="completed"] span {
+#navigation-bar [data-class~="testPart"] a[data-state~="completed"] span.question-number {
     border-bottom: 2px solid currentColor;
     padding: 0 2px;
     display: inline-block;
@@ -202,7 +221,8 @@
 #navigation-bar [data-class~="testPart"] ul a[data-state~="current"] {
     border-color: #34b2f1;
     background-color: #34b2f1;
-    background-image: linear-gradient(135deg, #34b2f1 0%, #1098dc 100%);
+    background-image: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/w8kvil7b_button.png"),
+                      linear-gradient(135deg, #34b2f1 0%, #1098dc 100%);
     color: #fff;
     text-shadow: 0 0 2px #000, 0 0 2px #000;
     box-shadow: 0 0 8px rgba(52, 178, 241, 0.6);
@@ -212,6 +232,7 @@
 #navigation-bar [data-class~="testPart"] a[data-state~="marked-for-review"] {
     border-radius: 50% !important;
     border-width: 2px;
+    border-color: #f59e0b;
 }
 
 /* Hover/Focus state */
