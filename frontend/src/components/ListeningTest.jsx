@@ -717,12 +717,6 @@ export function ListeningTest({ examId, audioRef }) {
           </div>
         </div>
       </footer>
-
-      {/* Notes Panel - Draggable, Resizable, Independent */}
-      <NotesPanel 
-        examId={examId} 
-        enabled={!examFinished && !isSubmitting} 
-      />
     </div>
   );
 }
