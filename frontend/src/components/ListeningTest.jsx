@@ -456,7 +456,12 @@ export function ListeningTest({ examId, audioRef }) {
 
       case 'map_labeling':
         return (
-          <div key={question.id} className="mb-4" onClick={() => setCurrentQuestionIndex(questionNum)}>
+          <div 
+            key={question.id} 
+            className="mb-4" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
             <div className="flex items-start gap-2">
               <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
               <div className="flex-1">
