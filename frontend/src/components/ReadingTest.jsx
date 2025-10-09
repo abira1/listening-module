@@ -247,12 +247,6 @@ export function ReadingTest({ examId }) {
     }
   };
 
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   const getQuestionButtonColor = (questionIndex) => {
     if (currentQuestionIndex === questionIndex) {
       return 'bg-blue-600 text-white';
