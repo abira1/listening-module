@@ -145,20 +145,20 @@
 /* ================================================
    TEST PART AND LAYOUT
    ================================================ */
-#navigation-bar [connect|class~=testPart] ul,
-#navigation-bar [connect|class~=testPart] li,
-#navigation-bar [connect|class~=testPart] a {
+#navigation-bar [connect-class~=testPart] ul,
+#navigation-bar [connect-class~=testPart] li,
+#navigation-bar [connect-class~=testPart] a {
     display: block;
     float: left;
 }
 
-[connect|class~="testPart"] > ul {
+[connect-class~="testPart"] > ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-[connect|class~="assessmentSection"] {
+[connect-class~="assessmentSection"] {
     margin-bottom: 0.5em;
 }
 
@@ -186,14 +186,14 @@
 }
 
 /* Question List within sections */
-#navigation-bar [connect|class~="assessmentSection"] > ul {
+#navigation-bar [connect-class~="assessmentSection"] > ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: block;
 }
 
-#navigation-bar [connect|class~="assessmentSection"] > ul li {
+#navigation-bar [connect-class~="assessmentSection"] > ul li {
     display: inline-block;
     float: left;
 }
