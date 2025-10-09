@@ -158,8 +158,19 @@ export function ListeningTest({ examId, audioRef }) {
     return 'bg-gray-800 text-white'; // Black - empty/unanswered
   };
 
-  // Tooltip functionality
+  // Toggle navigation view
+  const toggleNavView = () => {
+    setIsNavMaximised(!isNavMaximised);
+  };
+
+  // Tooltip functionality (only for minimised view)
   const showTooltip = (event, question) => {
+    // Only show tooltip in minimised view
+    if (isNavMaximised) {
+      hideTooltip();
+      return;
+    }
+    
     // Remove any existing tooltip
     hideTooltip();
     
@@ -169,29 +180,25 @@ export function ListeningTest({ examId, audioRef }) {
     // Create tooltip element
     const tooltip = document.createElement('div');
     tooltip.id = 'pageIdentifier';
+    tooltip.style.display = 'block';
     
-    // Get section for this question
-    let sectionName = 'Section 1';
-    if (examData) {
-      for (const section of examData.sections) {
-        if (section.questions.some(q => q.index === question.index)) {
-          sectionName = `Section ${section.index}`;
-          break;
-        }
-      }
-    }
+    // Find section for this question
+    const section = examData?.sections.find(s => 
+      s.questions.some(q => q.index === question.index)
+    );
+    const sectionName = section ? `Section ${section.index}` : 'Section';
     
-    // Create tooltip content
+    // Create content
     const partP = document.createElement('p');
     partP.textContent = sectionName;
-    partP.style.fontWeight = 'bold';
-    partP.style.marginBottom = '4px';
-    
-    const pageP = document.createElement('p');
-    pageP.textContent = `Question ${question.index}`;
-    
     tooltip.appendChild(partP);
-    tooltip.appendChild(pageP);
+    
+    const questionP = document.createElement('p');
+    questionP.textContent = `Question ${question.index}`;
+    tooltip.appendChild(questionP);
+    
+    const arrow = document.createElement('span');
+    tooltip.appendChild(arrow);
     
     // Add to body
     document.body.appendChild(tooltip);
@@ -206,6 +213,7 @@ export function ListeningTest({ examId, audioRef }) {
   const hideTooltip = () => {
     const tooltip = document.getElementById('pageIdentifier');
     if (tooltip) {
+      tooltip.style.display = 'none';
       tooltip.remove();
     }
   };
