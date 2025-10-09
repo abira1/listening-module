@@ -141,6 +141,17 @@ export function ListeningTest({ examId, audioRef }) {
     // Update question group based on question index
     const group = Math.floor((questionIndex - 1) / 10);
     setCurrentQuestionGroup(group);
+    
+    // Scroll to the question after a brief delay to allow DOM to update
+    setTimeout(() => {
+      const questionElement = document.querySelector(`[data-question-index="${questionIndex}"]`);
+      if (questionElement) {
+        questionElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }
+    }, 100);
   };
 
   const getQuestionButtonColor = (questionIndex) => {
