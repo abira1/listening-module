@@ -127,11 +127,72 @@ export function ReadingTest({ examId }) {
   };
 
   const showTooltip = (event, question) => {
-    // Tooltips are handled by CSS in navigation.css
+    // Remove any existing tooltip
+    hideTooltip();
+    
+    const target = event.currentTarget;
+    const rect = target.getBoundingClientRect();
+    
+    // Create tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.id = 'pageIdentifier';
+    tooltip.style.display = 'block';
+    
+    // Find section for this question
+    const section = examData?.sections.find(s => 
+      s.questions.some(q => q.index === question.index)
+    );
+    const sectionName = section ? `Passage ${section.index}` : 'Passage';
+    
+    // Determine status
+    const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
+    const isCurrent = currentQuestionIndex === question.index;
+    const isMarkedForReview = reviewMarked.has(question.index);
+    
+    let status = 'Unanswered';
+    let statusClass = 'status-unanswered';
+    
+    if (isCurrent) {
+      status = 'Current';
+      statusClass = 'status-current';
+    } else if (isMarkedForReview) {
+      status = 'Marked for Review';
+      statusClass = 'status-review';
+    } else if (isAnswered) {
+      status = 'Completed';
+      statusClass = 'status-completed';
+    }
+    
+    // Create content
+    const questionP = document.createElement('p');
+    questionP.textContent = `Question ${question.index}`;
+    tooltip.appendChild(questionP);
+    
+    const statusP = document.createElement('p');
+    statusP.className = `tooltip-status ${statusClass}`;
+    statusP.textContent = status;
+    tooltip.appendChild(statusP);
+    
+    const arrow = document.createElement('span');
+    arrow.className = 'tooltip-arrow';
+    tooltip.appendChild(arrow);
+    
+    // Add to body
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    tooltip.style.left = `${Math.max(10, left)}px`;
+    tooltip.style.bottom = `${window.innerHeight - rect.top + 15}px`;
   };
 
   const hideTooltip = () => {
-    // Tooltips are handled by CSS in navigation.css
+    const tooltip = document.getElementById('pageIdentifier');
+    if (tooltip) {
+      tooltip.style.display = 'none';
+      tooltip.remove();
+    }
   };
 
   const formatTime = (seconds) => {
