@@ -556,11 +556,11 @@ async def create_submission(
                 correct_answer = str(question["payload"]["answer_key"]).strip().lower()
                 
                 # For short answer questions, do case-insensitive comparison
-                if question["type"] in ["short_answer", "diagram_labeling"]:
+                if question["type"] in ["short_answer", "diagram_labeling", "sentence_completion", "short_answer_reading", "sentence_completion_wordlist"]:
                     if student_answer == correct_answer:
                         correct_count += 1
                 # For multiple choice and map labeling, exact match
-                elif question["type"] in ["multiple_choice", "map_labeling"]:
+                elif question["type"] in ["multiple_choice", "map_labeling", "matching_paragraphs", "true_false_not_given"]:
                     if student_answer == correct_answer:
                         correct_count += 1
         
