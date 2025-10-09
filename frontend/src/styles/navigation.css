@@ -255,14 +255,16 @@
     border-radius: 50%;
 }
 
-/* Minimised - Completed state */
+/* Minimised - Completed state (white circle with black number) */
 #navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
     background-color: #fff !important;
+    background-image: none !important;
     border-color: #fff !important;
 }
 
 #navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
     color: #000 !important;
+    border-bottom: none !important;
 }
 
 /* MINIMISED - Current question as TRIANGLE (white triangle on blue) */
