@@ -610,112 +610,106 @@ export function ListeningTest({ examId, audioRef }) {
         </div>
       </main>
 
-      {/* Footer Navigation */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg">
-        {/* Question Number Navigation */}
-        <div className="border-b border-gray-200 py-3 px-6">
-          <div className="max-w-5xl mx-auto">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-gray-700">
-                Questions {startQuestionIndex}-{endQuestionIndex}
-              </span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    const newGroup = Math.max(0, currentQuestionGroup - 1);
-                    setCurrentQuestionGroup(newGroup);
-                    navigateToQuestion(newGroup * 10 + 1);
-                  }}
-                  disabled={currentQuestionGroup === 0}
-                  className="p-1 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
-                  title="Previous section"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => {
-                    const newGroup = Math.min(totalGroups - 1, currentQuestionGroup + 1);
-                    setCurrentQuestionGroup(newGroup);
-                    navigateToQuestion(newGroup * 10 + 1);
-                  }}
-                  disabled={currentQuestionGroup === totalGroups - 1}
-                  className="p-1 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
-                  title="Next section"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-            
-            {/* Question Number Buttons */}
-            <div className="flex flex-wrap gap-2">
-              {allQuestions
-                .filter((q) => q.index >= startQuestionIndex && q.index <= endQuestionIndex)
-                .map((question) => (
-                  <button
-                    key={question.id}
-                    onClick={() => navigateToQuestion(question.index)}
-                    className={`w-10 h-10 rounded font-medium text-sm transition-colors ${getQuestionButtonColor(question.index)} ${
-                      reviewMarked.has(question.index) ? 'ring-2 ring-yellow-400' : ''
-                    }`}
-                    title={
-                      reviewMarked.has(question.index)
-                        ? `Question ${question.index} - Marked for review`
-                        : `Question ${question.index}`
-                    }
-                  >
-                    {question.index}
-                  </button>
-                ))}
-            </div>
+      {/* QTI-Style Footer Navigation */}
+      <footer 
+        role="navigation" 
+        className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg"
+        style={{ height: '100px' }}
+      >
+        <h1 className="reader-only">Navigation</h1>
+        
+        {/* Navigation Bar Container */}
+        <div className="relative h-full">
+          {/* Review Checkbox */}
+          <div id="review-checkbox">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={reviewMarked.has(currentQuestionIndex)}
+                onChange={() => toggleReviewMark(currentQuestionIndex)}
+                className="cursor-pointer"
+              />
+              <span className="text-sm font-medium text-gray-700">Review</span>
+            </label>
           </div>
-        </div>
 
-        {/* Action Buttons */}
-        <div className="py-3 px-6">
-          <div className="max-w-5xl mx-auto flex items-center justify-between">
-            <div className="text-sm text-gray-600">
-              <span className="font-semibold">{answeredCount}</span> of {totalQuestions} answered
-              {reviewMarked.size > 0 && (
-                <span className="ml-3 text-yellow-600">
-                  • {reviewMarked.size} marked for review
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => {
-                  const prevSection = Math.max(0, currentQuestionGroup - 1);
-                  setCurrentQuestionGroup(prevSection);
-                  navigateToQuestion(prevSection * 10 + 1);
-                }}
-                disabled={currentQuestionGroup === 0}
-                className="bg-gray-200 border border-gray-400 rounded px-6 py-2 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-              >
-                Previous
-              </button>
-              {currentQuestionGroup < totalGroups - 1 ? (
-                <button
-                  onClick={() => {
-                    const nextSection = Math.min(totalGroups - 1, currentQuestionGroup + 1);
-                    setCurrentQuestionGroup(nextSection);
-                    navigateToQuestion(nextSection * 10 + 1);
-                  }}
-                  className="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700 font-medium"
-                >
-                  Next
-                </button>
-              ) : (
-                <button
-                  onClick={handleSubmitExam}
-                  disabled={isSubmitting}
-                  className="bg-green-600 text-white rounded px-6 py-2 hover:bg-green-700 font-medium disabled:opacity-50"
-                >
-                  {isSubmitting ? 'Submitting...' : 'Submit Test'}
-                </button>
-              )}
+          {/* Main Navigation Bar */}
+          <div id="navigation-bar">
+            <div data-class="testPart" data-identifier="IELTS_LISTENING_TEST">
+              <ul>
+                <li data-class="assessmentSection" data-identifier="Section1">
+                  <span className="section-label"></span>
+                  <ul>
+                    {allQuestions.map((question) => {
+                      const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
+                      const isCurrent = currentQuestionIndex === question.index;
+                      const isMarkedForReview = reviewMarked.has(question.index);
+                      
+                      let dataState = '';
+                      if (isCurrent) dataState += 'current ';
+                      if (isAnswered) dataState += 'completed ';
+                      if (isMarkedForReview) dataState += 'marked-for-review';
+                      
+                      return (
+                        <li 
+                          key={question.id}
+                          data-class="assessmentItemRef" 
+                          data-identifier={`question-${question.index}`}
+                        >
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigateToQuestion(question.index);
+                            }}
+                            onMouseEnter={(e) => showTooltip(e, question)}
+                            onMouseLeave={hideTooltip}
+                            onFocus={(e) => showTooltip(e, question)}
+                            onBlur={hideTooltip}
+                            data-state={dataState.trim()}
+                            title={`Question ${question.index}`}
+                          >
+                            <span className="question-label">Question </span>
+                            <span className="question-number">{question.index}</span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </li>
+              </ul>
             </div>
           </div>
+
+          {/* Previous Button */}
+          <button
+            data-function="previous"
+            disabled={currentQuestionIndex <= 1}
+            onClick={() => navigateToQuestion(Math.max(1, currentQuestionIndex - 1))}
+            title="Previous Question"
+            aria-label="Previous Question"
+          >
+            <span className="reader-only">Previous Question</span>
+          </button>
+
+          {/* Next Button */}
+          <button
+            data-function="next"
+            disabled={currentQuestionIndex >= totalQuestions}
+            onClick={() => {
+              if (currentQuestionIndex < totalQuestions) {
+                navigateToQuestion(currentQuestionIndex + 1);
+              } else {
+                handleSubmitExam();
+              }
+            }}
+            title={currentQuestionIndex >= totalQuestions ? "Submit Test" : "Next Question"}
+            aria-label={currentQuestionIndex >= totalQuestions ? "Submit Test" : "Next Question"}
+          >
+            <span className="reader-only">
+              {currentQuestionIndex >= totalQuestions ? "Submit Test" : "Next Question"}
+            </span>
+          </button>
         </div>
       </footer>
     </div>
