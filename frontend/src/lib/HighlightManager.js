@@ -323,7 +323,9 @@ class HighlightManager {
       highlightText: this.options.noteHighlightText ? text : null,
       position: position,
       onClose: () => {
-        note.hide();
+        // onClose is called by hide() - no need to call hide() again here
+        // This was causing infinite recursion: hide() -> onClose() -> hide() -> ...
+        // Just perform any additional cleanup if needed
       },
       onDestroy: () => {
         delete this.notes[rangeKey];
