@@ -5,6 +5,7 @@ import { ConfirmDetails } from './ConfirmDetails';
 import { SoundTest } from './SoundTest';
 import { ListeningInstructions } from './ListeningInstructions';
 import { ListeningTest } from './ListeningTest';
+import { ReadingTest } from './ReadingTest';
 import { BackendService } from '../services/BackendService';
 import { useAuth } from '../contexts/AuthContext';
 
