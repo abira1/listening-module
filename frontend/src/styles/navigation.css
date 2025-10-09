@@ -54,15 +54,12 @@
     font-size: 0.9em;
 }
 
-#review-checkbox input[connect|function~="mark-for-review"] {
+#review-checkbox input[connect-function~="mark-for-review"] {
     vertical-align: -0.15em;
 }
 
 #review-checkbox label {
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
     font-weight: 500;
     color: #374151;
 }
