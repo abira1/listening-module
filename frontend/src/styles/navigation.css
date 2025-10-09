@@ -404,9 +404,10 @@
    ================================================ */
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
     background-color: #fff !important;
-    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
+    background-image: none !important;
     color: #000 !important;
-    border-color: #fff !important;
+    border-color: #ddd !important;
+    border: 1px solid #ddd !important;
 }
 
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
@@ -419,7 +420,7 @@
 /* Ensure completed state takes priority in maximised view */
 #navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
     background-color: #fff !important;
-    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
+    background-image: none !important;
     border: 1px solid #ddd !important;
     color: #000 !important;
 }
