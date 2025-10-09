@@ -154,6 +154,58 @@ export function ListeningTest({ examId, audioRef }) {
     return 'bg-gray-800 text-white'; // Black - empty/unanswered
   };
 
+  // Tooltip functionality
+  const showTooltip = (event, question) => {
+    // Remove any existing tooltip
+    hideTooltip();
+    
+    const target = event.currentTarget;
+    const rect = target.getBoundingClientRect();
+    
+    // Create tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.id = 'pageIdentifier';
+    
+    // Get section for this question
+    let sectionName = 'Section 1';
+    if (examData) {
+      for (const section of examData.sections) {
+        if (section.questions.some(q => q.index === question.index)) {
+          sectionName = `Section ${section.index}`;
+          break;
+        }
+      }
+    }
+    
+    // Create tooltip content
+    const partP = document.createElement('p');
+    partP.textContent = sectionName;
+    partP.style.fontWeight = 'bold';
+    partP.style.marginBottom = '4px';
+    
+    const pageP = document.createElement('p');
+    pageP.textContent = `Question ${question.index}`;
+    
+    tooltip.appendChild(partP);
+    tooltip.appendChild(pageP);
+    
+    // Add to body
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    tooltip.style.left = `${Math.max(10, left)}px`;
+    tooltip.style.bottom = `${window.innerHeight - rect.top + 15}px`;
+  };
+
+  const hideTooltip = () => {
+    const tooltip = document.getElementById('pageIdentifier');
+    if (tooltip) {
+      tooltip.remove();
+    }
+  };
+
   const getAllQuestions = () => {
     if (!examData) return [];
     // Flatten all questions from all sections into a single array
