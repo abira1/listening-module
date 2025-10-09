@@ -233,14 +233,40 @@
     margin-bottom: 0;
 }
 
+/* Section Header with Navigation Controls */
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5em;
+    gap: 0.5em;
+}
+
 /* Section Label - Visible for each section */
 .section-label {
     display: inline-block;
     font-weight: bold;
-    font-size: 0.85em;
+    font-size: 0.9em;
     color: #374151;
-    margin-right: 0.5em;
-    margin-bottom: 0.3em;
+    margin: 0;
+}
+
+/* Section Navigation Container */
+.section-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 0.5em 0;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 0.5em;
+}
+
+.section-navigation .current-section {
+    font-weight: bold;
+    font-size: 1em;
+    color: #1f2937;
+    min-width: 100px;
+    text-align: center;
 }
 
 /* Question List within sections */
