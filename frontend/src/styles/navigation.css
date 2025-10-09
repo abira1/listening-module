@@ -331,26 +331,52 @@
    QUESTION STATE INDICATORS (All Views)
    ================================================ */
 
-/* Default state - Black box with white number (NO underline) */
+/* Default state - Black box with white number (NO underline) - UNANSWERED */
 #navigation-bar [connect-class~=testPart] ul a .question-number {
-    border-bottom: none;
+    border-bottom: none !important;
     padding: 0 3px;
     display: inline-block;
     transition: all 0.3s ease;
-    color: #fff;
+    color: #fff !important;
 }
 
-/* Current state - Blue button with white number and white underline */
+/* UNANSWERED - Ensure black background for non-answered, non-current questions */
+#navigation-bar [connect-class~=testPart] ul a:not([connect-state~=completed]):not([connect-state~=current]) {
+    background-color: #000 !important;
+    border-color: #000 !important;
+    color: #fff !important;
+}
+
+#navigation-bar [connect-class~=testPart] ul a:not([connect-state~=completed]):not([connect-state~=current]) .question-number {
+    color: #fff !important;
+    border-bottom: none !important;
+}
+
+/* ================================================
+   CURRENT STATE - Blue button with white number and white underline
+   ================================================ */
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=current] {
     background-color: #007BFF !important;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
     border-color: #007BFF !important;
     color: #fff !important;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] {
+    background-color: #007BFF !important;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
+    border: 1px solid #007BFF !important;
 }
 
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=current] .question-number {
     border-bottom: 2px solid #fff !important;
     color: #fff !important;
     padding: 0 3px;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] .question-number {
+    border-bottom: 2px solid #fff !important;
+    color: #fff !important;
 }
 
 /* Current state hover */
@@ -366,7 +392,9 @@
     color: #fff !important;
 }
 
-/* Completed state - White box with black number and underline (HIGHEST PRIORITY) */
+/* ================================================
+   COMPLETED/ANSWERED STATE - White box with black number and black underline
+   ================================================ */
 #navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
     background-color: #fff !important;
     background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
@@ -386,6 +414,7 @@
     background-color: #fff !important;
     background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
     border: 1px solid #ddd !important;
+    color: #000 !important;
 }
 
 #navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
