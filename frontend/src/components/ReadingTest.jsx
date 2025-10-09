@@ -283,52 +283,77 @@ export function ReadingTest({ examId }) {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+    <div className="flex flex-col min-h-screen w-full bg-blue-50">
+      {/* Header - Two-section design - FIXED TO TOP */}
+      <header className="fixed top-0 left-0 right-0 bg-white w-full shadow-md z-50">
+        {/* Top Section - Logos (can be hidden) */}
         {!isHeaderHidden && (
-          <div className="border-b border-gray-200 px-6 py-3">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-4">
-                <img src="/ielts-logo.png" alt="IELTS" className="h-10" onError={(e) => e.target.style.display = 'none'} />
-                <span className="text-lg font-semibold text-gray-700">Shah Sultan's IELTS Academy</span>
-              </div>
-              <div className="flex items-center space-x-6">
-                <img src="/british-council-logo.png" alt="British Council" className="h-8" onError={(e) => e.target.style.display = 'none'} />
-                <img src="/idp-logo.png" alt="IDP" className="h-8" onError={(e) => e.target.style.display = 'none'} />
-                <img src="/cambridge-logo.png" alt="Cambridge" className="h-8" onError={(e) => e.target.style.display = 'none'} />
-              </div>
+          <div className="w-full p-4 flex justify-between items-center border-b border-gray-200">
+            <div className="flex items-center gap-6">
+              <img src="https://i.postimg.cc/FKx07M5m/ILTES.png" alt="IELTS Logo" className="h-10" />
+              <img 
+                src="https://customer-assets.emergentagent.com/job_login-gateway-23/artifacts/lb58nl9d_Shah-Sultan-Logo-2.png" 
+                alt="Shah Sultan's IELTS Academy" 
+                className="h-12"
+              />
+            </div>
+            <div className="flex items-center gap-6">
+              <img src="https://i.postimg.cc/0Q2DmVPS/Biritsh-Council.png" alt="British Council" className="h-8" />
+              <img src="https://i.postimg.cc/9f2GXWkJ/IDB.png" alt="IDP" className="h-8" />
+              <img src="https://i.postimg.cc/TYZVSjJ8/Cambridge-University.png" alt="Cambridge Assessment English" className="h-8" />
             </div>
           </div>
         )}
-        <div className="bg-gray-700 text-white px-6 py-3">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <User className="h-5 w-5" />
-              <span className="text-sm">STU-{user?.uid?.slice(0, 5) || '00000'}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Clock className={`h-5 w-5 ${isLastTwoMinutes ? 'animate-pulse' : ''}`} />
-              <span className={`text-lg font-semibold ${isLastTwoMinutes ? 'text-red-300 animate-pulse' : ''}`}>
-                {formatTime(timeRemaining)} minutes left | Passage {currentSectionIndex + 1}
+        
+        {/* Bottom Section - Info Bar (always visible) */}
+        <div className="w-full bg-gray-700 px-6 py-3 flex justify-between items-center text-white">
+          <div className="flex items-center gap-2">
+            <User className="w-5 h-5" />
+            <span className="text-sm font-medium">
+              {user?.id ? `STU-${user.id.slice(0, 5).toUpperCase()}` : 'STUDENT'}
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Clock className="w-5 h-5" />
+            <div 
+              className={`px-4 py-2 rounded-lg font-bold text-lg transition-all duration-500 ${
+                timeRemaining < 120 
+                  ? 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg shadow-red-500/50 animate-pulse-slow' 
+                  : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/50'
+              }`}
+              style={{
+                transform: timeRemaining < 120 ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: timeRemaining < 120 
+                  ? '0 0 20px rgba(239, 68, 68, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.3)' 
+                  : '0 0 10px rgba(59, 130, 246, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3)',
+              }}
+            >
+              <span className="drop-shadow-lg">
+                {formatTime(timeRemaining)} left | Passage {currentSectionIndex}
               </span>
             </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setIsHeaderHidden(!isHeaderHidden)}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm font-medium transition-colors"
-              >
-                <EyeOff className="h-4 w-4 inline mr-1" />
-                {isHeaderHidden ? 'Show' : 'Hide'}
-              </button>
-              <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm font-medium transition-colors">
-                <HelpCircle className="h-4 w-4 inline mr-1" />
-                Help
-              </button>
-            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button 
+              className="flex items-center gap-2 px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded text-sm font-medium transition-colors"
+              title="Get help"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Help
+            </button>
+            <button 
+              className="flex items-center gap-2 px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded text-sm font-medium transition-colors"
+              title={isHeaderHidden ? "Show header" : "Hide header"}
+              onClick={() => setIsHeaderHidden(!isHeaderHidden)}
+            >
+              <EyeOff className="w-4 h-4" />
+              {isHeaderHidden ? 'Show' : 'Hide'}
+            </button>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content Area - Split Screen */}
       <div className={`flex-1 flex ${isHeaderHidden ? 'pt-16' : 'pt-32'} pb-28`}>
