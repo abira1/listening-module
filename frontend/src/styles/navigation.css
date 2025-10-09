@@ -300,7 +300,7 @@
 }
 
 /* ================================================
-   MAXIMISED VIEW - QUESTION BUTTONS
+   MAXIMISED VIEW - QUESTION BUTTONS (Base sizing)
    ================================================ */
 #navigation-bar.maximised [connect-class~=testPart] ul a {
     margin-right: 0.143em;
@@ -316,6 +316,8 @@
     font-weight: bold;
     -moz-border-radius: 2px;
     border-radius: 2px;
+    /* Default background for unanswered - will be overridden by state classes */
+    background-color: #000;
 }
 
 /* Make triangle invisible in maximised view - show current state as blue box instead */
