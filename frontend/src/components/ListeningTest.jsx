@@ -24,6 +24,36 @@ export function ListeningTest({ examId, audioRef }) {
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const timerRef = useRef(null);
   const audioEndTimeRef = useRef(null);
+  const highlightManagerRef = useRef(null);
+
+  // Initialize HighlightManager
+  useEffect(() => {
+    if (!examFinished && !isSubmitting) {
+      highlightManagerRef.current = new HighlightManager('highlightable-content', {
+        noteHtext: false
+      });
+      
+      return () => {
+        if (highlightManagerRef.current) {
+          highlightManagerRef.current.destroy();
+        }
+      };
+    }
+  }, [examFinished, isSubmitting]);
+
+  // Save/restore highlights on section change
+  useEffect(() => {
+    if (highlightManagerRef.current && examData) {
+      const sectionId = `section-${currentQuestionIndex}`;
+      highlightManagerRef.current.restoreRanges(sectionId);
+      
+      return () => {
+        if (highlightManagerRef.current) {
+          highlightManagerRef.current.saveRanges(sectionId);
+        }
+      };
+    }
+  }, [currentQuestionIndex, examData]);
 
   useEffect(() => {
     const loadExamData = async () => {
