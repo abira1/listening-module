@@ -1359,6 +1359,437 @@ def test_control_system_endpoints():
     
     return results
 
+def test_ielts_reading_practice_test_1():
+    """Test IELTS Reading Practice Test 1 Backend Implementation"""
+    print_test_header("IELTS Reading Practice Test 1 Backend Implementation")
+    
+    print_info("Testing IELTS Reading Practice Test 1 as per review request:")
+    print_info("1. Reading exam exists and is published (GET /api/exams/ielts-reading-practice-test-1)")
+    print_info("2. Exam has exam_type='reading' field")
+    print_info("3. Exam duration is 3600 seconds (60 minutes)")
+    print_info("4. Exam has 40 questions total")
+    print_info("5. GET /api/exams/ielts-reading-practice-test-1/full returns complete structure with 3 sections")
+    print_info("6. Each section has passage_text field containing the reading passage")
+    print_info("7. Verify question types and distribution")
+    print_info("8. Verify all questions have proper answer_keys in payload")
+    print_info("9. Create a test submission for the reading test with sample answers")
+    print_info("10. Verify auto-grading works for reading test questions")
+    print_info("")
+    
+    results = {}
+    exam_id = "ielts-reading-practice-test-1"
+    
+    # Test 1: Reading exam exists and is published
+    print_info("\n--- Test 1: Reading Exam Exists and Is Published ---")
+    print_info(f"Testing: GET /api/exams/{exam_id}")
+    print_info("Expected: Exam exists, is published, has exam_type='reading', duration=3600 seconds")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/{exam_id}", timeout=10)
+        if response.status_code == 200:
+            exam_data = response.json()
+            print_success(f"✅ Reading exam exists - Status: {response.status_code}")
+            print_info(f"Exam ID: {exam_data.get('id')}")
+            print_info(f"Exam Title: {exam_data.get('title')}")
+            print_info(f"Exam Type: {exam_data.get('exam_type')}")
+            print_info(f"Duration: {exam_data.get('duration_seconds')} seconds")
+            print_info(f"Published: {exam_data.get('published')}")
+            print_info(f"Question Count: {exam_data.get('question_count')}")
+            
+            # Verify exam_type='reading'
+            if exam_data.get('exam_type') == 'reading':
+                print_success("✅ Exam has correct exam_type='reading'")
+                results['exam_type_correct'] = True
+            else:
+                print_error(f"❌ Exam type is '{exam_data.get('exam_type')}', expected 'reading'")
+                results['exam_type_correct'] = False
+            
+            # Verify duration is 3600 seconds (60 minutes)
+            if exam_data.get('duration_seconds') == 3600:
+                print_success("✅ Exam duration is correct (3600 seconds = 60 minutes)")
+                results['duration_correct'] = True
+            else:
+                print_error(f"❌ Exam duration is {exam_data.get('duration_seconds')} seconds, expected 3600")
+                results['duration_correct'] = False
+            
+            # Verify exam is published
+            if exam_data.get('published') == True:
+                print_success("✅ Exam is published")
+                results['exam_published'] = True
+            else:
+                print_error(f"❌ Exam is not published (published={exam_data.get('published')})")
+                results['exam_published'] = False
+            
+            # Verify 40 questions total
+            if exam_data.get('question_count') == 40:
+                print_success("✅ Exam has correct question count (40 questions)")
+                results['question_count_correct'] = True
+            else:
+                print_error(f"❌ Exam has {exam_data.get('question_count')} questions, expected 40")
+                results['question_count_correct'] = False
+            
+            # Verify no audio_url (reading test shouldn't have audio)
+            if exam_data.get('audio_url') is None:
+                print_success("✅ Reading exam correctly has no audio_url")
+                results['no_audio_correct'] = True
+            else:
+                print_warning(f"⚠️ Reading exam has audio_url: {exam_data.get('audio_url')}")
+                results['no_audio_correct'] = False
+            
+            results['exam_exists'] = True
+            results['exam_data'] = exam_data
+        elif response.status_code == 404:
+            print_error(f"❌ Reading exam not found - Status: {response.status_code}")
+            print_error("The IELTS Reading Practice Test 1 may not be initialized")
+            results['exam_exists'] = False
+            return results
+        else:
+            print_error(f"❌ Reading exam retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['exam_exists'] = False
+            return results
+    except Exception as e:
+        print_error(f"❌ Reading exam request error: {str(e)}")
+        results['exam_exists'] = False
+        return results
+    
+    # Test 2: Full exam structure with 3 sections and passage_text
+    print_info("\n--- Test 2: Full Exam Structure with 3 Sections ---")
+    print_info(f"Testing: GET /api/exams/{exam_id}/full")
+    print_info("Expected: Complete structure with exam object, 3 sections, each with passage_text field")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/{exam_id}/full", timeout=10)
+        if response.status_code == 200:
+            full_exam_data = response.json()
+            print_success(f"✅ Full exam data retrieved successfully - Status: {response.status_code}")
+            
+            # Verify structure
+            if "exam" in full_exam_data and "sections" in full_exam_data:
+                exam_obj = full_exam_data["exam"]
+                sections_data = full_exam_data["sections"]
+                
+                print_success("✅ Response contains required structure (exam, sections)")
+                print_info(f"Sections Count: {len(sections_data)}")
+                
+                # Verify 3 sections
+                if len(sections_data) == 3:
+                    print_success("✅ Exam has correct number of sections (3)")
+                    results['sections_count_correct'] = True
+                else:
+                    print_error(f"❌ Exam has {len(sections_data)} sections, expected 3")
+                    results['sections_count_correct'] = False
+                
+                # Verify each section has passage_text
+                sections_with_passage = 0
+                total_questions = 0
+                
+                for i, section in enumerate(sections_data, 1):
+                    print_info(f"\n  Section {i}: {section.get('title', 'No title')}")
+                    
+                    # Check passage_text field
+                    if 'passage_text' in section and section['passage_text']:
+                        print_success(f"  ✅ Section {i} has passage_text field with content")
+                        print_info(f"  Passage length: {len(section['passage_text'])} characters")
+                        sections_with_passage += 1
+                    else:
+                        print_error(f"  ❌ Section {i} missing passage_text field or empty")
+                    
+                    # Count questions in this section
+                    questions = section.get('questions', [])
+                    total_questions += len(questions)
+                    print_info(f"  Questions in section: {len(questions)}")
+                
+                if sections_with_passage == 3:
+                    print_success("✅ All 3 sections have passage_text field")
+                    results['all_sections_have_passage'] = True
+                else:
+                    print_error(f"❌ Only {sections_with_passage}/3 sections have passage_text")
+                    results['all_sections_have_passage'] = False
+                
+                # Verify total questions across all sections
+                print_info(f"\nTotal questions across all sections: {total_questions}")
+                if total_questions == 40:
+                    print_success("✅ Total questions across sections is correct (40)")
+                    results['total_questions_correct'] = True
+                else:
+                    print_error(f"❌ Total questions is {total_questions}, expected 40")
+                    results['total_questions_correct'] = False
+                
+                results['full_exam_retrieved'] = True
+                results['sections_data'] = sections_data
+            else:
+                print_error("❌ Full exam data missing required fields (exam, sections)")
+                results['full_exam_retrieved'] = False
+        else:
+            print_error(f"❌ Full exam data retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['full_exam_retrieved'] = False
+    except Exception as e:
+        print_error(f"❌ Full exam data request error: {str(e)}")
+        results['full_exam_retrieved'] = False
+    
+    # Test 3: Verify Question Types and Distribution
+    print_info("\n--- Test 3: Verify Question Types and Distribution ---")
+    print_info("Expected question types:")
+    print_info("  Passage 1 (Q1-13): matching_paragraphs (Q1-5), sentence_completion (Q6-8), true_false_not_given (Q9-13)")
+    print_info("  Passage 2 (Q14-27): matching_paragraphs (Q14-18), short_answer_reading (Q19-22), sentence_completion (Q23-27)")
+    print_info("  Passage 3 (Q28-40): matching_paragraphs (Q28-32), sentence_completion_wordlist (Q33-37), true_false_not_given (Q38-40)")
+    
+    if results.get('sections_data'):
+        sections_data = results['sections_data']
+        question_type_results = {}
+        
+        # Expected question type distribution
+        expected_distribution = {
+            1: {  # Passage 1 (Q1-13)
+                'matching_paragraphs': list(range(1, 6)),      # Q1-5
+                'sentence_completion': list(range(6, 9)),       # Q6-8
+                'true_false_not_given': list(range(9, 14))      # Q9-13
+            },
+            2: {  # Passage 2 (Q14-27)
+                'matching_paragraphs': list(range(14, 19)),     # Q14-18
+                'short_answer_reading': list(range(19, 23)),    # Q19-22
+                'sentence_completion': list(range(23, 28))      # Q23-27
+            },
+            3: {  # Passage 3 (Q28-40)
+                'matching_paragraphs': list(range(28, 33)),     # Q28-32
+                'sentence_completion_wordlist': list(range(33, 38)),  # Q33-37
+                'true_false_not_given': list(range(38, 41))     # Q38-40
+            }
+        }
+        
+        for section_idx, section in enumerate(sections_data, 1):
+            print_info(f"\n  Verifying Section {section_idx} Question Types:")
+            questions = section.get('questions', [])
+            
+            # Group questions by type
+            questions_by_type = {}
+            for question in questions:
+                q_type = question.get('type')
+                q_index = question.get('index')
+                if q_type not in questions_by_type:
+                    questions_by_type[q_type] = []
+                questions_by_type[q_type].append(q_index)
+            
+            # Check against expected distribution
+            expected_for_section = expected_distribution.get(section_idx, {})
+            
+            for expected_type, expected_indices in expected_for_section.items():
+                if expected_type in questions_by_type:
+                    actual_indices = sorted(questions_by_type[expected_type])
+                    if actual_indices == expected_indices:
+                        print_success(f"    ✅ {expected_type}: Q{min(expected_indices)}-{max(expected_indices)} ✓")
+                        question_type_results[f"section_{section_idx}_{expected_type}"] = True
+                    else:
+                        print_error(f"    ❌ {expected_type}: Expected Q{min(expected_indices)}-{max(expected_indices)}, got {actual_indices}")
+                        question_type_results[f"section_{section_idx}_{expected_type}"] = False
+                else:
+                    print_error(f"    ❌ {expected_type}: Missing question type")
+                    question_type_results[f"section_{section_idx}_{expected_type}"] = False
+            
+            # Check for unexpected question types
+            for actual_type in questions_by_type:
+                if actual_type not in expected_for_section:
+                    print_warning(f"    ⚠️ Unexpected question type: {actual_type}")
+        
+        # Summary of question type verification
+        correct_types = sum(1 for result in question_type_results.values() if result)
+        total_expected_types = sum(len(types) for types in expected_distribution.values())
+        
+        if correct_types == total_expected_types:
+            print_success(f"✅ All question types and distributions are correct ({correct_types}/{total_expected_types})")
+            results['question_types_correct'] = True
+        else:
+            print_error(f"❌ Question type verification failed ({correct_types}/{total_expected_types})")
+            results['question_types_correct'] = False
+    else:
+        print_error("❌ Cannot verify question types - sections data not available")
+        results['question_types_correct'] = False
+    
+    # Test 4: Verify All Questions Have Answer Keys
+    print_info("\n--- Test 4: Verify All Questions Have Answer Keys ---")
+    
+    if results.get('sections_data'):
+        sections_data = results['sections_data']
+        questions_with_answer_keys = 0
+        total_questions_checked = 0
+        
+        for section_idx, section in enumerate(sections_data, 1):
+            questions = section.get('questions', [])
+            print_info(f"\n  Section {section_idx} - Checking {len(questions)} questions:")
+            
+            for question in questions:
+                total_questions_checked += 1
+                q_index = question.get('index')
+                q_type = question.get('type')
+                payload = question.get('payload', {})
+                
+                if 'answer_key' in payload and payload['answer_key']:
+                    questions_with_answer_keys += 1
+                    print_success(f"    ✅ Q{q_index} ({q_type}): Has answer_key = '{payload['answer_key']}'")
+                else:
+                    print_error(f"    ❌ Q{q_index} ({q_type}): Missing or empty answer_key")
+        
+        print_info(f"\nAnswer Key Summary: {questions_with_answer_keys}/{total_questions_checked} questions have answer_key")
+        
+        if questions_with_answer_keys == total_questions_checked and total_questions_checked == 40:
+            print_success("✅ All 40 questions have proper answer_keys in payload")
+            results['all_questions_have_answer_keys'] = True
+        else:
+            print_error(f"❌ Answer key verification failed - {questions_with_answer_keys}/{total_questions_checked} questions have answer_keys")
+            results['all_questions_have_answer_keys'] = False
+    else:
+        print_error("❌ Cannot verify answer keys - sections data not available")
+        results['all_questions_have_answer_keys'] = False
+    
+    # Test 5: Create Test Submission for Reading Test
+    print_info("\n--- Test 5: Create Test Submission for Reading Test ---")
+    print_info("Creating test submission with sample answers for all 40 questions")
+    
+    # Create realistic sample answers for reading test
+    sample_answers = {}
+    
+    # Passage 1 answers (Q1-13)
+    passage_1_answers = {
+        # Q1-5: Matching paragraphs
+        "1": "A", "2": "G", "3": "B", "4": "A", "5": "F",
+        # Q6-8: Sentence completion
+        "6": "short", "7": "complex", "8": "rats",
+        # Q9-13: True/False/Not Given
+        "9": "NOT GIVEN", "10": "FALSE", "11": "FALSE", "12": "FALSE", "13": "TRUE"
+    }
+    
+    # Passage 2 answers (Q14-27)
+    passage_2_answers = {
+        # Q14-18: Matching paragraphs
+        "14": "C", "15": "G", "16": "F", "17": "E", "18": "D",
+        # Q19-22: Short answer reading
+        "19": "time span", "20": "defensive aggression", "21": "95 percent", "22": "genetic variation",
+        # Q23-27: Sentence completion
+        "23": "anxiety disorders", "24": "faces and eyes", "25": "high-status male", "26": "short gene", "27": "L/L"
+    }
+    
+    # Passage 3 answers (Q28-40)
+    passage_3_answers = {
+        # Q28-32: Matching paragraphs
+        "28": "F", "29": "B", "30": "D", "31": "H", "32": "G",
+        # Q33-37: Sentence completion wordlist
+        "33": "current", "34": "limb", "35": "muscles", "36": "stability", "37": "representation",
+        # Q38-40: True/False/Not Given
+        "38": "FALSE", "39": "TRUE", "40": "FALSE"
+    }
+    
+    # Combine all answers
+    sample_answers.update(passage_1_answers)
+    sample_answers.update(passage_2_answers)
+    sample_answers.update(passage_3_answers)
+    
+    print_info(f"Created sample answers for {len(sample_answers)} questions")
+    
+    submission_data = {
+        "exam_id": exam_id,
+        "user_id_or_session": f"reading_test_user_{datetime.now().strftime('%H%M%S')}",
+        "answers": sample_answers,
+        "started_at": datetime.now().isoformat(),
+        "finished_at": datetime.now().isoformat(),
+        "progress_percent": 100
+    }
+    
+    try:
+        response = requests.post(
+            f"{BACKEND_URL}/submissions",
+            json=submission_data,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            submission = response.json()
+            print_success(f"✅ Reading test submission created successfully")
+            print_info(f"Submission ID: {submission.get('id')}")
+            print_info(f"User ID: {submission.get('user_id_or_session')}")
+            print_info(f"Total Questions: {submission.get('total_questions')}")
+            print_info(f"Score: {submission.get('score')}")
+            print_info(f"Correct Answers: {submission.get('correct_answers')}")
+            
+            results['submission_created'] = True
+            results['submission_data'] = submission
+        else:
+            print_error(f"❌ Failed to create reading test submission - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['submission_created'] = False
+    except Exception as e:
+        print_error(f"❌ Reading test submission creation error: {str(e)}")
+        results['submission_created'] = False
+    
+    # Test 6: Verify Auto-Grading Works for Reading Test
+    print_info("\n--- Test 6: Verify Auto-Grading Works for Reading Test ---")
+    
+    if results.get('submission_data'):
+        submission = results['submission_data']
+        
+        # Check if auto-grading worked
+        score = submission.get('score')
+        total_questions = submission.get('total_questions')
+        correct_answers = submission.get('correct_answers')
+        
+        if score is not None and total_questions is not None and correct_answers is not None:
+            print_success("✅ Auto-grading system processed the reading test submission")
+            print_info(f"Score: {score}/{total_questions}")
+            print_info(f"Correct Answers: {correct_answers}")
+            print_info(f"Percentage: {(score/total_questions*100):.1f}%")
+            
+            # Verify score calculation
+            if score == correct_answers:
+                print_success("✅ Score calculation is correct (score = correct_answers)")
+                results['auto_grading_calculation_correct'] = True
+            else:
+                print_error(f"❌ Score calculation error: score={score}, correct_answers={correct_answers}")
+                results['auto_grading_calculation_correct'] = False
+            
+            # Check if we got a reasonable score (should be high since we used correct answers)
+            if score >= 35:  # Expecting high score with correct answers
+                print_success(f"✅ Auto-grading produced expected high score ({score}/40)")
+                results['auto_grading_score_reasonable'] = True
+            else:
+                print_warning(f"⚠️ Auto-grading score seems low ({score}/40) - may indicate grading issues")
+                results['auto_grading_score_reasonable'] = False
+            
+            results['auto_grading_works'] = True
+        else:
+            print_error("❌ Auto-grading failed - missing score, total_questions, or correct_answers")
+            results['auto_grading_works'] = False
+    else:
+        print_error("❌ Cannot verify auto-grading - submission data not available")
+        results['auto_grading_works'] = False
+    
+    # Overall Summary
+    print_info("\n--- IELTS Reading Practice Test 1 Summary ---")
+    passed_tests = sum(1 for key, result in results.items() if key not in ['exam_data', 'sections_data', 'submission_data'] and result)
+    total_tests = len([key for key in results.keys() if key not in ['exam_data', 'sections_data', 'submission_data']])
+    
+    if passed_tests == total_tests:
+        print_success(f"🎉 ALL IELTS READING PRACTICE TEST 1 TESTS PASSED ({passed_tests}/{total_tests})")
+        print_success("✅ Reading exam exists and is published with correct exam_type='reading'")
+        print_success("✅ Exam duration is correct (3600 seconds = 60 minutes)")
+        print_success("✅ Exam has 40 questions across 3 sections")
+        print_success("✅ All sections have passage_text field with reading passages")
+        print_success("✅ Question types and distribution match IELTS reading format")
+        print_success("✅ All questions have proper answer_keys in payload")
+        print_success("✅ Test submission creation works for reading test")
+        print_success("✅ Auto-grading system works correctly for reading questions")
+        print_success("✅ IELTS Reading Practice Test 1 backend is fully operational!")
+    else:
+        print_error(f"❌ SOME TESTS FAILED ({passed_tests}/{total_tests})")
+        for test_name, result in results.items():
+            if test_name not in ['exam_data', 'sections_data', 'submission_data']:
+                status = "PASS" if result else "FAIL"
+                color = Colors.GREEN if result else Colors.RED
+                print(f"  {color}{status} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    return results
+
 def test_hierarchical_submission_management_fix():
     """Test Fixed Hierarchical Submission Management System - Detailed Answer Sheet View"""
     print_test_header("Fixed Hierarchical Submission Management System - Detailed Answer Sheet View")
