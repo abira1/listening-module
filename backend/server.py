@@ -72,6 +72,7 @@ class Exam(BaseModel):
     id: str
     title: str
     description: str
+    exam_type: Optional[str] = "listening"  # "listening" or "reading"
     audio_url: Optional[str] = None
     audio_source_method: Optional[str] = None
     loop_audio: bool = False
