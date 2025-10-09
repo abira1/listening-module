@@ -201,7 +201,7 @@
 /* ================================================
    QUESTION BUTTON BASE STYLES
    ================================================ */
-#navigation-bar [connect|class~=testPart] ul a {
+#navigation-bar [connect-class~=testPart] ul a {
     overflow: hidden;
     color: #fff;
     position: relative;
@@ -218,7 +218,7 @@
 /* ================================================
    MINIMISED VIEW - QUESTION BUTTONS
    ================================================ */
-#navigation-bar.minimised [connect|class~=testPart] ul a {
+#navigation-bar.minimised [connect-class~=testPart] ul a {
     margin: 3px 1px 0.2em 0;
     padding-left: 1em;
     width: 1em;
@@ -228,7 +228,7 @@
 }
 
 /* MINIMISED - Current question as TRIANGLE */
-#navigation-bar.minimised [connect|class~=testPart] ul a[connect|state~=current] {
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current] {
     width: 0;
     height: 0;
     z-index: 1;
@@ -244,15 +244,15 @@
     border-radius: 0;
 }
 
-#navigation-bar.minimised [connect|class~=testPart] ul a[connect|state~=current]:hover,
-#navigation-bar.minimised [connect|class~=testPart] ul a[connect|state~=current]:focus {
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current]:hover,
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current]:focus {
     border-top: 1.2em solid #47b7ec;
 }
 
 /* ================================================
    MAXIMISED VIEW - QUESTION BUTTONS
    ================================================ */
-#navigation-bar.maximised [connect|class~=testPart] ul a {
+#navigation-bar.maximised [connect-class~=testPart] ul a {
     margin-right: 0.143em;
     margin-bottom: 0.5em;
     border: 1px solid black;
@@ -272,17 +272,17 @@
    ================================================ */
 
 /* Completed state - with underline */
-#navigation-bar [connect|class~=testPart] a[connect|state~=completed] span {
+#navigation-bar [connect-class~=testPart] a[connect-state~=completed] span {
     border-bottom: 2px solid #fff;
     padding: 0 2px;
 }
 
-#navigation-bar [connect|class~=testPart] a[connect|state~=completed]:not([connect|state~=current]) span {
+#navigation-bar [connect-class~=testPart] a[connect-state~=completed]:not([connect-state~=current]) span {
     border-color: #000;
 }
 
 /* Completed state - white background */
-#navigation-bar [connect|class~=testPart] a[connect|state~=completed]:not([connect|state~=current]) {
+#navigation-bar [connect-class~=testPart] a[connect-state~=completed]:not([connect-state~=current]) {
     border-color: #fff;
     background-color: #fff;
     background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png");
@@ -290,25 +290,25 @@
 }
 
 /* Marked for review - circle shape */
-#navigation-bar.maximised [connect|class~=testPart] a[connect|state~=marked-for-review],
-#navigation-bar.minimised [connect|class~=testPart] a[connect|state~=marked-for-review]:not([connect|state~=current]) {
+#navigation-bar.maximised [connect-class~=testPart] a[connect-state~=marked-for-review],
+#navigation-bar.minimised [connect-class~=testPart] a[connect-state~=marked-for-review]:not([connect-state~=current]) {
     -moz-border-radius: 50% !important;
     border-radius: 50% !important;
 }
 
 /* Hover and focus states */
-#navigation-bar [connect|class~=testPart] ul a:hover,
-#navigation-bar [connect|class~=testPart] ul a:focus,
-#navigation-bar [connect|class~=testPart] ul a[connect|state~=completed]:not([connect|state~=current]):hover,
-#navigation-bar [connect|class~=testPart] ul a[connect|state~=completed]:not([connect|state~=current]):focus {
+#navigation-bar [connect-class~=testPart] ul a:hover,
+#navigation-bar [connect-class~=testPart] ul a:focus,
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):hover,
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):focus {
     background-image: none;
     color: #3bf !important;
 }
 
 /* Current state */
-#navigation-bar [connect|class~=testPart] ul a[connect|state~=current],
-#navigation-bar [connect|class~=testPart] ul a[connect|state~=current]:hover,
-#navigation-bar [connect|class~=testPart] ul a[connect|state~=current]:focus {
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current],
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current]:hover,
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current]:focus {
     border-color: #34b2f1;
     background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png");
     text-shadow: 0 0 2px #000, 0 0 2px #000;
