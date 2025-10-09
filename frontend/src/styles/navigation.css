@@ -223,7 +223,7 @@
 }
 
 /* ================================================
-   QUESTION BUTTON BASE STYLES
+   QUESTION BUTTON BASE STYLES (Default: Unanswered)
    ================================================ */
 #navigation-bar [connect-class~=testPart] ul a {
     overflow: hidden;
