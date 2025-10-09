@@ -564,9 +564,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Interactive Scoring System for Admin Answer Review"
-  stuck_tasks:
-    - "Interactive Scoring System for Admin Answer Review"
+    - "IELTS Reading Practice Test 1 Backend Implementation"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
