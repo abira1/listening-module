@@ -51,13 +51,21 @@ export function ExamTest() {
   }, [examId, isAuthenticated, authLoading]);
 
   const handleContinue = () => {
+    const isReadingTest = exam?.exam_type === 'reading';
+    
     if (currentScreen === 'confirmDetails') {
-      setCurrentScreen('soundTest');
+      // Skip sound test for reading tests
+      if (isReadingTest) {
+        setCurrentScreen('instructions');
+      } else {
+        setCurrentScreen('soundTest');
+      }
     } else if (currentScreen === 'soundTest') {
       setCurrentScreen('instructions');
     } else if (currentScreen === 'instructions') {
       setCurrentScreen('test');
-      if (audioRef.current) {
+      // Only play audio for listening tests
+      if (!isReadingTest && audioRef.current) {
         audioRef.current.play().catch((error) => {
           console.error('Error playing audio:', error);
         });
