@@ -666,7 +666,7 @@ export function ListeningTest({ examId, audioRef }) {
       <footer 
         role="navigation" 
         className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg"
-        style={{ height: '100px' }}
+        style={{ height: '110px' }}
       >
         <h1 className="reader-only">Navigation</h1>
         
@@ -685,50 +685,56 @@ export function ListeningTest({ examId, audioRef }) {
             </label>
           </div>
 
-          {/* Main Navigation Bar */}
+          {/* Main Navigation Bar - Organized by Sections */}
           <div id="navigation-bar">
             <div data-class="testPart" data-identifier="IELTS_LISTENING_TEST">
               <ul>
-                <li data-class="assessmentSection" data-identifier="Section1">
-                  <span className="section-label"></span>
-                  <ul>
-                    {allQuestions.map((question) => {
-                      const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
-                      const isCurrent = currentQuestionIndex === question.index;
-                      const isMarkedForReview = reviewMarked.has(question.index);
-                      
-                      let dataState = '';
-                      if (isCurrent) dataState += 'current ';
-                      if (isAnswered) dataState += 'completed ';
-                      if (isMarkedForReview) dataState += 'marked-for-review';
-                      
-                      return (
-                        <li 
-                          key={question.id}
-                          data-class="assessmentItemRef" 
-                          data-identifier={`question-${question.index}`}
-                        >
-                          <a
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              navigateToQuestion(question.index);
-                            }}
-                            onMouseEnter={(e) => showTooltip(e, question)}
-                            onMouseLeave={hideTooltip}
-                            onFocus={(e) => showTooltip(e, question)}
-                            onBlur={hideTooltip}
-                            data-state={dataState.trim()}
-                            title={`Question ${question.index}`}
+                {examData?.sections.map((section) => (
+                  <li 
+                    key={section.id}
+                    data-class="assessmentSection" 
+                    data-identifier={`Section${section.index}`}
+                  >
+                    <span className="section-label">Section {section.index}</span>
+                    <ul>
+                      {section.questions.map((question) => {
+                        const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
+                        const isCurrent = currentQuestionIndex === question.index;
+                        const isMarkedForReview = reviewMarked.has(question.index);
+                        
+                        let dataState = '';
+                        if (isCurrent) dataState += 'current ';
+                        if (isAnswered) dataState += 'completed ';
+                        if (isMarkedForReview) dataState += 'marked-for-review';
+                        
+                        return (
+                          <li 
+                            key={question.id}
+                            data-class="assessmentItemRef" 
+                            data-identifier={`question-${question.index}`}
                           >
-                            <span className="question-label">Question </span>
-                            <span className="question-number">{question.index}</span>
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </li>
+                            <a
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigateToQuestion(question.index);
+                              }}
+                              onMouseEnter={(e) => showTooltip(e, question)}
+                              onMouseLeave={hideTooltip}
+                              onFocus={(e) => showTooltip(e, question)}
+                              onBlur={hideTooltip}
+                              data-state={dataState.trim()}
+                              title={`Question ${question.index}`}
+                            >
+                              <span className="question-label">Question </span>
+                              <span className="question-number">{question.index}</span>
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
