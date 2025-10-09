@@ -678,7 +678,7 @@ export function ListeningTest({ examId, audioRef }) {
       <footer 
         role="navigation" 
         className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg"
-        style={{ height: '140px' }}
+        style={{ height: '100px' }}
       >
         <h1 className="reader-only">Navigation</h1>
         
@@ -686,69 +686,28 @@ export function ListeningTest({ examId, audioRef }) {
         <div className="relative h-full">
           {/* Review Checkbox */}
           <div id="review-checkbox">
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label htmlFor="mark-for-review-input">
               <input
+                id="mark-for-review-input"
                 type="checkbox"
+                connect-function="mark-for-review"
                 checked={reviewMarked.has(currentQuestionIndex)}
                 onChange={() => toggleReviewMark(currentQuestionIndex)}
-                className="cursor-pointer"
+                aria-label="Mark current question for review"
               />
-              <span className="text-sm font-medium text-gray-700">Review</span>
+              Review
             </label>
           </div>
 
-          {/* Main Navigation Bar - Organized by Sections */}
-          <div id="navigation-bar">
-            {/* Section Navigation Controls */}
-            <div className="section-navigation">
-              <button
-                data-function="previous-section"
-                disabled={currentSectionIndex <= 1}
-                onClick={() => {
-                  const targetSection = Math.max(1, currentSectionIndex - 1);
-                  // Find first question in target section
-                  const targetQuestion = allQuestions.find(q => {
-                    const qSection = examData.sections.find(s => s.questions.some(sq => sq.index === q.index));
-                    return qSection?.index === targetSection;
-                  });
-                  if (targetQuestion) navigateToQuestion(targetQuestion.index);
-                }}
-                title="Previous Section"
-                aria-label="Previous Section"
-              >
-                <span className="reader-only">Previous Section</span>
-              </button>
-              
-              <span className="current-section">
-                Section {currentSectionIndex} of {examData?.sections.length || 4}
-              </span>
-              
-              <button
-                data-function="next-section"
-                disabled={currentSectionIndex >= (examData?.sections.length || 4)}
-                onClick={() => {
-                  const targetSection = Math.min(examData?.sections.length || 4, currentSectionIndex + 1);
-                  // Find first question in target section
-                  const targetQuestion = allQuestions.find(q => {
-                    const qSection = examData.sections.find(s => s.questions.some(sq => sq.index === q.index));
-                    return qSection?.index === targetSection;
-                  });
-                  if (targetQuestion) navigateToQuestion(targetQuestion.index);
-                }}
-                title="Next Section"
-                aria-label="Next Section"
-              >
-                <span className="reader-only">Next Section</span>
-              </button>
-            </div>
-
-            <div data-class="testPart" data-identifier="IELTS_LISTENING_TEST">
+          {/* Main Navigation Bar - QTI Style with View Toggle */}
+          <div id="navigation-bar" className={isNavMaximised ? 'maximised' : 'minimised'}>
+            <div connect-class="testPart" connect-identifier="IELTS_LISTENING_TEST">
               <ul>
                 {examData?.sections.map((section) => (
                   <li 
                     key={section.id}
-                    data-class="assessmentSection" 
-                    data-identifier={`Section${section.index}`}
+                    connect-class="assessmentSection" 
+                    connect-identifier={`Sec${section.index}`}
                   >
                     <span className="section-label">Section {section.index}</span>
                     <ul>
@@ -757,16 +716,16 @@ export function ListeningTest({ examId, audioRef }) {
                         const isCurrent = currentQuestionIndex === question.index;
                         const isMarkedForReview = reviewMarked.has(question.index);
                         
-                        let dataState = '';
-                        if (isCurrent) dataState += 'current ';
-                        if (isAnswered) dataState += 'completed ';
-                        if (isMarkedForReview) dataState += 'marked-for-review';
+                        let connectState = '';
+                        if (isCurrent) connectState += 'current ';
+                        if (isAnswered) connectState += 'completed ';
+                        if (isMarkedForReview) connectState += 'marked-for-review';
                         
                         return (
                           <li 
                             key={question.id}
-                            data-class="assessmentItemRef" 
-                            data-identifier={`question-${question.index}`}
+                            connect-class="assessmentItemRef" 
+                            connect-identifier={`IELTS-Q${question.index}`}
                           >
                             <a
                               href="#"
@@ -778,7 +737,7 @@ export function ListeningTest({ examId, audioRef }) {
                               onMouseLeave={hideTooltip}
                               onFocus={(e) => showTooltip(e, question)}
                               onBlur={hideTooltip}
-                              data-state={dataState.trim()}
+                              connect-state={connectState.trim()}
                               title={`Question ${question.index}`}
                             >
                               <span className="question-label">Question </span>
@@ -792,6 +751,37 @@ export function ListeningTest({ examId, audioRef }) {
                 ))}
               </ul>
             </div>
+
+            {/* View Toggle Controls */}
+            <div className="views">
+              <a
+                href="#"
+                className="minimise"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNavView();
+                }}
+                title="switch view to navigation summary"
+                role="button"
+                aria-label="Switch to compact navigation view"
+              >
+                <span>navigation summary</span>
+              </a>
+              
+              <a
+                href="#"
+                className="maximise"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNavView();
+                }}
+                title="switch view to navigation details"
+                role="button"
+                aria-label="Switch to detailed navigation view"
+              >
+                <span>navigation details</span>
+              </a>
+            </div>
           </div>
 
           {/* Previous Button */}
@@ -800,7 +790,7 @@ export function ListeningTest({ examId, audioRef }) {
             disabled={currentQuestionIndex <= 1}
             onClick={() => navigateToQuestion(Math.max(1, currentQuestionIndex - 1))}
             title="Previous Question"
-            aria-label="Previous Question"
+            aria-label="Go to previous question"
           >
             <span className="reader-only">Previous Question</span>
           </button>
@@ -817,7 +807,7 @@ export function ListeningTest({ examId, audioRef }) {
               }
             }}
             title={currentQuestionIndex >= totalQuestions ? "Submit Test" : "Next Question"}
-            aria-label={currentQuestionIndex >= totalQuestions ? "Submit Test" : "Next Question"}
+            aria-label={currentQuestionIndex >= totalQuestions ? "Submit Test" : "Go to next question"}
           >
             <span className="reader-only">
               {currentQuestionIndex >= totalQuestions ? "Submit Test" : "Next Question"}
