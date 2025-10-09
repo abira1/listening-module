@@ -31,34 +31,31 @@ export function ListeningTest({ examId, audioRef }) {
   const highlightManagerRef = useRef(null);
   const tooltipRef = useRef(null);
 
-  // Initialize HighlightManager
+  // Initialize HighlightManager - ONCE for entire exam session
   useEffect(() => {
     if (!examFinished && !isSubmitting) {
       highlightManagerRef.current = new HighlightManager('highlightable-content', {
-        noteHtext: false
+        noteHtext: true // Enable notes feature
       });
+      
+      // Restore any previously saved highlights/notes for this exam
+      const examSessionId = `exam-${examId}`;
+      if (highlightManagerRef.current) {
+        highlightManagerRef.current.restoreRanges(examSessionId);
+      }
       
       return () => {
         if (highlightManagerRef.current) {
+          // Save highlights/notes before cleanup
+          highlightManagerRef.current.saveRanges(examSessionId);
           highlightManagerRef.current.destroy();
         }
       };
     }
-  }, [examFinished, isSubmitting]);
+  }, [examFinished, isSubmitting, examId]);
 
-  // Save/restore highlights on section change
-  useEffect(() => {
-    if (highlightManagerRef.current && examData) {
-      const sectionId = `section-${currentQuestionIndex}`;
-      highlightManagerRef.current.restoreRanges(sectionId);
-      
-      return () => {
-        if (highlightManagerRef.current) {
-          highlightManagerRef.current.saveRanges(sectionId);
-        }
-      };
-    }
-  }, [currentQuestionIndex, examData]);
+  // Keep highlights/notes visible when switching sections - NO save/restore on section change
+  // The highlights and notes persist throughout the exam session
 
   useEffect(() => {
     const loadExamData = async () => {
