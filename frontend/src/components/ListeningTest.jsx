@@ -687,6 +687,49 @@ export function ListeningTest({ examId, audioRef }) {
 
           {/* Main Navigation Bar - Organized by Sections */}
           <div id="navigation-bar">
+            {/* Section Navigation Controls */}
+            <div className="section-navigation">
+              <button
+                data-function="previous-section"
+                disabled={currentSectionIndex <= 1}
+                onClick={() => {
+                  const targetSection = Math.max(1, currentSectionIndex - 1);
+                  // Find first question in target section
+                  const targetQuestion = allQuestions.find(q => {
+                    const qSection = examData.sections.find(s => s.questions.some(sq => sq.index === q.index));
+                    return qSection?.index === targetSection;
+                  });
+                  if (targetQuestion) navigateToQuestion(targetQuestion.index);
+                }}
+                title="Previous Section"
+                aria-label="Previous Section"
+              >
+                <span className="reader-only">Previous Section</span>
+              </button>
+              
+              <span className="current-section">
+                Section {currentSectionIndex} of {examData?.sections.length || 4}
+              </span>
+              
+              <button
+                data-function="next-section"
+                disabled={currentSectionIndex >= (examData?.sections.length || 4)}
+                onClick={() => {
+                  const targetSection = Math.min(examData?.sections.length || 4, currentSectionIndex + 1);
+                  // Find first question in target section
+                  const targetQuestion = allQuestions.find(q => {
+                    const qSection = examData.sections.find(s => s.questions.some(sq => sq.index === q.index));
+                    return qSection?.index === targetSection;
+                  });
+                  if (targetQuestion) navigateToQuestion(targetQuestion.index);
+                }}
+                title="Next Section"
+                aria-label="Next Section"
+              >
+                <span className="reader-only">Next Section</span>
+              </button>
+            </div>
+
             <div data-class="testPart" data-identifier="IELTS_LISTENING_TEST">
               <ul>
                 {examData?.sections.map((section) => (
