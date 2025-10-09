@@ -1,6 +1,49 @@
 /* QTI-Style Navigation Bar CSS */
 
-/* Previous/Next Buttons with Background Image */
+/* Section Navigation Buttons (Previous/Next Section) */
+[data-function~="next-section"],
+[data-function~="previous-section"] {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    background: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/gt2g11of_nav-buttons.png") no-repeat;
+    background-size: 160px 40px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    vertical-align: middle;
+}
+
+[data-function~="next-section"] {
+    background-position: left top;
+    margin-left: 8px;
+}
+
+[data-function~="next-section"]:hover,
+[data-function~="next-section"]:focus {
+    background-position: right top;
+}
+
+[data-function~="previous-section"] {
+    background-position: left bottom;
+    margin-right: 8px;
+}
+
+[data-function~="previous-section"]:hover,
+[data-function~="previous-section"]:focus {
+    background-position: right bottom;
+}
+
+/* Hide when disabled */
+[data-function~="previous-section"][disabled],
+[data-function~="next-section"][disabled] {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Question Navigation Buttons (Previous/Next Question) */
 [data-function~="next"],
 [data-function~="previous"] {
     display: block;
@@ -9,31 +52,53 @@
     width: 56px;
     height: 56px;
     overflow: hidden;
-    background: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/gt2g11of_nav-buttons.png") no-repeat;
-    background-size: 224px 56px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
+    border-radius: 4px;
 }
 
 [data-function~="next"] {
     right: 0;
-    background-position: left top;
 }
 
-[data-function~="next"]:hover,
-[data-function~="next"]:focus {
-    background-position: right top;
+[data-function~="next"]::before {
+    content: '›';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
 }
 
 [data-function~="previous"] {
     right: 56px;
-    background-position: left bottom;
+}
+
+[data-function~="previous"]::before {
+    content: '‹';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
+
+[data-function~="next"]:hover,
+[data-function~="next"]:focus {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: scale(1.05);
 }
 
 [data-function~="previous"]:hover,
 [data-function~="previous"]:focus {
-    background-position: right bottom;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: scale(1.05);
 }
 
 /* Hide when disabled */
