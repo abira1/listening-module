@@ -486,7 +486,12 @@ export function ListeningTest({ examId, audioRef }) {
 
       case 'diagram_labeling':
         return (
-          <div key={question.id} className="mb-4" onClick={() => setCurrentQuestionIndex(questionNum)}>
+          <div 
+            key={question.id} 
+            className="mb-4" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
             <div className="flex items-start gap-2">
               <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
               <div className="flex-1">
@@ -503,7 +508,7 @@ export function ListeningTest({ examId, audioRef }) {
 
       default:
         return (
-          <div key={question.id} className="mb-4">
+          <div key={question.id} className="mb-4" data-question-index={questionNum}>
             <p className="text-gray-500">Question type not supported: {question.type}</p>
           </div>
         );
