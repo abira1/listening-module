@@ -255,6 +255,7 @@
     border: 1px solid black;
     width: 1.6em;
     height: 1.6em;
+    font-size: 14px;
     -moz-background-size: contain;
     background-size: contain;
     line-height: 1.6em;
@@ -262,6 +263,11 @@
     font-weight: bold;
     -moz-border-radius: 2px;
     border-radius: 2px;
+}
+
+/* Make triangle invisible in maximised view - show current state as blue box instead */
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] .question-number {
+    display: inline-block;
 }
 
 /* ================================================
