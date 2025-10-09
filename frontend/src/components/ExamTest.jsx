@@ -4,6 +4,7 @@ import { Header } from './Header';
 import { ConfirmDetails } from './ConfirmDetails';
 import { SoundTest } from './SoundTest';
 import { ListeningInstructions } from './ListeningInstructions';
+import { ReadingInstructions } from './ReadingInstructions';
 import { ListeningTest } from './ListeningTest';
 import { ReadingTest } from './ReadingTest';
 import { BackendService } from '../services/BackendService';
