@@ -1,49 +1,9 @@
-/* QTI-Style Navigation Bar CSS */
+/* QTI-Style Navigation Bar CSS - Complete Implementation */
 
-/* Section Navigation Buttons (Previous/Next Section) */
-[data-function~="next-section"],
-[data-function~="previous-section"] {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    overflow: hidden;
-    background: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/gt2g11of_nav-buttons.png") no-repeat;
-    background-size: 160px 40px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    vertical-align: middle;
-}
-
-[data-function~="next-section"] {
-    background-position: left top;
-    margin-left: 8px;
-}
-
-[data-function~="next-section"]:hover,
-[data-function~="next-section"]:focus {
-    background-position: right top;
-}
-
-[data-function~="previous-section"] {
-    background-position: left bottom;
-    margin-right: 8px;
-}
-
-[data-function~="previous-section"]:hover,
-[data-function~="previous-section"]:focus {
-    background-position: right bottom;
-}
-
-/* Hide when disabled */
-[data-function~="previous-section"][disabled],
-[data-function~="next-section"][disabled] {
-    opacity: 0.3;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-/* Question Navigation Buttons (Previous/Next Question) */
+/* ================================================
+   PREVIOUS/NEXT NAVIGATION BUTTONS (Main Controls)
+   Using nav-buttons.png sprite (112px × 56px)
+   ================================================ */
 [data-function~="next"],
 [data-function~="previous"] {
     display: block;
@@ -52,53 +12,29 @@
     width: 56px;
     height: 56px;
     overflow: hidden;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/k44x4hg5_nav-buttons.png") no-repeat left top;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 4px;
+    transition: opacity 0.2s ease;
 }
 
 [data-function~="next"] {
     right: 0;
 }
 
-[data-function~="next"]::before {
-    content: '›';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 32px;
-    font-weight: bold;
-    color: white;
+[data-function~="next"]:hover,
+[data-function~="next"]:focus {
+    background-position: right top;
 }
 
 [data-function~="previous"] {
     right: 56px;
-}
-
-[data-function~="previous"]::before {
-    content: '‹';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 32px;
-    font-weight: bold;
-    color: white;
-}
-
-[data-function~="next"]:hover,
-[data-function~="next"]:focus {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    transform: scale(1.05);
+    background-position: left bottom;
 }
 
 [data-function~="previous"]:hover,
 [data-function~="previous"]:focus {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    transform: scale(1.05);
+    background-position: right bottom;
 }
 
 /* Hide when disabled */
