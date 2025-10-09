@@ -226,41 +226,49 @@ export function ReadingTest({ examId }) {
     }
   };
 
-  const currentSection = examData?.sections[currentSectionIndex];
+  const currentSection = getCurrentSection();
   const allQuestions = examData?.sections.flatMap(s => s.questions) || [];
+  const totalQuestions = allQuestions.length;
+  const answeredCount = Object.keys(answers).filter(key => answers[key] !== undefined && answers[key] !== '').length;
+  const currentSectionIndex = currentSection?.index || 1;
 
   // Check if timer is in last 2 minutes for blinking effect
   const isLastTwoMinutes = timeRemaining <= 120;
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="flex justify-center items-center h-screen bg-blue-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading test...</p>
+        </div>
       </div>
     );
   }
 
   if (submissionComplete) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-4">
-        <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center">
+      <div className="flex justify-center items-center min-h-screen bg-blue-50">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mx-4 text-center">
           <div className="mb-6">
-            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100">
-              <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Test Completed!</h2>
+            <p className="text-gray-600 mb-6">
+              Your test has been submitted successfully. Thank you for taking the IELTS Reading Test.
+            </p>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Test Submitted Successfully!</h2>
-          <p className="text-gray-600 mb-6">
-            Your reading test has been submitted. Results will be available once your instructor publishes them.
-          </p>
-          <button
-            onClick={() => navigate('/student/dashboard')}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
-          >
-            Return to Dashboard
-          </button>
+          <div className="space-y-3">
+            <button
+              onClick={() => navigate(isAuthenticated ? '/student/dashboard' : '/')}
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 font-medium"
+            >
+              {isAuthenticated ? 'Go to Dashboard' : 'Return to Home'}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -268,8 +276,8 @@ export function ReadingTest({ examId }) {
 
   if (!examData) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-600">Test not found</p>
+      <div className="flex justify-center items-center h-screen bg-blue-50">
+        <p className="text-gray-600">Unable to load test data</p>
       </div>
     );
   }
