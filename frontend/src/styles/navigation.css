@@ -265,7 +265,7 @@
     color: #000 !important;
 }
 
-/* MINIMISED - Current question as TRIANGLE */
+/* MINIMISED - Current question as TRIANGLE (white triangle on blue) */
 #navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current] {
     width: 0;
     height: 0;
@@ -286,6 +286,17 @@
 #navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current]:hover,
 #navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current]:focus {
     border-top: 1.2em solid #0056b3;
+}
+
+/* MAXIMISED - Current question as BLUE BOX with white number and white underline */
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] {
+    background-color: #007BFF !important;
+    border-color: #007BFF !important;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] .question-number {
+    color: #fff !important;
+    border-bottom: 2px solid #fff !important;
 }
 
 /* ================================================
