@@ -130,7 +130,11 @@ export function ExamTest() {
           <SoundTest onContinue={handleContinue} audioRef={audioRef} />
         )}
         {currentScreen === 'instructions' && (
-          <ListeningInstructions onStart={handleContinue} examTitle={exam?.title} />
+          isReadingTest ? (
+            <ReadingInstructions onStart={handleContinue} examTitle={exam?.title} />
+          ) : (
+            <ListeningInstructions onStart={handleContinue} examTitle={exam?.title} />
+          )
         )}
         {currentScreen === 'test' && (
           isReadingTest ? (
