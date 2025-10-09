@@ -348,13 +348,15 @@
 /* Completed state - White text with white underline on dark gray background */
 #navigation-bar [connect-class~=testPart] a[connect-state~=completed]:not([connect-state~=current]) {
     background-color: #222;
-    color: #fff;
+    color: #fff !important;
     border-color: #222;
 }
 
 #navigation-bar [connect-class~=testPart] a[connect-state~=completed]:not([connect-state~=current]) .question-number {
-    border-bottom: 2px solid #fff;
-    color: #fff;
+    border-bottom: 3px solid #fff !important;
+    color: #fff !important;
+    padding: 0 3px;
+    display: inline-block;
 }
 
 /* Marked for review - Circular border with yellow glow */
