@@ -67,37 +67,42 @@
     color: #374151;
 }
 
-/* Hover Popup (Page Identifier) */
+/* ================================================
+   HOVER TOOLTIP (Page Identifier)
+   Only shown in minimised view
+   ================================================ */
 #pageIdentifier {
+    -moz-border-radius: 5px;
     border-radius: 5px;
     position: absolute;
     font-size: 0.9em;
     margin-bottom: 1em;
-    background: #333;
+    background: #333 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==) repeat-x left top;
     border: 1px solid #202020;
-    padding: 8px 12px;
+    padding: 3px;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     color: #fff;
     z-index: 3;
     bottom: 2.9em;
-    white-space: nowrap;
     pointer-events: none;
+    display: none;
 }
 
 #pageIdentifier p {
     margin: 0;
-    padding: 2px 0;
+    text-align: left;
 }
 
 /* Arrow pointing down to navigation item */
-#pageIdentifier::after {
-    content: '';
+#pageIdentifier span {
     width: 0;
     height: 0;
     line-height: 0;
     border-left: 0.8em solid transparent;
     border-right: 0.8em solid transparent;
-    border-top: 0.8em solid rgba(0, 0, 0, 0.55);
+    border-top: 0.8em solid;
+    border-top-color: rgba(0, 0, 0, 0.55);
     position: absolute;
     bottom: -0.9em;
     left: 50%;
