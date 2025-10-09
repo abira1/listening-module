@@ -109,22 +109,37 @@
     margin-left: -0.8em;
 }
 
-/* Navigation Bar Container */
+/* ================================================
+   NAVIGATION BAR CONTAINER
+   ================================================ */
 #navigation-bar {
     margin-left: 5.3em;
     margin-right: 8.3em;
-    position: relative;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
     padding-right: 30px;
-    border: 1px solid #e5e7eb;
+}
+
+/* MINIMISED VIEW STATE */
+#navigation-bar.minimised {
+    margin-bottom: 3px;
+    padding-top: 1.35em;
+}
+
+/* MAXIMISED VIEW STATE */
+#navigation-bar.maximised {
+    border: 1px solid #fff;
     border-bottom: 0;
-    padding-top: 0.6em;
-    padding-left: 0.6em;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
     padding-right: 1.0em;
-    padding-bottom: 0.6em;
-    background: url("https://customer-assets.emergentagent.com/job_ielts-nav-ui/artifacts/r2lcn28s_background.png") repeat,
-                rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.25);
+    -moz-border-radius: 0.5em 0.5em 0 0;
     border-radius: 0.5em 0.5em 0 0;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* Test Part and Assessment Section */
