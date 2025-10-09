@@ -605,7 +605,7 @@ export function ListeningTest({ examId, audioRef }) {
                 {sectionData.questions.map((question) => renderQuestion(question))}
               </div>
             </div>
-          </TextHighlighter>
+          </div>
         </div>
       </main>
 
