@@ -163,14 +163,8 @@ export function ListeningTest({ examId, audioRef }) {
     setIsNavMaximised(!isNavMaximised);
   };
 
-  // Tooltip functionality (only for minimised view)
+  // Tooltip functionality (shows in both views with status)
   const showTooltip = (event, question) => {
-    // Only show tooltip in minimised view
-    if (isNavMaximised) {
-      hideTooltip();
-      return;
-    }
-    
     // Remove any existing tooltip
     hideTooltip();
     
@@ -188,16 +182,37 @@ export function ListeningTest({ examId, audioRef }) {
     );
     const sectionName = section ? `Section ${section.index}` : 'Section';
     
-    // Create content
-    const partP = document.createElement('p');
-    partP.textContent = sectionName;
-    tooltip.appendChild(partP);
+    // Determine status
+    const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
+    const isCurrent = currentQuestionIndex === question.index;
+    const isMarkedForReview = reviewMarked.has(question.index);
     
+    let status = 'Unanswered';
+    let statusClass = 'status-unanswered';
+    
+    if (isCurrent) {
+      status = 'Current';
+      statusClass = 'status-current';
+    } else if (isMarkedForReview) {
+      status = 'Marked for Review';
+      statusClass = 'status-review';
+    } else if (isAnswered) {
+      status = 'Completed';
+      statusClass = 'status-completed';
+    }
+    
+    // Create content
     const questionP = document.createElement('p');
     questionP.textContent = `Question ${question.index}`;
     tooltip.appendChild(questionP);
     
+    const statusP = document.createElement('p');
+    statusP.className = `tooltip-status ${statusClass}`;
+    statusP.textContent = status;
+    tooltip.appendChild(statusP);
+    
     const arrow = document.createElement('span');
+    arrow.className = 'tooltip-arrow';
     tooltip.appendChild(arrow);
     
     // Add to body
