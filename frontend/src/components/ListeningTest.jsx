@@ -541,7 +541,7 @@ export function ListeningTest({ examId, audioRef }) {
       {/* Main Content - Add padding-top to account for fixed header */}
       <main className={`flex-1 p-6 pb-32 ${isHeaderHidden ? 'pt-20' : 'pt-36'}`}>
         <div className="max-w-5xl mx-auto">
-          <TextHighlighter enabled={!examFinished && !isSubmitting}>
+          <div id="highlightable-content">
             <div className="bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 mb-6">
               <div className="flex justify-between items-center mb-4 pb-3 border-b-2 border-gray-200">
                 <h2 className="text-xl font-bold text-gray-800">
