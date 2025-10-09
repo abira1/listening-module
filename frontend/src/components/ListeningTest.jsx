@@ -23,9 +23,13 @@ export function ListeningTest({ examId, audioRef }) {
   const [currentQuestionGroup, setCurrentQuestionGroup] = useState(0); // 0 = questions 1-10, 1 = 11-20, etc.
   const [isHeaderHidden, setIsHeaderHidden] = useState(false); // Track header visibility
   const [submissionComplete, setSubmissionComplete] = useState(false);
+  const [isNavMaximised, setIsNavMaximised] = useState(true); // Navigation view state
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipData, setTooltipData] = useState({ section: '', question: '', x: 0, y: 0 });
   const timerRef = useRef(null);
   const audioEndTimeRef = useRef(null);
   const highlightManagerRef = useRef(null);
+  const tooltipRef = useRef(null);
 
   // Initialize HighlightManager
   useEffect(() => {
