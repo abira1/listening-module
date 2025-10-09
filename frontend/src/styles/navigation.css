@@ -200,16 +200,17 @@
    ================================================ */
 #navigation-bar [connect-class~=testPart] ul a {
     overflow: hidden;
-    color: #fff;
+    color: #000;
     position: relative;
     display: block;
-    background-color: #000;
+    background-color: transparent;
     background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png");
     text-align: center;
     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     text-decoration: none;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 /* ================================================
