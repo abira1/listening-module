@@ -257,8 +257,12 @@
 
 /* Minimised - Completed state */
 #navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
-    background-color: #222;
-    border-color: #222;
+    background-color: #222 !important;
+    border-color: #222 !important;
+}
+
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
+    color: #fff !important;
 }
 
 /* MINIMISED - Current question as TRIANGLE */
