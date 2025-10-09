@@ -16,7 +16,6 @@ export function ReadingTest({ examId }) {
   const { user, isAuthenticated } = useAuth();
   const [examData, setExamData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0); // 0, 1, or 2 for the 3 passages
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
   const [answers, setAnswers] = useState({});
   const [reviewMarked, setReviewMarked] = useState(new Set());
@@ -26,6 +25,7 @@ export function ReadingTest({ examId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [submissionComplete, setSubmissionComplete] = useState(false);
+  const [isNavMaximised, setIsNavMaximised] = useState(true);
   const timerRef = useRef(null);
   const highlightManagerRef = useRef(null);
 
