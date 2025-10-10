@@ -511,9 +511,16 @@ export function ReadingTest({ examId }) {
               <h2 className="text-lg font-bold text-gray-900 mb-2">
                 Questions {currentSection?.questions[0]?.index} - {currentSection?.questions[currentSection?.questions.length - 1]?.index}
               </h2>
-              <p className="text-sm text-gray-700">
-                Choose the correct answer for each question.
-              </p>
+              {getMatchingParagraphsQuestions().length > 0 ? (
+                <div className="text-sm text-gray-700">
+                  <p className="font-medium mb-1">Which paragraph contains the following information?</p>
+                  <p className="text-xs">📌 Click a question below, then click the box next to the paragraph in the passage to assign it.</p>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-700">
+                  Choose the correct answer for each question.
+                </p>
+              )}
             </div>
             {currentSection?.questions.map((question) => (
               <div 
