@@ -286,101 +286,94 @@ export function WritingTest({ examId }) {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-gray-50">
-      {/* Fixed Header */}
-      <header className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-md transition-all duration-300 ${isHeaderHidden ? 'h-20' : 'h-36'}`}>
-        {/* Top Logo Section */}
+      {/* Fixed Header - Two-section design */}
+      <header className="fixed top-0 left-0 right-0 bg-white w-full shadow-md z-50">
+        {/* Top Section - Logos (can be hidden) */}
         {!isHeaderHidden && (
-          <div className="bg-white border-b border-gray-200 py-3 px-6">
-            <div className="flex items-center justify-between max-w-7xl mx-auto">
-              <div className="flex items-center gap-4">
-                <img 
-                  src="https://www.ielts.org/-/media/images/ielts-logo-2018.ashx" 
-                  alt="IELTS" 
-                  className="h-12"
-                />
-                <img 
-                  src="https://i.postimg.cc/k5dQjHG1/images-removebg-preview.png" 
-                  alt="Shah Sultan's IELTS Academy" 
-                  className="h-12"
-                />
-              </div>
-              <div className="flex items-center gap-4">
-                <img 
-                  src="https://www.britishcouncil.org/sites/default/files/british-council-logo.png" 
-                  alt="British Council" 
-                  className="h-10"
-                />
-                <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/IDP_Education_logo.svg/2560px-IDP_Education_logo.svg.png" 
-                  alt="IDP" 
-                  className="h-8"
-                />
-                <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/University_of_Cambridge_logo.svg/2560px-University_of_Cambridge_logo.svg.png" 
-                  alt="Cambridge" 
-                  className="h-10"
-                />
-              </div>
+          <div className="w-full p-4 flex justify-between items-center border-b border-gray-200">
+            <div className="flex items-center gap-6">
+              <img src="https://i.postimg.cc/FKx07M5m/ILTES.png" alt="IELTS Logo" className="h-10" />
+              <img 
+                src="https://customer-assets.emergentagent.com/job_login-gateway-23/artifacts/lb58nl9d_Shah-Sultan-Logo-2.png" 
+                alt="Shah Sultan's IELTS Academy" 
+                className="h-12"
+              />
+            </div>
+            <div className="flex items-center gap-6">
+              <img src="https://i.postimg.cc/0Q2DmVPS/Biritsh-Council.png" alt="British Council" className="h-8" />
+              <img src="https://i.postimg.cc/9f2GXWkJ/IDB.png" alt="IDP" className="h-8" />
+              <img src="https://i.postimg.cc/TYZVSjJ8/Cambridge-University.png" alt="Cambridge Assessment English" className="h-8" />
             </div>
           </div>
         )}
-
-        {/* Bottom Info Bar */}
-        <div className="bg-gray-700 text-white py-4 px-6">
-          <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <div className="flex items-center gap-2">
-              <User size={18} />
-              <span className="text-sm">ID: STU-{user?.uid?.substring(0, 8) || 'XXXXXX'}</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Clock size={18} />
-              <span 
-                className={`text-lg font-bold ${isFinalTwoMinutes ? 'text-red-400 animate-pulse' : ''}`}
-              >
-                {formatTime(timeRemaining)}
+        
+        {/* Bottom Section - Info Bar (always visible) */}
+        <div className="w-full bg-gray-700 px-6 py-3 flex justify-between items-center text-white">
+          <div className="flex items-center gap-2">
+            <User className="w-5 h-5" />
+            <span className="text-sm font-medium">
+              ID: STU-{user?.uid?.substring(0, 8) || 'XXXXXX'}
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Clock className="w-5 h-5" />
+            <div 
+              className={`px-4 py-2 rounded-lg font-bold text-lg transition-all duration-500 ${
+                timeRemaining < 120 
+                  ? 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg shadow-red-500/50 animate-pulse-slow' 
+                  : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/50'
+              }`}
+              style={{
+                transform: timeRemaining < 120 ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: timeRemaining < 120 
+                  ? '0 0 20px rgba(239, 68, 68, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.3)' 
+                  : '0 0 10px rgba(59, 130, 246, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3)',
+              }}
+            >
+              <span className="drop-shadow-lg">
+                {formatTime(timeRemaining)} left | Task {currentTaskIndex + 1}
               </span>
-              <span className="text-sm ml-2">
-                minutes left | Task {currentTaskIndex + 1}
-              </span>
             </div>
-
-            <div className="flex items-center gap-2">
-              <button 
-                className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors flex items-center gap-1"
-              >
-                <HelpCircle size={16} />
-                Help
-              </button>
-              <button 
-                onClick={toggleHeaderVisibility}
-                className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors flex items-center gap-1"
-              >
-                <EyeOff size={16} />
-                {isHeaderHidden ? 'Show' : 'Hide'}
-              </button>
-            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button 
+              className="flex items-center gap-2 px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded text-sm font-medium transition-colors"
+              title="Get help"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Help
+            </button>
+            <button 
+              className="flex items-center gap-2 px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded text-sm font-medium transition-colors"
+              title={isHeaderHidden ? "Show header" : "Hide header"}
+              onClick={() => setIsHeaderHidden(!isHeaderHidden)}
+            >
+              <EyeOff className="w-4 h-4" />
+              {isHeaderHidden ? 'Show' : 'Hide'}
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className={`flex-1 ${isHeaderHidden ? 'pt-20' : 'pt-36'} pb-8`}>
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          {/* Task Header */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-2xl font-bold text-gray-800">
+      {/* Main Content - Horizontal Split Layout */}
+      <main className="flex-1 flex pb-32" style={{ paddingTop: isHeaderHidden ? '80px' : '136px' }} id="highlightable-content">
+        {/* Left Side: Task Prompt - 40% width */}
+        <div className="w-[40%] bg-white border-r-2 border-gray-300 overflow-y-auto">
+          <div className="p-8">
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">
                 Writing Task {currentQuestion?.payload?.task_number}
               </h1>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 italic">
                 {currentQuestion?.payload?.instructions}
               </div>
             </div>
-            
+
             {/* Task Prompt */}
-            <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <div className="whitespace-pre-wrap text-gray-800">
+            <div className="mb-6 p-5 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+              <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
                 {currentQuestion?.payload?.prompt}
               </div>
             </div>
@@ -390,73 +383,151 @@ export function WritingTest({ examId }) {
               <div className="mb-6 flex justify-center">
                 <img 
                   src={currentQuestion.payload.chart_image} 
-                  alt="Chart for Writing Task 1" 
-                  className="max-w-full h-auto rounded-lg shadow-md border border-gray-200"
-                  style={{ maxHeight: '500px' }}
+                  alt="Chart for Writing Task" 
+                  className="max-w-full h-auto rounded-lg shadow-lg border border-gray-200"
+                  style={{ maxHeight: '600px' }}
                 />
               </div>
             )}
 
             {/* Minimum Word Count Notice */}
-            <div className="mb-4 text-sm text-gray-600">
-              Write at least <strong>{minWords} words</strong>.
-            </div>
-
-            {/* Writing Area */}
-            <div className="mb-4">
-              <textarea
-                value={answers[currentQuestion?.index] || ''}
-                onChange={(e) => handleAnswerChange(currentQuestion?.index, e.target.value)}
-                className="w-full h-96 p-4 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none font-sans text-base leading-relaxed resize-none"
-                placeholder="Write your answer here..."
-                disabled={examFinished}
-              />
-            </div>
-
-            {/* Word Counter */}
-            <div className={`text-sm font-semibold ${isWordCountSufficient ? 'text-green-600' : 'text-orange-600'}`}>
-              Word count: {currentWordCount} / {minWords}
-              {!isWordCountSufficient && (
-                <span className="ml-2 text-xs">({minWords - currentWordCount} more words needed)</span>
-              )}
+            <div className="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+              <p className="text-sm text-gray-700">
+                <strong>Note:</strong> Write at least <strong className="text-yellow-700">{minWords} words</strong> for this task.
+              </p>
             </div>
           </div>
+        </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex items-center justify-between bg-white rounded-lg shadow-md p-6">
-            <button
-              onClick={handlePreviousTask}
-              disabled={currentTaskIndex === 0}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors ${
-                currentTaskIndex === 0
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              <ChevronLeft size={20} />
-              Previous Task
-            </button>
+        {/* Right Side: Writing Area - 50% width */}
+        <div className="w-[50%] bg-gray-50 overflow-y-auto">
+          <div className="p-8">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-700">Your Response</h2>
+              <div className={`text-lg font-bold ${isWordCountSufficient ? 'text-green-600' : 'text-orange-600'}`}>
+                {currentWordCount} / {minWords} words
+              </div>
+            </div>
 
-            {currentTaskIndex === allQuestions.length - 1 ? (
-              <button
-                onClick={handleSubmitExam}
-                disabled={isSubmitting}
-                className="px-8 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400"
-              >
-                {isSubmitting ? 'Submitting...' : 'Submit Test'}
-              </button>
-            ) : (
-              <button
-                onClick={handleNextTask}
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-              >
-                Next Task
-                <ChevronRight size={20} />
-              </button>
+            {/* Word Count Status */}
+            {!isWordCountSufficient && (
+              <div className="mb-4 p-3 bg-orange-100 border-l-4 border-orange-400 rounded">
+                <p className="text-sm text-orange-800">
+                  You need <strong>{minWords - currentWordCount} more words</strong> to meet the minimum requirement.
+                </p>
+              </div>
+            )}
+
+            {/* Writing Area */}
+            <textarea
+              value={answers[currentQuestion?.index] || ''}
+              onChange={(e) => handleAnswerChange(currentQuestion?.index, e.target.value)}
+              className="w-full h-[calc(100vh-350px)] p-6 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none font-sans text-base leading-relaxed resize-none bg-white shadow-inner"
+              placeholder="Start writing your answer here..."
+              disabled={examFinished}
+              style={{ minHeight: '500px' }}
+            />
+
+            {/* Submit Button for Task 2 */}
+            {currentTaskIndex === allQuestions.length - 1 && (
+              <div className="mt-6">
+                <button
+                  onClick={handleSubmitExam}
+                  disabled={isSubmitting}
+                  className="w-full px-8 py-4 bg-green-600 text-white rounded-lg font-bold text-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 shadow-lg"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Test'}
+                </button>
+              </div>
             )}
           </div>
         </div>
       </main>
+
+      {/* QTI-Style Footer Navigation with 2 Task Buttons */}
+      <footer 
+        role="navigation" 
+        className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg"
+        style={{ height: '100px' }}
+      >
+        <h1 className="reader-only">Navigation</h1>
+        
+        {/* Navigation Bar Container */}
+        <div className="relative h-full">
+          {/* Review Checkbox */}
+          <div id="review-checkbox">
+            <label htmlFor="mark-for-review-input">
+              <input
+                id="mark-for-review-input"
+                type="checkbox"
+                connect-function="mark-for-review"
+                checked={reviewMarked.has(currentQuestion?.index)}
+                onChange={() => toggleReviewMark(currentQuestion?.index)}
+                aria-label="Mark current task for review"
+              />
+              Review
+            </label>
+          </div>
+
+          {/* Task Navigation Buttons */}
+          <div className="flex items-center justify-center h-full gap-6">
+            {allQuestions.map((question, idx) => {
+              const taskNumber = question.payload?.task_number;
+              const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
+              const isCurrent = currentTaskIndex === idx;
+              const isMarkedForReview = reviewMarked.has(question.index);
+              
+              let connectState = '';
+              if (isCurrent) connectState += 'current ';
+              if (isAnswered) connectState += 'completed ';
+              if (isMarkedForReview) connectState += 'marked-for-review';
+
+              return (
+                <a
+                  key={question.id}
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateToTask(idx);
+                  }}
+                  onMouseEnter={(e) => showTooltip(e, taskNumber)}
+                  onMouseLeave={hideTooltip}
+                  onFocus={(e) => showTooltip(e, taskNumber)}
+                  onBlur={hideTooltip}
+                  connect-state={connectState.trim()}
+                  className={`px-8 py-4 rounded-lg font-bold text-lg transition-all border-2 ${
+                    isCurrent 
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-lg' 
+                      : isAnswered 
+                        ? 'bg-white text-gray-700 border-gray-300 hover:border-blue-400' 
+                        : 'bg-gray-800 text-white border-gray-800 hover:bg-gray-700'
+                  } ${isMarkedForReview ? 'ring-4 ring-yellow-400' : ''}`}
+                  title={`Task ${taskNumber}`}
+                >
+                  Task {taskNumber}
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Previous/Next Navigation Buttons */}
+          <button
+            data-function="previous"
+            onClick={handlePreviousTask}
+            disabled={currentTaskIndex === 0}
+            aria-label="Previous Task"
+            title="Previous Task"
+          />
+          
+          <button
+            data-function="next"
+            onClick={handleNextTask}
+            disabled={currentTaskIndex === allQuestions.length - 1}
+            aria-label="Next Task"
+            title="Next Task"
+          />
+        </div>
+      </footer>
     </div>
   );
 }
