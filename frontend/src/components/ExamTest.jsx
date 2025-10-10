@@ -55,10 +55,11 @@ export function ExamTest() {
 
   const handleContinue = () => {
     const isReadingTest = exam?.exam_type === 'reading';
+    const isWritingTest = exam?.exam_type === 'writing';
     
     if (currentScreen === 'confirmDetails') {
-      // Skip sound test for reading tests
-      if (isReadingTest) {
+      // Skip sound test for reading and writing tests
+      if (isReadingTest || isWritingTest) {
         setCurrentScreen('instructions');
       } else {
         setCurrentScreen('soundTest');
@@ -68,7 +69,7 @@ export function ExamTest() {
     } else if (currentScreen === 'instructions') {
       setCurrentScreen('test');
       // Only play audio for listening tests
-      if (!isReadingTest && audioRef.current) {
+      if (!isReadingTest && !isWritingTest && audioRef.current) {
         audioRef.current.play().catch((error) => {
           console.error('Error playing audio:', error);
         });
