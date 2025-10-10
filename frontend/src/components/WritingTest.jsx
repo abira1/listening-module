@@ -469,7 +469,7 @@ export function WritingTest({ examId }) {
           </div>
 
           {/* Task Navigation Buttons - QTI Style with View Toggle */}
-          <div id="navigation-bar" className={isNavMaximised ? 'maximised' : 'minimised'}>
+          <div id="navigation-bar" className={isNavMaximised ? 'maximised' : 'minimised'} style={{ paddingTop: '0.3em' }}>
             <div connect-class="testPart" connect-identifier="IELTS_WRITING_TEST">
               <ul>
                 {allQuestions.map((question, idx) => {
