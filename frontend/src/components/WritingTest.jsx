@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { BackendService } from '../services/BackendService';
 import FirebaseAuthService from '../services/FirebaseAuthService';
 import { useAuth } from '../contexts/AuthContext';
-import { Clock, User, HelpCircle, EyeOff, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Clock, User, HelpCircle, EyeOff } from 'lucide-react';
+import HighlightManager from '../lib/HighlightManager';
+import '../styles/navigation.css';
 
 export function WritingTest({ examId }) {
   const navigate = useNavigate();
