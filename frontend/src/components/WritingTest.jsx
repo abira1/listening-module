@@ -469,21 +469,9 @@ export function WritingTest({ examId }) {
           </div>
 
           {/* Task Navigation Buttons - QTI Style with View Toggle */}
-          <div 
-            id="navigation-bar" 
-            className={isNavMaximised ? 'maximised' : 'minimised'}
-            style={{ 
-              paddingTop: isNavMaximised ? '0.4em' : '0.5em', 
-              marginBottom: '0', 
-              marginLeft: '4em', 
-              marginRight: '6.5em',
-              border: 'none',
-              background: 'transparent',
-              boxShadow: 'none'
-            }}
-          >
+          <div id="navigation-bar" className={isNavMaximised ? 'maximised' : 'minimised'}>
             <div connect-class="testPart" connect-identifier="IELTS_WRITING_TEST">
-              <ul style={{ margin: 0, padding: 0 }}>
+              <ul>
                 {allQuestions.map((question, idx) => {
                   const taskNumber = question.payload?.task_number;
                   const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
