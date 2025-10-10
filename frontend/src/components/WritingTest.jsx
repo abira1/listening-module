@@ -557,6 +557,7 @@ export function WritingTest({ examId }) {
             disabled={currentTaskIndex === 0}
             aria-label="Previous Task"
             title="Previous Task"
+            style={{ width: '48px', height: '48px', bottom: '11px', backgroundSize: '96px 48px' }}
           >
             <span className="reader-only">Previous Task</span>
           </button>
@@ -567,6 +568,7 @@ export function WritingTest({ examId }) {
             disabled={currentTaskIndex === allQuestions.length - 1}
             aria-label="Next Task"
             title="Next Task"
+            style={{ width: '48px', height: '48px', bottom: '11px', backgroundSize: '96px 48px' }}
           >
             <span className="reader-only">Next Task</span>
           </button>
