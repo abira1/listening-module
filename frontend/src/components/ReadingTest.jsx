@@ -500,9 +500,7 @@ export function ReadingTest({ examId }) {
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               {currentSection?.title}
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">
-              {currentSection?.passage_text}
-            </div>
+            {renderPassageWithBoxes(currentSection?.passage_text)}
           </div>
         </div>
 
