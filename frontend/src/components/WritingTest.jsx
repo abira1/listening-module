@@ -472,10 +472,10 @@ export function WritingTest({ examId }) {
           <div 
             id="navigation-bar" 
             className={isNavMaximised ? 'maximised' : 'minimised'}
-            style={{ paddingTop: isNavMaximised ? '0.25em' : '0.5em', marginBottom: '0' }}
+            style={{ paddingTop: isNavMaximised ? '0.25em' : '0.5em', marginBottom: '0', marginLeft: '4em', marginRight: '5em' }}
           >
             <div connect-class="testPart" connect-identifier="IELTS_WRITING_TEST">
-              <ul>
+              <ul style={{ margin: 0, padding: 0 }}>
                 {allQuestions.map((question, idx) => {
                   const taskNumber = question.payload?.task_number;
                   const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
