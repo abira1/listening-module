@@ -454,7 +454,7 @@ export function WritingTest({ examId }) {
         {/* Navigation Bar Container */}
         <div className="relative h-full">
           {/* Review Checkbox */}
-          <div id="review-checkbox">
+          <div id="review-checkbox" style={{ bottom: '0.7em', fontSize: '0.9em' }}>
             <label htmlFor="mark-for-review-input">
               <input
                 id="mark-for-review-input"
