@@ -173,6 +173,11 @@ export function WritingTest({ examId }) {
     setIsHeaderHidden(!isHeaderHidden);
   };
 
+  // Toggle navigation view
+  const toggleNavView = () => {
+    setIsNavMaximised(!isNavMaximised);
+  };
+
   const showTooltip = (event, taskNumber) => {
     // Remove any existing tooltip
     hideTooltip();
