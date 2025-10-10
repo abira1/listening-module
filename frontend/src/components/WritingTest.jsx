@@ -525,7 +525,7 @@ export function WritingTest({ examId }) {
             </div>
 
             {/* View Toggle Controls */}
-            <div className="views" style={{ bottom: '8px', right: '50px' }}>
+            <div className="views" style={{ bottom: '16px', right: '95px' }}>
               <a
                 href="#"
                 className="minimise"
@@ -536,7 +536,7 @@ export function WritingTest({ examId }) {
                 title="switch view to navigation summary"
                 role="button"
                 aria-label="Switch to compact navigation view"
-                style={{ width: '24px', height: '24px', backgroundSize: 'contain' }}
+                style={{ width: '22px', height: '22px', backgroundSize: 'contain' }}
               >
                 <span>navigation summary</span>
               </a>
@@ -551,7 +551,7 @@ export function WritingTest({ examId }) {
                 title="switch view to navigation details"
                 role="button"
                 aria-label="Switch to detailed navigation view"
-                style={{ width: '24px', height: '24px', backgroundSize: 'contain' }}
+                style={{ width: '22px', height: '22px', backgroundSize: 'contain' }}
               >
                 <span>navigation details</span>
               </a>
