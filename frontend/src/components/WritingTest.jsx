@@ -462,45 +462,56 @@ export function WritingTest({ examId }) {
             </label>
           </div>
 
-          {/* Task Navigation Buttons */}
-          <div className="flex items-center justify-center h-full gap-6">
-            {allQuestions.map((question, idx) => {
-              const taskNumber = question.payload?.task_number;
-              const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
-              const isCurrent = currentTaskIndex === idx;
-              const isMarkedForReview = reviewMarked.has(question.index);
-              
-              let connectState = '';
-              if (isCurrent) connectState += 'current ';
-              if (isAnswered) connectState += 'completed ';
-              if (isMarkedForReview) connectState += 'marked-for-review';
+          {/* Task Navigation Buttons - QTI Style */}
+          <div id="navigation-bar" className="maximised">
+            <div connect-class="testPart" connect-identifier="IELTS_WRITING_TEST">
+              <ul className="flex items-center justify-center h-full gap-4" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+                {allQuestions.map((question, idx) => {
+                  const taskNumber = question.payload?.task_number;
+                  const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
+                  const isCurrent = currentTaskIndex === idx;
+                  const isMarkedForReview = reviewMarked.has(question.index);
+                  
+                  let connectState = '';
+                  if (isCurrent) connectState += 'current ';
+                  if (isAnswered) connectState += 'completed ';
+                  if (isMarkedForReview) connectState += 'marked-for-review';
 
-              return (
-                <a
-                  key={question.id}
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigateToTask(idx);
-                  }}
-                  onMouseEnter={(e) => showTooltip(e, taskNumber)}
-                  onMouseLeave={hideTooltip}
-                  onFocus={(e) => showTooltip(e, taskNumber)}
-                  onBlur={hideTooltip}
-                  connect-state={connectState.trim()}
-                  className={`px-8 py-4 rounded-lg font-bold text-lg transition-all border-2 ${
-                    isCurrent 
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-lg' 
-                      : isAnswered 
-                        ? 'bg-white text-gray-700 border-gray-300 hover:border-blue-400' 
-                        : 'bg-gray-800 text-white border-gray-800 hover:bg-gray-700'
-                  } ${isMarkedForReview ? 'ring-4 ring-yellow-400' : ''}`}
-                  title={`Task ${taskNumber}`}
-                >
-                  Task {taskNumber}
-                </a>
-              );
-            })}
+                  return (
+                    <li 
+                      key={question.id}
+                      connect-class="assessmentItemRef" 
+                      connect-identifier={`IELTS-TASK${taskNumber}`}
+                    >
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateToTask(idx);
+                        }}
+                        onMouseEnter={(e) => showTooltip(e, taskNumber)}
+                        onMouseLeave={hideTooltip}
+                        onFocus={(e) => showTooltip(e, taskNumber)}
+                        onBlur={hideTooltip}
+                        connect-state={connectState.trim()}
+                        title={`Task ${taskNumber}`}
+                        style={{
+                          display: 'inline-block',
+                          padding: '0.8em 1.5em',
+                          fontSize: '1em',
+                          fontWeight: 'bold',
+                          cursor: 'pointer',
+                          textDecoration: 'none'
+                        }}
+                      >
+                        <span className="question-label">Task </span>
+                        <span className="question-number">{taskNumber}</span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
 
           {/* Previous/Next Navigation Buttons */}
