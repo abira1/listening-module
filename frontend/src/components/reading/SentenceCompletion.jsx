@@ -5,54 +5,56 @@ export function SentenceCompletion({ question, answer, onChange }) {
 
   // Check word count
   const wordCount = answer ? answer.trim().split(/\s+/).filter(w => w).length : 0;
-  const exceedsLimit = wordCount > max_words;
+  const exceedsLimit = max_words && wordCount > max_words;
 
   // If word list exists, use dropdown; otherwise use text input
   if (word_list && word_list.length > 0) {
     return (
-      <div className="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-        <p className="text-gray-700 mb-3 font-medium">{prompt}</p>
-        <select
-          value={answer || ''}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="">-- Select from word list --</option>
-          {word_list.map((word) => (
-            <option key={word} value={word}>
-              {word}
-            </option>
-          ))}
-        </select>
+      <div>
+        <p className="text-gray-700 mb-3">{prompt}</p>
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-2">
+          <p className="text-xs text-gray-600 mb-2 font-medium">Choose from the list below:</p>
+          <select
+            value={answer || ''}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+          >
+            <option value="">-- Select your answer --</option>
+            {word_list.map((word) => (
+              <option key={word} value={word}>
+                {word}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-      <p className="text-gray-700 mb-3 font-medium">{prompt}</p>
-      <input
-        type="text"
-        value={answer || ''}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={`Enter your answer (max ${max_words} word${max_words > 1 ? 's' : ''})`}
-        className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-          exceedsLimit ? 'border-red-500 bg-red-50' : 'border-gray-300'
-        }`}
-      />
-      <div className="flex justify-between items-center mt-2 text-sm">
-        <span className="text-gray-500">
-          Max {max_words} word{max_words > 1 ? 's' : ''}
-        </span>
-        <span className={`font-medium ${exceedsLimit ? 'text-red-600' : 'text-gray-600'}`}>
-          {wordCount} / {max_words}
-        </span>
+    <div>
+      <p className="text-gray-700 mb-3">{prompt}</p>
+      <div className="flex flex-col">
+        <input
+          type="text"
+          value={answer || ''}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Type your answer here"
+          className={`px-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+            exceedsLimit ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white'
+          }`}
+        />
+        {max_words && (
+          <div className="flex justify-between items-center mt-1.5 text-xs">
+            <span className={`${exceedsLimit ? 'text-red-600 font-medium' : 'text-gray-500'}`}>
+              {exceedsLimit ? '⚠️ Word limit exceeded!' : `Maximum ${max_words} word${max_words > 1 ? 's' : ''} from the passage`}
+            </span>
+            <span className={`font-medium ${exceedsLimit ? 'text-red-600' : 'text-gray-600'}`}>
+              {wordCount}/{max_words}
+            </span>
+          </div>
+        )}
       </div>
-      {exceedsLimit && (
-        <p className="text-red-600 text-sm mt-1">
-          ⚠️ Answer exceeds word limit
-        </p>
-      )}
     </div>
   );
 }
