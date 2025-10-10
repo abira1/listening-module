@@ -402,21 +402,9 @@ export function WritingTest({ examId }) {
         {/* Right Side: Writing Area - 50% width */}
         <div className="w-[50%] bg-gray-50 overflow-y-auto">
           <div className="p-8">
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-4">
               <h2 className="text-xl font-semibold text-gray-700">Your Response</h2>
-              <div className={`text-lg font-bold ${isWordCountSufficient ? 'text-green-600' : 'text-orange-600'}`}>
-                {currentWordCount} / {minWords} words
-              </div>
             </div>
-
-            {/* Word Count Status */}
-            {!isWordCountSufficient && (
-              <div className="mb-4 p-3 bg-orange-100 border-l-4 border-orange-400 rounded">
-                <p className="text-sm text-orange-800">
-                  You need <strong>{minWords - currentWordCount} more words</strong> to meet the minimum requirement.
-                </p>
-              </div>
-            )}
 
             {/* Writing Area */}
             <textarea
@@ -427,6 +415,11 @@ export function WritingTest({ examId }) {
               disabled={examFinished}
               style={{ minHeight: '500px' }}
             />
+
+            {/* Word Counter - Below Textarea */}
+            <div className={`mt-3 text-base font-semibold ${isWordCountSufficient ? 'text-green-600' : 'text-orange-600'}`}>
+              Word count: {currentWordCount} / {minWords}
+            </div>
 
             {/* Submit Button for Task 2 */}
             {currentTaskIndex === allQuestions.length - 1 && (
