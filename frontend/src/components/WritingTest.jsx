@@ -27,6 +27,27 @@ export function WritingTest({ examId }) {
   const allQuestions = examData?.sections?.flatMap(section => section.questions) || [];
   const currentQuestion = allQuestions[currentTaskIndex];
 
+  // Initialize HighlightManager for task prompt highlighting
+  useEffect(() => {
+    if (!examFinished && !isSubmitting) {
+      highlightManagerRef.current = new HighlightManager('highlightable-content', {
+        noteHtext: true
+      });
+      
+      const examSessionId = `exam-${examId}`;
+      if (highlightManagerRef.current) {
+        highlightManagerRef.current.restoreRanges(examSessionId);
+      }
+      
+      return () => {
+        if (highlightManagerRef.current) {
+          highlightManagerRef.current.saveRanges(examSessionId);
+          highlightManagerRef.current.destroy();
+        }
+      };
+    }
+  }, [examFinished, isSubmitting, examId]);
+
   useEffect(() => {
     const loadExamData = async () => {
       try {
