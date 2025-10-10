@@ -20,6 +20,7 @@ export function WritingTest({ examId }) {
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [reviewMarked, setReviewMarked] = useState(new Set());
+  const [isNavMaximised, setIsNavMaximised] = useState(true); // Navigation view state
   const timerRef = useRef(null);
   const highlightManagerRef = useRef(null);
 
