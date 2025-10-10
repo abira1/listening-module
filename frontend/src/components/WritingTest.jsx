@@ -565,7 +565,7 @@ export function WritingTest({ examId }) {
             disabled={currentTaskIndex === 0}
             aria-label="Previous Task"
             title="Previous Task"
-            style={{ width: '40px', height: '40px', bottom: '10px' }}
+            style={{ width: '45px', height: '45px', bottom: '8px', right: '45px', backgroundSize: '90px 45px' }}
           />
           
           <button
@@ -574,7 +574,7 @@ export function WritingTest({ examId }) {
             disabled={currentTaskIndex === allQuestions.length - 1}
             aria-label="Next Task"
             title="Next Task"
-            style={{ width: '40px', height: '40px', bottom: '10px' }}
+            style={{ width: '45px', height: '45px', bottom: '8px', right: '0', backgroundSize: '90px 45px' }}
           />
         </div>
       </footer>
