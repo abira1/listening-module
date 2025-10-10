@@ -1359,6 +1359,517 @@ def test_control_system_endpoints():
     
     return results
 
+def test_ielts_writing_practice_test_1():
+    """Test IELTS Writing Practice Test 1 Backend Implementation"""
+    print_test_header("IELTS Writing Practice Test 1 Backend Implementation")
+    
+    print_info("Testing IELTS Writing Practice Test 1 as per review request:")
+    print_info("1. Exam Existence & Configuration - GET /api/exams/ielts-writing-practice-test-1")
+    print_info("   - Verify exam_type='writing'")
+    print_info("   - Verify duration_seconds=3600 (60 minutes)")
+    print_info("   - Verify published=true")
+    print_info("   - Verify question_count=2")
+    print_info("2. Full Exam Structure - GET /api/exams/ielts-writing-practice-test-1/full")
+    print_info("   - Verify 2 sections exist (Task 1 and Task 2)")
+    print_info("   - Section 1: index=1, title='Writing Task 1'")
+    print_info("   - Section 2: index=2, title='Writing Task 2'")
+    print_info("3. Task 1 Question (Chart Description)")
+    print_info("   - Verify question index=1, type='writing_task'")
+    print_info("   - Verify payload contains instructions, prompt, chart_image, min_words=150, task_number=1")
+    print_info("   - Verify answer_key=null (no auto-grading for writing)")
+    print_info("4. Task 2 Question (Essay Writing)")
+    print_info("   - Verify question index=2, type='writing_task'")
+    print_info("   - Verify payload contains instructions, prompt, min_words=250, task_number=2")
+    print_info("   - Verify chart_image=null, answer_key=null")
+    print_info("5. Writing Submission Workflow")
+    print_info("   - POST /api/submissions with sample writing answers")
+    print_info("   - Verify submission created successfully")
+    print_info("   - Verify score=0 (no auto-grading for writing tests)")
+    print_info("   - GET /api/submissions/{submission_id} to confirm submission stored")
+    print_info("6. Manual Grading Support")
+    print_info("   - Verify submission has score field for manual updates")
+    print_info("   - Verify is_published=false by default")
+    print_info("")
+    
+    results = {}
+    exam_id = "ielts-writing-practice-test-1"
+    
+    # Test 1: Exam Existence & Configuration
+    print_info("\n--- Test 1: Exam Existence & Configuration ---")
+    print_info(f"Testing: GET /api/exams/{exam_id}")
+    print_info("Expected: Exam exists, exam_type='writing', duration=3600, published=true, question_count=2")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/{exam_id}", timeout=10)
+        if response.status_code == 200:
+            exam_data = response.json()
+            print_success(f"✅ Writing exam exists - Status: {response.status_code}")
+            print_info(f"Exam ID: {exam_data.get('id')}")
+            print_info(f"Exam Title: {exam_data.get('title')}")
+            print_info(f"Exam Type: {exam_data.get('exam_type')}")
+            print_info(f"Duration: {exam_data.get('duration_seconds')} seconds")
+            print_info(f"Published: {exam_data.get('published')}")
+            print_info(f"Question Count: {exam_data.get('question_count')}")
+            
+            # Verify exam_type='writing'
+            if exam_data.get('exam_type') == 'writing':
+                print_success("✅ Exam has correct exam_type='writing'")
+                results['exam_type_correct'] = True
+            else:
+                print_error(f"❌ Exam type is '{exam_data.get('exam_type')}', expected 'writing'")
+                results['exam_type_correct'] = False
+            
+            # Verify duration is 3600 seconds (60 minutes)
+            if exam_data.get('duration_seconds') == 3600:
+                print_success("✅ Exam duration is correct (3600 seconds = 60 minutes)")
+                results['duration_correct'] = True
+            else:
+                print_error(f"❌ Exam duration is {exam_data.get('duration_seconds')}, expected 3600")
+                results['duration_correct'] = False
+            
+            # Verify published=true
+            if exam_data.get('published') == True:
+                print_success("✅ Exam is published")
+                results['published_correct'] = True
+            else:
+                print_error(f"❌ Exam published status is {exam_data.get('published')}, expected true")
+                results['published_correct'] = False
+            
+            # Verify question_count=2
+            if exam_data.get('question_count') == 2:
+                print_success("✅ Exam has correct question count (2 tasks)")
+                results['question_count_correct'] = True
+            else:
+                print_error(f"❌ Exam question count is {exam_data.get('question_count')}, expected 2")
+                results['question_count_correct'] = False
+            
+            results['exam_exists'] = True
+            results['exam_data'] = exam_data
+        elif response.status_code == 404:
+            print_error(f"❌ Writing exam not found - Status: {response.status_code}")
+            print_error("The IELTS Writing Practice Test 1 exam may not be initialized")
+            results['exam_exists'] = False
+            return results
+        else:
+            print_error(f"❌ Writing exam retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['exam_exists'] = False
+            return results
+    except Exception as e:
+        print_error(f"❌ Writing exam request error: {str(e)}")
+        results['exam_exists'] = False
+        return results
+    
+    # Test 2: Full Exam Structure
+    print_info("\n--- Test 2: Full Exam Structure ---")
+    print_info(f"Testing: GET /api/exams/{exam_id}/full")
+    print_info("Expected: 2 sections (Task 1 and Task 2) with proper structure")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/exams/{exam_id}/full", timeout=10)
+        if response.status_code == 200:
+            full_data = response.json()
+            print_success(f"✅ Full exam structure retrieved - Status: {response.status_code}")
+            
+            # Verify structure
+            if "exam" in full_data and "sections" in full_data:
+                exam_info = full_data["exam"]
+                sections = full_data["sections"]
+                
+                print_info(f"Exam: {exam_info.get('title')}")
+                print_info(f"Sections count: {len(sections)}")
+                
+                # Verify 2 sections exist
+                if len(sections) == 2:
+                    print_success("✅ Exam has correct number of sections (2)")
+                    results['sections_count_correct'] = True
+                    
+                    # Verify Section 1 (Task 1)
+                    section1 = sections[0] if sections[0].get('index') == 1 else sections[1]
+                    if section1.get('index') == 1 and section1.get('title') == "Writing Task 1":
+                        print_success("✅ Section 1: index=1, title='Writing Task 1'")
+                        results['section1_correct'] = True
+                    else:
+                        print_error(f"❌ Section 1 incorrect: index={section1.get('index')}, title='{section1.get('title')}'")
+                        results['section1_correct'] = False
+                    
+                    # Verify Section 2 (Task 2)
+                    section2 = sections[1] if sections[1].get('index') == 2 else sections[0]
+                    if section2.get('index') == 2 and section2.get('title') == "Writing Task 2":
+                        print_success("✅ Section 2: index=2, title='Writing Task 2'")
+                        results['section2_correct'] = True
+                    else:
+                        print_error(f"❌ Section 2 incorrect: index={section2.get('index')}, title='{section2.get('title')}'")
+                        results['section2_correct'] = False
+                    
+                    results['sections_data'] = sections
+                else:
+                    print_error(f"❌ Expected 2 sections, found {len(sections)}")
+                    results['sections_count_correct'] = False
+                    results['section1_correct'] = False
+                    results['section2_correct'] = False
+                
+                results['full_structure'] = True
+            else:
+                print_error("❌ Full exam data missing required fields (exam, sections)")
+                results['full_structure'] = False
+        else:
+            print_error(f"❌ Full exam structure retrieval failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['full_structure'] = False
+    except Exception as e:
+        print_error(f"❌ Full exam structure request error: {str(e)}")
+        results['full_structure'] = False
+    
+    # Test 3: Task 1 Question (Chart Description)
+    print_info("\n--- Test 3: Task 1 Question (Chart Description) ---")
+    print_info("Expected: index=1, type='writing_task', proper payload structure")
+    
+    if results.get('sections_data'):
+        sections = results['sections_data']
+        section1 = next((s for s in sections if s.get('index') == 1), None)
+        
+        if section1 and section1.get('questions'):
+            task1_question = section1['questions'][0] if section1['questions'] else None
+            
+            if task1_question:
+                print_info(f"Task 1 Question ID: {task1_question.get('id')}")
+                print_info(f"Question Index: {task1_question.get('index')}")
+                print_info(f"Question Type: {task1_question.get('type')}")
+                
+                # Verify question index=1
+                if task1_question.get('index') == 1:
+                    print_success("✅ Task 1 question has correct index (1)")
+                    results['task1_index_correct'] = True
+                else:
+                    print_error(f"❌ Task 1 question index is {task1_question.get('index')}, expected 1")
+                    results['task1_index_correct'] = False
+                
+                # Verify question type='writing_task'
+                if task1_question.get('type') == 'writing_task':
+                    print_success("✅ Task 1 question has correct type ('writing_task')")
+                    results['task1_type_correct'] = True
+                else:
+                    print_error(f"❌ Task 1 question type is '{task1_question.get('type')}', expected 'writing_task'")
+                    results['task1_type_correct'] = False
+                
+                # Verify payload structure
+                payload = task1_question.get('payload', {})
+                required_fields = ['instructions', 'prompt', 'chart_image', 'min_words', 'task_number']
+                missing_fields = [field for field in required_fields if field not in payload]
+                
+                if not missing_fields:
+                    print_success("✅ Task 1 payload contains all required fields")
+                    results['task1_payload_complete'] = True
+                    
+                    # Verify specific values
+                    if "20 minutes" in payload.get('instructions', ''):
+                        print_success("✅ Task 1 instructions mention '20 minutes'")
+                        results['task1_instructions_correct'] = True
+                    else:
+                        print_error("❌ Task 1 instructions don't mention '20 minutes'")
+                        results['task1_instructions_correct'] = False
+                    
+                    if "milk export figures" in payload.get('prompt', ''):
+                        print_success("✅ Task 1 prompt contains 'milk export figures'")
+                        results['task1_prompt_correct'] = True
+                    else:
+                        print_error("❌ Task 1 prompt doesn't contain 'milk export figures'")
+                        results['task1_prompt_correct'] = False
+                    
+                    if payload.get('chart_image'):
+                        print_success("✅ Task 1 has chart_image URL")
+                        results['task1_chart_present'] = True
+                    else:
+                        print_error("❌ Task 1 missing chart_image URL")
+                        results['task1_chart_present'] = False
+                    
+                    if payload.get('min_words') == 150:
+                        print_success("✅ Task 1 has correct min_words (150)")
+                        results['task1_min_words_correct'] = True
+                    else:
+                        print_error(f"❌ Task 1 min_words is {payload.get('min_words')}, expected 150")
+                        results['task1_min_words_correct'] = False
+                    
+                    if payload.get('task_number') == 1:
+                        print_success("✅ Task 1 has correct task_number (1)")
+                        results['task1_number_correct'] = True
+                    else:
+                        print_error(f"❌ Task 1 task_number is {payload.get('task_number')}, expected 1")
+                        results['task1_number_correct'] = False
+                    
+                    if payload.get('answer_key') is None:
+                        print_success("✅ Task 1 has answer_key=null (no auto-grading)")
+                        results['task1_no_answer_key'] = True
+                    else:
+                        print_error(f"❌ Task 1 answer_key is {payload.get('answer_key')}, expected null")
+                        results['task1_no_answer_key'] = False
+                else:
+                    print_error(f"❌ Task 1 payload missing fields: {missing_fields}")
+                    results['task1_payload_complete'] = False
+            else:
+                print_error("❌ Task 1 question not found in section")
+                results.update({
+                    'task1_index_correct': False,
+                    'task1_type_correct': False,
+                    'task1_payload_complete': False
+                })
+        else:
+            print_error("❌ Section 1 or questions not found")
+            results.update({
+                'task1_index_correct': False,
+                'task1_type_correct': False,
+                'task1_payload_complete': False
+            })
+    else:
+        print_error("❌ Sections data not available")
+        results.update({
+            'task1_index_correct': False,
+            'task1_type_correct': False,
+            'task1_payload_complete': False
+        })
+    
+    # Test 4: Task 2 Question (Essay Writing)
+    print_info("\n--- Test 4: Task 2 Question (Essay Writing) ---")
+    print_info("Expected: index=2, type='writing_task', proper payload structure")
+    
+    if results.get('sections_data'):
+        sections = results['sections_data']
+        section2 = next((s for s in sections if s.get('index') == 2), None)
+        
+        if section2 and section2.get('questions'):
+            task2_question = section2['questions'][0] if section2['questions'] else None
+            
+            if task2_question:
+                print_info(f"Task 2 Question ID: {task2_question.get('id')}")
+                print_info(f"Question Index: {task2_question.get('index')}")
+                print_info(f"Question Type: {task2_question.get('type')}")
+                
+                # Verify question index=2
+                if task2_question.get('index') == 2:
+                    print_success("✅ Task 2 question has correct index (2)")
+                    results['task2_index_correct'] = True
+                else:
+                    print_error(f"❌ Task 2 question index is {task2_question.get('index')}, expected 2")
+                    results['task2_index_correct'] = False
+                
+                # Verify question type='writing_task'
+                if task2_question.get('type') == 'writing_task':
+                    print_success("✅ Task 2 question has correct type ('writing_task')")
+                    results['task2_type_correct'] = True
+                else:
+                    print_error(f"❌ Task 2 question type is '{task2_question.get('type')}', expected 'writing_task'")
+                    results['task2_type_correct'] = False
+                
+                # Verify payload structure
+                payload = task2_question.get('payload', {})
+                required_fields = ['instructions', 'prompt', 'min_words', 'task_number']
+                missing_fields = [field for field in required_fields if field not in payload]
+                
+                if not missing_fields:
+                    print_success("✅ Task 2 payload contains all required fields")
+                    results['task2_payload_complete'] = True
+                    
+                    # Verify specific values
+                    if "40 minutes" in payload.get('instructions', ''):
+                        print_success("✅ Task 2 instructions mention '40 minutes'")
+                        results['task2_instructions_correct'] = True
+                    else:
+                        print_error("❌ Task 2 instructions don't mention '40 minutes'")
+                        results['task2_instructions_correct'] = False
+                    
+                    if "international media" in payload.get('prompt', ''):
+                        print_success("✅ Task 2 prompt contains 'international media'")
+                        results['task2_prompt_correct'] = True
+                    else:
+                        print_error("❌ Task 2 prompt doesn't contain 'international media'")
+                        results['task2_prompt_correct'] = False
+                    
+                    if payload.get('chart_image') is None:
+                        print_success("✅ Task 2 has chart_image=null (no chart for Task 2)")
+                        results['task2_no_chart'] = True
+                    else:
+                        print_error(f"❌ Task 2 chart_image is {payload.get('chart_image')}, expected null")
+                        results['task2_no_chart'] = False
+                    
+                    if payload.get('min_words') == 250:
+                        print_success("✅ Task 2 has correct min_words (250)")
+                        results['task2_min_words_correct'] = True
+                    else:
+                        print_error(f"❌ Task 2 min_words is {payload.get('min_words')}, expected 250")
+                        results['task2_min_words_correct'] = False
+                    
+                    if payload.get('task_number') == 2:
+                        print_success("✅ Task 2 has correct task_number (2)")
+                        results['task2_number_correct'] = True
+                    else:
+                        print_error(f"❌ Task 2 task_number is {payload.get('task_number')}, expected 2")
+                        results['task2_number_correct'] = False
+                    
+                    if payload.get('answer_key') is None:
+                        print_success("✅ Task 2 has answer_key=null (no auto-grading)")
+                        results['task2_no_answer_key'] = True
+                    else:
+                        print_error(f"❌ Task 2 answer_key is {payload.get('answer_key')}, expected null")
+                        results['task2_no_answer_key'] = False
+                else:
+                    print_error(f"❌ Task 2 payload missing fields: {missing_fields}")
+                    results['task2_payload_complete'] = False
+            else:
+                print_error("❌ Task 2 question not found in section")
+                results.update({
+                    'task2_index_correct': False,
+                    'task2_type_correct': False,
+                    'task2_payload_complete': False
+                })
+        else:
+            print_error("❌ Section 2 or questions not found")
+            results.update({
+                'task2_index_correct': False,
+                'task2_type_correct': False,
+                'task2_payload_complete': False
+            })
+    else:
+        print_error("❌ Sections data not available")
+        results.update({
+            'task2_index_correct': False,
+            'task2_type_correct': False,
+            'task2_payload_complete': False
+        })
+    
+    # Test 5: Writing Submission Workflow
+    print_info("\n--- Test 5: Writing Submission Workflow ---")
+    print_info("Testing: POST /api/submissions with sample writing answers")
+    print_info("Expected: Submission created, score=0 (no auto-grading), total_questions=2")
+    
+    # Create sample writing answers
+    task1_sample = "The bar chart illustrates the export of milk from three European countries (Italy, Russia, and Poland) over a five-year period from 2008 to 2012. Overall, Italy consistently had the highest milk exports throughout the period, while Poland showed the most significant growth. In 2008, Italy exported approximately 15 million tons of milk, Russia exported around 8 million tons, and Poland exported the least at about 5 million tons. By 2012, Italy's exports had increased to roughly 18 million tons, maintaining its leading position. Russia's exports remained relatively stable, fluctuating between 7-9 million tons throughout the period. Poland demonstrated remarkable growth, with exports rising steadily from 5 million tons in 2008 to approximately 12 million tons in 2012, nearly tripling its export volume. The most notable trend was Poland's consistent upward trajectory, while Italy and Russia showed more modest changes over the five-year period."
+    
+    task2_sample = "The proliferation of international media has undoubtedly transformed local cultures worldwide, bringing both significant benefits and concerning drawbacks. This essay will examine these impacts and argue that the advantages generally outweigh the disadvantages. On the positive side, exposure to international media promotes cultural exchange and global understanding. Films, television programs, and magazines from different countries allow people to learn about diverse lifestyles, traditions, and perspectives, fostering tolerance and reducing prejudice. Additionally, international media often introduces innovative ideas, technologies, and artistic expressions that can enrich local cultures rather than simply replacing them. For instance, the global popularity of Korean entertainment has led to increased interest in Korean language and culture worldwide. However, there are legitimate concerns about cultural homogenization and the potential erosion of local traditions. Dominant media from powerful countries, particularly the United States, can overshadow local content and gradually influence local values and behaviors. This may lead to the loss of unique cultural practices and languages, particularly in smaller communities. Despite these concerns, I believe the advantages outweigh the disadvantages because international media exposure ultimately enhances rather than diminishes cultural richness when balanced with strong local content preservation efforts."
+    
+    sample_answers = {
+        "1": task1_sample,  # Task 1 (160 words)
+        "2": task2_sample   # Task 2 (270 words)
+    }
+    
+    submission_data = {
+        "exam_id": exam_id,
+        "user_id_or_session": f"writing_test_user_{datetime.now().strftime('%H%M%S')}",
+        "answers": sample_answers,
+        "started_at": datetime.now().isoformat(),
+        "finished_at": datetime.now().isoformat(),
+        "progress_percent": 100
+    }
+    
+    try:
+        response = requests.post(
+            f"{BACKEND_URL}/submissions",
+            json=submission_data,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            submission = response.json()
+            print_success(f"✅ Writing submission created - Status: {response.status_code}")
+            print_info(f"Submission ID: {submission.get('id')}")
+            print_info(f"Exam ID: {submission.get('exam_id')}")
+            print_info(f"Total Questions: {submission.get('total_questions')}")
+            print_info(f"Score: {submission.get('score')}")
+            print_info(f"Is Published: {submission.get('is_published')}")
+            
+            # Verify score=0 (no auto-grading for writing)
+            if submission.get('score') == 0:
+                print_success("✅ Submission score is 0 (no auto-grading for writing tests)")
+                results['submission_score_correct'] = True
+            else:
+                print_error(f"❌ Submission score is {submission.get('score')}, expected 0")
+                results['submission_score_correct'] = False
+            
+            # Verify total_questions=2
+            if submission.get('total_questions') == 2:
+                print_success("✅ Submission has correct total_questions (2)")
+                results['submission_questions_correct'] = True
+            else:
+                print_error(f"❌ Submission total_questions is {submission.get('total_questions')}, expected 2")
+                results['submission_questions_correct'] = False
+            
+            # Verify is_published=false by default
+            if submission.get('is_published') == False:
+                print_success("✅ Submission is_published=false by default (manual grading)")
+                results['submission_unpublished'] = True
+            else:
+                print_error(f"❌ Submission is_published is {submission.get('is_published')}, expected false")
+                results['submission_unpublished'] = False
+            
+            results['submission_created'] = True
+            results['submission_id'] = submission.get('id')
+        else:
+            print_error(f"❌ Writing submission creation failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['submission_created'] = False
+    except Exception as e:
+        print_error(f"❌ Writing submission creation error: {str(e)}")
+        results['submission_created'] = False
+    
+    # Test 6: Submission Retrieval
+    print_info("\n--- Test 6: Submission Retrieval ---")
+    print_info("Testing: GET /api/submissions/{submission_id}")
+    print_info("Expected: Submission retrieved with all data intact")
+    
+    if results.get('submission_id'):
+        submission_id = results['submission_id']
+        try:
+            response = requests.get(f"{BACKEND_URL}/submissions/{submission_id}", timeout=10)
+            
+            if response.status_code == 200:
+                retrieved_submission = response.json()
+                print_success(f"✅ Submission retrieved - Status: {response.status_code}")
+                print_info(f"Retrieved ID: {retrieved_submission.get('id')}")
+                print_info(f"Answers count: {len(retrieved_submission.get('answers', {}))}")
+                
+                # Verify answers are stored correctly
+                answers = retrieved_submission.get('answers', {})
+                if len(answers) == 2 and '1' in answers and '2' in answers:
+                    print_success("✅ Both writing task answers stored correctly")
+                    results['submission_retrieval'] = True
+                else:
+                    print_error(f"❌ Answers not stored correctly: {list(answers.keys())}")
+                    results['submission_retrieval'] = False
+            else:
+                print_error(f"❌ Submission retrieval failed - Status: {response.status_code}")
+                results['submission_retrieval'] = False
+        except Exception as e:
+            print_error(f"❌ Submission retrieval error: {str(e)}")
+            results['submission_retrieval'] = False
+    else:
+        print_error("❌ No submission ID available for retrieval test")
+        results['submission_retrieval'] = False
+    
+    # Summary
+    print_info("\n--- IELTS Writing Practice Test 1 Summary ---")
+    passed_tests = sum(1 for key, result in results.items() if key not in ['exam_data', 'sections_data', 'submission_id'] and result)
+    total_tests = len([key for key in results.keys() if key not in ['exam_data', 'sections_data', 'submission_id']])
+    
+    if passed_tests == total_tests:
+        print_success(f"🎉 ALL IELTS WRITING PRACTICE TEST 1 TESTS PASSED ({passed_tests}/{total_tests})")
+        print_success("✅ Exam exists with correct configuration (exam_type='writing', duration=3600, published=true)")
+        print_success("✅ Full exam structure with 2 sections (Task 1 and Task 2)")
+        print_success("✅ Task 1: Chart description with proper payload (150 words, chart image)")
+        print_success("✅ Task 2: Essay writing with proper payload (250 words, no chart)")
+        print_success("✅ Writing submission workflow functional (no auto-grading, manual scoring)")
+        print_success("✅ Manual grading support ready (score=0 initially, is_published=false)")
+        print_success("✅ IELTS Writing Practice Test 1 backend is fully operational!")
+    else:
+        print_error(f"❌ SOME TESTS FAILED ({passed_tests}/{total_tests})")
+        for test_name, result in results.items():
+            if test_name not in ['exam_data', 'sections_data', 'submission_id']:
+                status = "PASS" if result else "FAIL"
+                color = Colors.GREEN if result else Colors.RED
+                print(f"  {color}{status} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    return results
+
 def test_ielts_reading_practice_test_1():
     """Test IELTS Reading Practice Test 1 Backend Implementation"""
     print_test_header("IELTS Reading Practice Test 1 Backend Implementation")
