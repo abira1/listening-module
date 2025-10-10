@@ -550,7 +550,7 @@ export function WritingTest({ examId }) {
             disabled={currentTaskIndex === 0}
             aria-label="Previous Task"
             title="Previous Task"
-            style={{ display: 'block' }}
+            style={{ display: 'block !important', opacity: currentTaskIndex === 0 ? 0.5 : 1 }}
           >
             <span className="reader-only">Previous Task</span>
           </button>
@@ -561,7 +561,7 @@ export function WritingTest({ examId }) {
             disabled={currentTaskIndex === allQuestions.length - 1}
             aria-label="Next Task"
             title="Next Task"
-            style={{ display: 'block' }}
+            style={{ display: 'block !important', opacity: currentTaskIndex === allQuestions.length - 1 ? 0.5 : 1 }}
           >
             <span className="reader-only">Next Task</span>
           </button>
