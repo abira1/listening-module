@@ -257,6 +257,88 @@ export function ReadingTest({ examId }) {
     return 'bg-gray-800 text-white';
   };
 
+  // Get all matching paragraphs questions for current section
+  const getMatchingParagraphsQuestions = () => {
+    if (!currentSection) return [];
+    return currentSection.questions.filter(q => q.type === 'matching_paragraphs');
+  };
+
+  // Handle paragraph box click for matching questions
+  const handleParagraphBoxClick = (paragraphLetter) => {
+    if (currentQuestionIndex) {
+      const currentQuestion = currentSection?.questions.find(q => q.index === currentQuestionIndex);
+      if (currentQuestion && currentQuestion.type === 'matching_paragraphs') {
+        handleAnswerChange(currentQuestionIndex, paragraphLetter);
+      }
+    }
+  };
+
+  // Parse passage to add paragraph boxes
+  const renderPassageWithBoxes = (passageText) => {
+    if (!passageText) return null;
+    
+    const matchingQuestions = getMatchingParagraphsQuestions();
+    const hasMatchingQuestions = matchingQuestions.length > 0;
+    
+    if (!hasMatchingQuestions) {
+      return <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">{passageText}</div>;
+    }
+
+    // Split by paragraph markers (assuming paragraphs are marked with letters A, B, C, etc.)
+    const paragraphPattern = /^([A-Z])\s*$/gm;
+    const parts = passageText.split(paragraphPattern);
+    
+    const elements = [];
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i] && parts[i].match(/^[A-Z]$/)) {
+        // This is a paragraph letter
+        const paragraphLetter = parts[i];
+        const paragraphText = parts[i + 1] || '';
+        
+        // Find which question(s) are assigned to this paragraph
+        const assignedQuestions = matchingQuestions.filter(q => answers[q.index] === paragraphLetter);
+        
+        elements.push(
+          <div key={`para-${paragraphLetter}`} className="mb-6">
+            <div className="flex items-start gap-3 mb-2">
+              <div className="font-bold text-lg text-gray-900 min-w-[2rem]">{paragraphLetter}</div>
+              <div 
+                onClick={() => handleParagraphBoxClick(paragraphLetter)}
+                className={`flex items-center justify-center min-w-[60px] h-[40px] border-2 rounded cursor-pointer transition-all ${
+                  assignedQuestions.length > 0
+                    ? 'bg-blue-100 border-blue-500 hover:bg-blue-200'
+                    : 'bg-white border-gray-400 border-dashed hover:border-blue-400 hover:bg-blue-50'
+                }`}
+                title={assignedQuestions.length > 0 ? `Question ${assignedQuestions.map(q => q.index).join(', ')}` : 'Click to assign current question'}
+              >
+                {assignedQuestions.length > 0 ? (
+                  <span className="font-bold text-blue-700">
+                    {assignedQuestions.map(q => q.index).join(', ')}
+                  </span>
+                ) : (
+                  <span className="text-gray-400 text-xs">Box</span>
+                )}
+              </div>
+            </div>
+            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap ml-11">
+              {paragraphText}
+            </div>
+          </div>
+        );
+        i++; // Skip the next part as we've already processed it
+      } else if (parts[i] && !parts[i].match(/^[A-Z]$/)) {
+        // Regular text before first paragraph
+        elements.push(
+          <div key={`text-${i}`} className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap mb-4">
+            {parts[i]}
+          </div>
+        );
+      }
+    }
+    
+    return <div>{elements}</div>;
+  };
+
   const renderQuestionComponent = (question) => {
     const answer = answers[question.index] || '';
     const onChange = (value) => handleAnswerChange(question.index, value);
