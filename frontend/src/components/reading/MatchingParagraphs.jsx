@@ -1,27 +1,19 @@
 import React from 'react';
 
 export function MatchingParagraphs({ question, answer, onChange }) {
-  const { prompt, options } = question.payload;
+  const { prompt } = question.payload;
 
   return (
-    <div>
-      <p className="text-gray-700 mb-3">{prompt}</p>
-      <div className="flex items-center gap-3">
-        <label className="text-sm text-gray-600 font-medium">Write the letter:</label>
-        <select
-          value={answer || ''}
-          onChange={(e) => onChange(e.target.value)}
-          className="px-3 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 font-medium"
-          style={{ minWidth: '100px' }}
-        >
-          <option value="">---</option>
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+    <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded">
+      <p className="text-gray-700 text-sm">{prompt}</p>
+      <div className="mt-2 text-xs text-gray-600 italic">
+        💡 Click the paragraph box in the passage on the left to assign this question number
       </div>
+      {answer && (
+        <div className="mt-2 text-sm font-medium text-green-700">
+          ✓ Assigned to Paragraph {answer}
+        </div>
+      )}
     </div>
   );
 }
