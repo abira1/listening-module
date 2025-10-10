@@ -118,10 +118,11 @@ export function ExamTest() {
   }
 
   const isReadingTest = exam?.exam_type === 'reading';
+  const isWritingTest = exam?.exam_type === 'writing';
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-gradient-to-b from-blue-50 to-blue-100">
-      {!isReadingTest && <audio ref={audioRef} style={{ display: 'none' }} controls={false} />}
+      {!isReadingTest && !isWritingTest && <audio ref={audioRef} style={{ display: 'none' }} controls={false} />}
       
       {currentScreen !== 'test' && <Header />}
       
@@ -129,18 +130,22 @@ export function ExamTest() {
         {currentScreen === 'confirmDetails' && (
           <ConfirmDetails onContinue={handleContinue} />
         )}
-        {currentScreen === 'soundTest' && !isReadingTest && (
+        {currentScreen === 'soundTest' && !isReadingTest && !isWritingTest && (
           <SoundTest onContinue={handleContinue} audioRef={audioRef} />
         )}
         {currentScreen === 'instructions' && (
-          isReadingTest ? (
+          isWritingTest ? (
+            <WritingInstructions onStart={handleContinue} examTitle={exam?.title} />
+          ) : isReadingTest ? (
             <ReadingInstructions onStart={handleContinue} examTitle={exam?.title} />
           ) : (
             <ListeningInstructions onStart={handleContinue} examTitle={exam?.title} />
           )
         )}
         {currentScreen === 'test' && (
-          isReadingTest ? (
+          isWritingTest ? (
+            <WritingTest examId={examId} />
+          ) : isReadingTest ? (
             <ReadingTest examId={examId} />
           ) : (
             <ListeningTest examId={examId} audioRef={audioRef} />
