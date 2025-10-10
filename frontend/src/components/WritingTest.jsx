@@ -505,6 +505,7 @@ export function WritingTest({ examId }) {
                         onBlur={hideTooltip}
                         connect-state={connectState.trim()}
                         title={`Task ${taskNumber}`}
+                        style={isNavMaximised ? { fontSize: '16px', width: '2em', height: '2em', lineHeight: '2em' } : {}}
                       >
                         <span className="question-label">Task </span>
                         <span className="question-number">{taskNumber}</span>
