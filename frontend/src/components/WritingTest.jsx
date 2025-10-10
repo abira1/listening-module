@@ -19,7 +19,9 @@ export function WritingTest({ examId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [submissionComplete, setSubmissionComplete] = useState(false);
+  const [reviewMarked, setReviewMarked] = useState(new Set());
   const timerRef = useRef(null);
+  const highlightManagerRef = useRef(null);
 
   // Get all questions (both tasks)
   const allQuestions = examData?.sections?.flatMap(section => section.questions) || [];
