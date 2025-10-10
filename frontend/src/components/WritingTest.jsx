@@ -468,10 +468,10 @@ export function WritingTest({ examId }) {
             </label>
           </div>
 
-          {/* Task Navigation Buttons - QTI Style */}
-          <div id="navigation-bar" className="maximised">
+          {/* Task Navigation Buttons - QTI Style with View Toggle */}
+          <div id="navigation-bar" className={isNavMaximised ? 'maximised' : 'minimised'}>
             <div connect-class="testPart" connect-identifier="IELTS_WRITING_TEST">
-              <ul className="flex items-center justify-center h-full gap-4" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+              <ul>
                 {allQuestions.map((question, idx) => {
                   const taskNumber = question.payload?.task_number;
                   const isAnswered = answers[question.index] !== undefined && answers[question.index] !== '';
@@ -501,14 +501,6 @@ export function WritingTest({ examId }) {
                         onBlur={hideTooltip}
                         connect-state={connectState.trim()}
                         title={`Task ${taskNumber}`}
-                        style={{
-                          display: 'inline-block',
-                          padding: '0.8em 1.5em',
-                          fontSize: '1em',
-                          fontWeight: 'bold',
-                          cursor: 'pointer',
-                          textDecoration: 'none'
-                        }}
                       >
                         <span className="question-label">Task </span>
                         <span className="question-number">{taskNumber}</span>
@@ -517,6 +509,37 @@ export function WritingTest({ examId }) {
                   );
                 })}
               </ul>
+            </div>
+
+            {/* View Toggle Controls */}
+            <div className="views">
+              <a
+                href="#"
+                className="minimise"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNavView();
+                }}
+                title="switch view to navigation summary"
+                role="button"
+                aria-label="Switch to compact navigation view"
+              >
+                <span>navigation summary</span>
+              </a>
+              
+              <a
+                href="#"
+                className="maximise"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNavView();
+                }}
+                title="switch view to navigation details"
+                role="button"
+                aria-label="Switch to detailed navigation view"
+              >
+                <span>navigation details</span>
+              </a>
             </div>
           </div>
 
