@@ -140,22 +140,99 @@ export function WritingTest({ examId }) {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const toggleReviewMark = (taskIndex) => {
+    setReviewMarked((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(taskIndex)) {
+        newSet.delete(taskIndex);
+      } else {
+        newSet.add(taskIndex);
+      }
+      return newSet;
+    });
+  };
+
+  const navigateToTask = (taskIndex) => {
+    setCurrentTaskIndex(taskIndex);
+  };
+
   const handlePreviousTask = () => {
     if (currentTaskIndex > 0) {
       setCurrentTaskIndex(currentTaskIndex - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handleNextTask = () => {
     if (currentTaskIndex < allQuestions.length - 1) {
       setCurrentTaskIndex(currentTaskIndex + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const toggleHeaderVisibility = () => {
     setIsHeaderHidden(!isHeaderHidden);
+  };
+
+  const showTooltip = (event, taskNumber) => {
+    // Remove any existing tooltip
+    hideTooltip();
+    
+    const target = event.currentTarget;
+    const rect = target.getBoundingClientRect();
+    
+    // Create tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.id = 'pageIdentifier';
+    tooltip.style.display = 'block';
+    
+    // Determine status
+    const isAnswered = answers[taskNumber] !== undefined && answers[taskNumber] !== '';
+    const isCurrent = currentTaskIndex === (taskNumber - 1);
+    const isMarkedForReview = reviewMarked.has(taskNumber);
+    
+    let status = 'Not Started';
+    let statusClass = 'status-unanswered';
+    
+    if (isCurrent) {
+      status = 'Current Task';
+      statusClass = 'status-current';
+    } else if (isMarkedForReview) {
+      status = 'Marked for Review';
+      statusClass = 'status-review';
+    } else if (isAnswered) {
+      status = 'Completed';
+      statusClass = 'status-completed';
+    }
+    
+    // Create content
+    const taskP = document.createElement('p');
+    taskP.textContent = `Task ${taskNumber}`;
+    tooltip.appendChild(taskP);
+    
+    const statusP = document.createElement('p');
+    statusP.className = `tooltip-status ${statusClass}`;
+    statusP.textContent = status;
+    tooltip.appendChild(statusP);
+    
+    const arrow = document.createElement('span');
+    arrow.className = 'tooltip-arrow';
+    tooltip.appendChild(arrow);
+    
+    // Add to body
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    tooltip.style.left = `${Math.max(10, left)}px`;
+    tooltip.style.bottom = `${window.innerHeight - rect.top + 15}px`;
+  };
+
+  const hideTooltip = () => {
+    const tooltip = document.getElementById('pageIdentifier');
+    if (tooltip) {
+      tooltip.style.display = 'none';
+      tooltip.remove();
+    }
   };
 
   if (loading) {
