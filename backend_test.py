@@ -3451,6 +3451,8 @@ if __name__ == "__main__":
             success = run_hierarchical_submission_fix_tests()
         elif sys.argv[1] == "--reading-test":
             success = run_reading_test_only()
+        elif sys.argv[1] == "--writing-test":
+            success = run_writing_test_only()
         else:
             print_error(f"Unknown test suite: {sys.argv[1]}")
             print_info("Available test suites:")
@@ -3461,10 +3463,11 @@ if __name__ == "__main__":
             print_info("  --hierarchical        : Run enhanced hierarchical submission management tests")
             print_info("  --hierarchical-fix    : Run fixed hierarchical submission management tests (review request)")
             print_info("  --reading-test        : Run IELTS Reading Practice Test 1 verification")
-            print_info("  (no args)             : Run IELTS Reading Practice Test 1 verification (current focus)")
+            print_info("  --writing-test        : Run IELTS Writing Practice Test 1 verification")
+            print_info("  (no args)             : Run IELTS Writing Practice Test 1 verification (current focus)")
             sys.exit(1)
     else:
-        # Run the reading test as the default for this review request
-        success = run_reading_test_only()
+        # Run the writing test as the default for this review request
+        success = run_writing_test_only()
     
     sys.exit(0 if success else 1)
