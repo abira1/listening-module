@@ -3432,6 +3432,26 @@ def run_reading_test_only():
     
     return passed_tests == total_tests
 
+def run_writing_test_only():
+    """Run only the IELTS Writing Practice Test 1 verification"""
+    print(f"{Colors.BOLD}{Colors.BLUE}")
+    print("=" * 80)
+    print("  IELTS Writing Practice Test 1 - Backend Verification")
+    print("=" * 80)
+    print(f"{Colors.END}")
+    
+    print_info(f"Testing backend at: {BACKEND_URL}")
+    print_info(f"Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # Run the writing test
+    results = test_ielts_writing_practice_test_1()
+    
+    # Check if all tests passed
+    passed_tests = sum(1 for key, result in results.items() if key not in ['exam_data', 'sections_data', 'submission_id'] and result)
+    total_tests = len([key for key in results.keys() if key not in ['exam_data', 'sections_data', 'submission_id']])
+    
+    return passed_tests == total_tests
+
 if __name__ == "__main__":
     import sys
     
