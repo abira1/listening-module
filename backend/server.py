@@ -544,28 +544,32 @@ async def create_submission(
             questions = await db.questions.find({"section_id": section["id"]}, {"_id": 0}).to_list(1000)
             all_questions.extend(questions)
         
-        # Auto-grade submission
+        # Auto-grade submission (skip for writing tasks - they need manual grading)
         correct_count = 0
         total_questions = len(all_questions)
         
-        for question in all_questions:
-            question_index = str(question["index"])
-            student_answer = submission_data.answers.get(question_index, "").strip().lower()
-            
-            # Check if question has answer_key
-            if "answer_key" in question.get("payload", {}):
-                correct_answer = str(question["payload"]["answer_key"]).strip().lower()
-                
-                # For short answer questions, do case-insensitive comparison
-                if question["type"] in ["short_answer", "diagram_labeling", "sentence_completion", "short_answer_reading", "sentence_completion_wordlist"]:
-                    if student_answer == correct_answer:
-                        correct_count += 1
-                # For multiple choice and map labeling, exact match
-                elif question["type"] in ["multiple_choice", "map_labeling", "matching_paragraphs", "true_false_not_given"]:
-                    if student_answer == correct_answer:
-                        correct_count += 1
+        # Check if this is a writing test (no auto-grading for writing)
+        is_writing_test = exam.get("exam_type") == "writing"
         
-        # Calculate score (out of total questions)
+        if not is_writing_test:
+            for question in all_questions:
+                question_index = str(question["index"])
+                student_answer = submission_data.answers.get(question_index, "").strip().lower()
+                
+                # Check if question has answer_key
+                if "answer_key" in question.get("payload", {}):
+                    correct_answer = str(question["payload"]["answer_key"]).strip().lower()
+                    
+                    # For short answer questions, do case-insensitive comparison
+                    if question["type"] in ["short_answer", "diagram_labeling", "sentence_completion", "short_answer_reading", "sentence_completion_wordlist"]:
+                        if student_answer == correct_answer:
+                            correct_count += 1
+                    # For multiple choice and map labeling, exact match
+                    elif question["type"] in ["multiple_choice", "map_labeling", "matching_paragraphs", "true_false_not_given"]:
+                        if student_answer == correct_answer:
+                            correct_count += 1
+        
+        # Calculate score (out of total questions) - writing tests get 0 until manually graded
         score = correct_count if total_questions > 0 else 0
         
         submission_id = generate_id()
