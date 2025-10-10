@@ -579,7 +579,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "IELTS Reading Practice Test 1 Backend Implementation"
+    - "IELTS Writing Practice Test 1 Full Implementation"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
