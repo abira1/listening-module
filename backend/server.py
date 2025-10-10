@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 import shutil
 from init_ielts_test import init_ielts_test
 from init_reading_test import init_reading_test
+from init_writing_test import init_writing_test
 from auth_service import AuthService
 
 
