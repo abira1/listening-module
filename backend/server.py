@@ -1297,6 +1297,7 @@ async def startup_db():
     """Initialize IELTS tests on startup"""
     await init_ielts_test()
     await init_reading_test()
+    await init_writing_test()
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
