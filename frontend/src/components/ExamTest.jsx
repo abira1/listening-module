@@ -5,8 +5,10 @@ import { ConfirmDetails } from './ConfirmDetails';
 import { SoundTest } from './SoundTest';
 import { ListeningInstructions } from './ListeningInstructions';
 import { ReadingInstructions } from './ReadingInstructions';
+import { WritingInstructions } from './WritingInstructions';
 import { ListeningTest } from './ListeningTest';
 import { ReadingTest } from './ReadingTest';
+import { WritingTest } from './WritingTest';
 import { BackendService } from '../services/BackendService';
 import { useAuth } from '../contexts/AuthContext';
 
