@@ -3976,6 +3976,24 @@ def run_writing_test_only():
     
     return passed_tests == total_tests
 
+def run_ai_import_tests():
+    """Run AI Import and Track Management Tests Only"""
+    print(f"\n{Colors.BLUE}{Colors.BOLD}🚀 Running AI Import and Track Management Tests Only 🚀{Colors.END}")
+    
+    results = test_ai_import_and_track_management()
+    
+    # Check if all tests passed
+    passed_tests = sum(1 for result in results.values() if result)
+    total_tests = len(results)
+    
+    if passed_tests == total_tests:
+        print(f"\n{Colors.GREEN}{Colors.BOLD}🎉 ALL AI IMPORT TESTS PASSED! System is fully functional! 🎉{Colors.END}")
+        return True
+    else:
+        print(f"\n{Colors.RED}{Colors.BOLD}❌ SOME AI IMPORT TESTS FAILED! System needs attention! ❌{Colors.END}")
+        return False
+
+
 if __name__ == "__main__":
     import sys
     
