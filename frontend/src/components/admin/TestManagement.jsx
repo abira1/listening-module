@@ -159,7 +159,7 @@ export function TestManagement() {
     
     if (window.confirm(`Are you sure you want to ${action} this test from students?`)) {
       try {
-        const updatedExam = await BackendService.toggleExamVisibility(testId, newVisibility);
+        const updatedExam = await BackendService.toggleExamVisibility(testId, newVisibility, user?.email);
         if (updatedExam) {
           setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_visible: newVisibility } : exam));
           showToast(`Test ${newVisibility ? 'shown' : 'hidden'} successfully!`, 'success');
