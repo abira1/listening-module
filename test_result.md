@@ -606,7 +606,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "IELTS Writing Practice Test 1 Full Implementation"
+    - "AI Import and Track Management System"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
