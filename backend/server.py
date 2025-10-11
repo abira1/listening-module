@@ -1287,6 +1287,10 @@ logger = logging.getLogger(__name__)
 # Include the router in the main app
 app.include_router(api_router)
 
+# Include new routers for AI import and track management
+app.include_router(get_ai_import_router())
+app.include_router(get_track_router())
+
 # Mount static files for serving audio files
 app.mount("/listening_tracks", StaticFiles(directory=str(LISTENING_TRACKS_DIR)), name="listening_tracks")
 
