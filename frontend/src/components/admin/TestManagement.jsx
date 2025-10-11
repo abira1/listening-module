@@ -153,6 +153,24 @@ export function TestManagement() {
     }
   };
 
+  const handleToggleVisibility = async (testId, currentVisibility) => {
+    const newVisibility = !currentVisibility;
+    const action = newVisibility ? 'show' : 'hide';
+    
+    if (window.confirm(`Are you sure you want to ${action} this test from students?`)) {
+      try {
+        const updatedExam = await BackendService.toggleExamVisibility(testId, newVisibility);
+        if (updatedExam) {
+          setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_visible: newVisibility } : exam));
+          showToast(`Test ${newVisibility ? 'shown' : 'hidden'} successfully!`, 'success');
+        }
+      } catch (error) {
+        console.error('Error toggling test visibility:', error);
+        showToast(error.message || 'Failed to toggle test visibility', 'error');
+      }
+    }
+  };
+
   return (
     <div>
       <ToastContainer />
