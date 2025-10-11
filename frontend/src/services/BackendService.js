@@ -136,6 +136,16 @@ export const BackendService = {
     }
   },
 
+  toggleExamVisibility: async (examId, isVisible) => {
+    try {
+      const response = await api.put(`/admin/exams/${examId}/visibility?is_visible=${isVisible}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error toggling exam visibility:', error);
+      throw new Error('Failed to toggle exam visibility');
+    }
+  },
+
   // Section operations
   getSectionsByExam: async (examId) => {
     try {
