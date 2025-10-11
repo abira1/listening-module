@@ -234,7 +234,98 @@ export function StudentDashboard() {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content */}
+      <div className="flex-1 ml-64">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Profile Section */}
+          {showProfile ? (
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white rounded-2xl shadow-sm border p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Settings</h2>
+                
+                <div className="flex items-start gap-8 mb-8">
+                  {/* Profile Picture */}
+                  <div className="text-center">
+                    {user?.profile_picture ? (
+                      <img src={user.profile_picture} alt="Profile" className="w-32 h-32 rounded-full border-4 border-blue-200 mb-3" />
+                    ) : (
+                      <div className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center mb-3 border-4 border-blue-200">
+                        <User className="w-16 h-16 text-blue-600" />
+                      </div>
+                    )}
+                    <p className="text-sm text-gray-500">Profile Picture</p>
+                  </div>
+
+                  {/* Profile Info */}
+                  <div className="flex-1 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                      <div className="px-4 py-3 bg-gray-50 rounded-lg border">
+                        <p className="text-gray-900">{user?.full_name || 'N/A'}</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <div className="px-4 py-3 bg-gray-50 rounded-lg border">
+                        <p className="text-gray-900">{user?.email || 'N/A'}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                        <div className="px-4 py-3 bg-gray-50 rounded-lg border">
+                          <p className="text-gray-900">{user?.phone || 'N/A'}</p>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Roll Number</label>
+                        <div className="px-4 py-3 bg-gray-50 rounded-lg border">
+                          <p className="text-gray-900">{user?.roll_number || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Institution</label>
+                      <div className="px-4 py-3 bg-gray-50 rounded-lg border">
+                        <p className="text-gray-900">{user?.institution || 'N/A'}</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                      <div className="px-4 py-3 bg-gray-50 rounded-lg border">
+                        <p className="text-gray-900">{user?.department || 'N/A'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stats Section in Profile */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Progress</h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="text-center p-4 bg-blue-50 rounded-lg">
+                      <p className="text-3xl font-bold text-blue-600">{exams.length}</p>
+                      <p className="text-sm text-gray-600 mt-1">Available Tests</p>
+                    </div>
+                    <div className="text-center p-4 bg-green-50 rounded-lg">
+                      <p className="text-3xl font-bold text-green-600">{submissions.length}</p>
+                      <p className="text-sm text-gray-600 mt-1">Completed</p>
+                    </div>
+                    <div className="text-center p-4 bg-amber-50 rounded-lg">
+                      <p className="text-3xl font-bold text-amber-600">{avgPercentage}%</p>
+                      <p className="text-sm text-gray-600 mt-1">Average Score</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Dashboard Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
