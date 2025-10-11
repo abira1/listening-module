@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import FirebaseAuthService from '../../services/FirebaseAuthService';
 import { BackendService } from '../../services/BackendService';
-import { LogOut, User, BookOpen, CheckCircle, Clock, FileText, Award, HeadphonesIcon, BookIcon, PenToolIcon, TrophyIcon, BarChart3, ArrowRight, Star } from 'lucide-react';
+import { LogOut, User, BookOpen, CheckCircle, Clock, FileText, Award, HeadphonesIcon, BookIcon, PenToolIcon, TrophyIcon, BarChart3, ArrowRight, Star, Home, Settings, Bell, HelpCircle } from 'lucide-react';
 import { ProgressChart } from './ProgressChart';
 import { ref, onValue, off } from 'firebase/database';
 import { database } from '../../config/firebase';
