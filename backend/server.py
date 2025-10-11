@@ -1173,6 +1173,53 @@ async def get_exam_status(exam_id: str):
         logger.error(f"Error fetching exam status: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch exam status")
 
+@api_router.put("/admin/exams/{exam_id}/visibility")
+async def toggle_exam_visibility(
+    exam_id: str,
+    is_visible: bool,
+    request: Request
+):
+    """Admin only: Toggle exam visibility to students"""
+    try:
+        # Check admin authentication
+        session_token = request.cookies.get('session_token')
+        if not session_token:
+            raise HTTPException(status_code=401, detail="Not authenticated")
+        
+        # Get user from session
+        user = await AuthService.get_user_from_session(db, session_token)
+        if not user:
+            raise HTTPException(status_code=401, detail="Invalid session")
+        
+        # Check if user is admin
+        if user.get('email') not in ['shahsultanweb@gmail.com', 'aminulislam004474@gmail.com']:
+            raise HTTPException(status_code=403, detail="Not authorized - Admin only")
+        
+        # Find exam
+        exam = await db.exams.find_one({"id": exam_id})
+        if not exam:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        
+        # Update visibility
+        await db.exams.update_one(
+            {"id": exam_id},
+            {"$set": {
+                "is_visible": is_visible,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        # Get updated exam
+        updated_exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+        logger.info(f"Admin {user.get('email')} set exam {exam_id} visibility to {is_visible}")
+        
+        return Exam(**updated_exam)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error toggling exam visibility: {e}")
+        raise HTTPException(status_code=500, detail="Failed to toggle exam visibility")
+
 # Result Publishing Endpoints (Admin only)
 @api_router.put("/admin/exams/{exam_id}/publish-results")
 async def publish_exam_results(
