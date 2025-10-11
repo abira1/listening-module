@@ -300,26 +300,13 @@ export function TestManagement() {
                         <span className="text-xs text-gray-400">-</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <div className="flex space-x-2">
-                        <button onClick={() => handleEditTest(exam.id)} className="text-blue-600 hover:text-blue-900" title="Edit test">
+                    <td className="px-4 py-4 whitespace-nowrap text-center">
+                      <div className="flex justify-center space-x-2">
+                        <button onClick={() => handleEditTest(exam.id)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors" title="Edit test">
                           <Edit className="w-4 h-4" />
                         </button>
-                        {!exam.audio_url && (
-                          <button onClick={() => handleUploadAudio(exam.id)} className="text-orange-600 hover:text-orange-900" title="Upload audio">
-                            <Upload className="w-4 h-4" />
-                          </button>
-                        )}
-                        <button onClick={() => handleDuplicateTest(exam.id)} className="text-gray-600 hover:text-gray-900" title="Duplicate test">
-                          <Copy className="w-4 h-4" />
-                        </button>
-                        {!exam.published && (
-                          <button onClick={() => handlePublishTest(exam.id)} className="text-blue-600 hover:text-blue-900" title="Publish test">
-                            <CheckCircle className="w-4 h-4" />
-                          </button>
-                        )}
                         {!exam.is_demo && (
-                          <button onClick={() => handleDeleteTest(exam.id)} className="text-red-600 hover:text-red-900" title="Delete test">
+                          <button onClick={() => handleDeleteTest(exam.id)} className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete test">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         )}
