@@ -229,12 +229,14 @@ export function TestManagement() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredExams.map((exam) => (
                   <tr key={exam.id} className={`hover:bg-gray-50 ${newlyCreatedExamId === exam.id ? 'bg-blue-50 transition-colors duration-500' : ''}`}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="font-medium text-blue-600 hover:underline cursor-pointer" onClick={() => handleEditTest(exam.id)}>
-                        {exam.title}
-                        {exam.is_demo && <span className="ml-2 px-2 py-0.5 text-xs bg-purple-100 text-purple-800 rounded-full">Demo</span>}
+                    <td className="px-6 py-4">
+                      <div className="max-w-xs">
+                        <div className="font-medium text-blue-600 hover:underline cursor-pointer truncate" onClick={() => handleEditTest(exam.id)} title={exam.title}>
+                          {exam.title}
+                          {exam.is_demo && <span className="ml-2 px-2 py-0.5 text-xs bg-purple-100 text-purple-800 rounded-full">Demo</span>}
+                        </div>
+                        <div className="text-sm text-gray-500 truncate" title={exam.description}>{exam.description}</div>
                       </div>
-                      <div className="text-sm text-gray-500">{exam.description}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {exam.audio_url ? (
