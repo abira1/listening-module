@@ -339,7 +339,7 @@ export function StudentDashboard() {
                 </div>
               </div>
             </div>
-          ) : (
+          ) : activeTab === 'dashboard' ? (
             <>
               {/* Dashboard Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
