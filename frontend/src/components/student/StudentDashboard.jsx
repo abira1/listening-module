@@ -259,10 +259,14 @@ export function StudentDashboard() {
                   {/* Profile Picture */}
                   <div className="text-center">
                     {user?.profile_picture ? (
-                      <img src={user.profile_picture} alt="Profile" className="w-32 h-32 rounded-full border-4 border-blue-200 mb-3" />
+                      <img 
+                        src={user.profile_picture} 
+                        alt="Profile" 
+                        className="w-32 h-32 rounded-full border-4 border-blue-500 mb-3 object-cover shadow-lg" 
+                      />
                     ) : (
-                      <div className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center mb-3 border-4 border-blue-200">
-                        <User className="w-16 h-16 text-blue-600" />
+                      <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-3 border-4 border-blue-500 shadow-lg">
+                        <span className="text-white font-bold text-5xl">{getUserInitials(user?.full_name)}</span>
                       </div>
                     )}
                     <p className="text-sm text-gray-500">Profile Picture</p>
