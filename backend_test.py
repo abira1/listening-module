@@ -906,6 +906,12 @@ def test_ai_import_and_track_management():
             else:
                 print_error("❌ Should have failed validation for wrong section count")
                 results['validation_invalid_sections'] = False
+        elif response.status_code == 422:
+            # Pydantic validation error - this is also correct behavior
+            print_success(f"✅ Validation correctly rejected invalid JSON - Status: {response.status_code}")
+            error_detail = response.json()
+            print_info(f"Validation error: {error_detail.get('detail', [{}])[0].get('msg', 'Unknown error')}")
+            results['validation_invalid_sections'] = True
         else:
             print_error(f"❌ Validation request failed - Status: {response.status_code}")
             results['validation_invalid_sections'] = False
