@@ -49,6 +49,7 @@ async def init_ielts_test():
         "_id": IELTS_EXAM_ID,
         "title": "IELTS Listening Practice Test 1",
         "description": "Complete IELTS Listening test with 4 sections and 40 questions. Duration: 31 minutes audio + 2 minutes review time.",
+        "exam_type": "listening",
         "audio_url": "https://audio.jukehost.co.uk/F9irt6LcsYuP93ulaMo42JfXBEcABytV",
         "audio_source_method": "url",
         "loop_audio": False,
@@ -62,6 +63,7 @@ async def init_ielts_test():
         "is_active": False,
         "started_at": None,
         "stopped_at": None,
+        "is_visible": True,
     }
     
     await db.exams.insert_one(exam_data)
