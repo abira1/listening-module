@@ -6,7 +6,7 @@ Debug script to test question re-indexing after deletion
 import requests
 import json
 
-BACKEND_URL = "https://codearchive-1.preview.emergentagent.com/api"
+BACKEND_URL = "https://ielts-portal.preview.emergentagent.com/api"
 
 def debug_reindex_test():
     print("=== DEBUG: Question Re-indexing Test ===")
