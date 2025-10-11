@@ -136,9 +136,13 @@ export const BackendService = {
     }
   },
 
-  toggleExamVisibility: async (examId, isVisible) => {
+  toggleExamVisibility: async (examId, isVisible, adminEmail) => {
     try {
-      const response = await api.put(`/admin/exams/${examId}/visibility?is_visible=${isVisible}`);
+      const response = await api.put(`/admin/exams/${examId}/visibility?is_visible=${isVisible}`, {}, {
+        headers: {
+          'X-Admin-Email': adminEmail
+        }
+      });
       return response.data;
     } catch (error) {
       console.error('Error toggling exam visibility:', error);
