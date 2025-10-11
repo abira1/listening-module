@@ -884,7 +884,8 @@ def test_ai_import_and_track_management():
     print_info("\n--- Test 4: AI Import Validation - Invalid JSON (Wrong Section Count) ---")
     print_info("Testing: POST /api/tracks/validate-import with 3 sections instead of 4")
     
-    invalid_json = valid_listening_json.copy()
+    import copy
+    invalid_json = copy.deepcopy(valid_listening_json)
     invalid_json["sections"] = invalid_json["sections"][:3]  # Only 3 sections
     
     try:
