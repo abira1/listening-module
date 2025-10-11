@@ -256,6 +256,33 @@ export function TestManagement() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
+                      {exam.published ? (
+                        <button 
+                          onClick={() => handleToggleVisibility(exam.id, exam.is_visible !== false)} 
+                          className={`flex items-center px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                            exam.is_visible !== false 
+                              ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                          title={exam.is_visible !== false ? 'Hide from students' : 'Show to students'}
+                        >
+                          {exam.is_visible !== false ? (
+                            <>
+                              <Eye className="w-3.5 h-3.5 mr-1" />
+                              Visible
+                            </>
+                          ) : (
+                            <>
+                              <EyeOff className="w-3.5 h-3.5 mr-1" />
+                              Hidden
+                            </>
+                          )}
+                        </button>
+                      ) : (
+                        <span className="text-xs text-gray-400">Publish first</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       {exam.published && (
                         exam.is_active ? (
                           <button 
