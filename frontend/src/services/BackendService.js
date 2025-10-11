@@ -264,10 +264,26 @@ export const BackendService = {
   // Submission operations
   createSubmission: async (submissionData) => {
     try {
-      const response = await api.post('/submissions', submissionData);
+      // Use longer timeout for submissions (30 seconds)
+      const response = await api.post('/submissions', submissionData, {
+        timeout: 30000 // 30 seconds
+      });
       return response.data;
     } catch (error) {
       console.error('Error creating submission:', error);
+      console.error('Error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message
+      });
+      
+      // Preserve the error message from backend
+      if (error.response?.data?.detail) {
+        throw new Error(error.response.data.detail);
+      } else if (error.message) {
+        throw new Error(error.message);
+      }
       throw new Error('Failed to create submission');
     }
   },
