@@ -259,7 +259,7 @@ export function TestManagement() {
                       {exam.published ? (
                         <button 
                           onClick={() => handleToggleVisibility(exam.id, exam.is_visible !== false)} 
-                          className={`flex items-center px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                          className={`flex items-center justify-center px-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
                             exam.is_visible !== false 
                               ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -267,45 +267,37 @@ export function TestManagement() {
                           title={exam.is_visible !== false ? 'Hide from students' : 'Show to students'}
                         >
                           {exam.is_visible !== false ? (
-                            <>
-                              <Eye className="w-3.5 h-3.5 mr-1" />
-                              Visible
-                            </>
+                            <Eye className="w-4 h-4" />
                           ) : (
-                            <>
-                              <EyeOff className="w-3.5 h-3.5 mr-1" />
-                              Hidden
-                            </>
+                            <EyeOff className="w-4 h-4" />
                           )}
                         </button>
                       ) : (
-                        <span className="text-xs text-gray-400">Publish first</span>
+                        <span className="text-xs text-gray-400">-</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap text-center">
                       {exam.published && (
                         exam.is_active ? (
                           <button 
                             onClick={() => handleStopTest(exam.id)} 
-                            className="flex items-center px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-md text-xs font-medium transition-colors"
-                            title="Stop test - students will not be able to take it"
+                            className="flex items-center justify-center px-2 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-md text-xs font-medium transition-colors mx-auto"
+                            title="Stop test"
                           >
-                            <PauseIcon className="w-3.5 h-3.5 mr-1" />
-                            Stop
+                            <PauseIcon className="w-4 h-4" />
                           </button>
                         ) : (
                           <button 
                             onClick={() => handleStartTest(exam.id)} 
-                            className="flex items-center px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-md text-xs font-medium transition-colors"
-                            title="Start test - students will be able to take it"
+                            className="flex items-center justify-center px-2 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-md text-xs font-medium transition-colors mx-auto"
+                            title="Start test"
                           >
-                            <PlayIcon className="w-3.5 h-3.5 mr-1" />
-                            Start
+                            <PlayIcon className="w-4 h-4" />
                           </button>
                         )
                       )}
                       {!exam.published && (
-                        <span className="text-xs text-gray-400">Publish first</span>
+                        <span className="text-xs text-gray-400">-</span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
