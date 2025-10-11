@@ -3997,6 +3997,8 @@ if __name__ == "__main__":
             success = run_reading_test_only()
         elif sys.argv[1] == "--writing-test":
             success = run_writing_test_only()
+        elif sys.argv[1] == "--ai-import":
+            success = run_ai_import_tests()
         else:
             print_error(f"Unknown test suite: {sys.argv[1]}")
             print_info("Available test suites:")
@@ -4008,7 +4010,8 @@ if __name__ == "__main__":
             print_info("  --hierarchical-fix    : Run fixed hierarchical submission management tests (review request)")
             print_info("  --reading-test        : Run IELTS Reading Practice Test 1 verification")
             print_info("  --writing-test        : Run IELTS Writing Practice Test 1 verification")
-            print_info("  (no args)             : Run IELTS Writing Practice Test 1 verification (current focus)")
+            print_info("  --ai-import           : Run AI Import and Track Management system tests")
+            print_info("  (no args)             : Run AI Import and Track Management system tests (current focus)")
             sys.exit(1)
     else:
         # Run the writing test as the default for this review request
