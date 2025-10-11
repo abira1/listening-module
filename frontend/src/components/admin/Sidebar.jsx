@@ -16,6 +16,8 @@ export function Sidebar({ isOpen, setIsOpen }) {
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard className="w-5 h-5" /> },
     { name: 'Test Management', path: '/admin/tests', icon: <FileQuestion className="w-5 h-5" /> },
+    { name: 'AI Import', path: '/admin/ai-import', icon: <Upload className="w-5 h-5" /> },
+    { name: 'Track Library', path: '/admin/tracks', icon: <Library className="w-5 h-5" /> },
     { name: 'Students', path: '/admin/students', icon: <Users className="w-5 h-5" /> },
     { name: 'Submissions', path: '/admin/submissions', icon: <ClipboardList className="w-5 h-5" /> },
     { name: 'Analytics', path: '/admin/analytics', icon: <BarChart3 className="w-5 h-5" /> },
