@@ -715,7 +715,7 @@ def test_ai_import_and_track_management():
     created_track_id = None
     created_exam_id = None
     
-    # Sample JSON for testing (valid listening test)
+    # Sample JSON for testing (valid listening test) - exactly as provided in review request
     valid_listening_json = {
         "test_type": "listening",
         "title": "IELTS Listening Practice Test 2",
@@ -728,8 +728,16 @@ def test_ai_import_and_track_management():
                 "title": "Section 1",
                 "instructions": "Complete the notes below.",
                 "questions": [
-                    {"index": i, "type": "short_answer", "prompt": f"Test question {i}", "answer_key": f"answer{i}", "max_words": 2}
-                    for i in range(1, 11)
+                    {"index": 1, "type": "short_answer", "prompt": "Test question 1", "answer_key": "answer1", "max_words": 2},
+                    {"index": 2, "type": "short_answer", "prompt": "Test question 2", "answer_key": "answer2", "max_words": 2},
+                    {"index": 3, "type": "short_answer", "prompt": "Test question 3", "answer_key": "answer3", "max_words": 2},
+                    {"index": 4, "type": "short_answer", "prompt": "Test question 4", "answer_key": "answer4", "max_words": 2},
+                    {"index": 5, "type": "short_answer", "prompt": "Test question 5", "answer_key": "answer5", "max_words": 2},
+                    {"index": 6, "type": "short_answer", "prompt": "Test question 6", "answer_key": "answer6", "max_words": 2},
+                    {"index": 7, "type": "short_answer", "prompt": "Test question 7", "answer_key": "answer7", "max_words": 2},
+                    {"index": 8, "type": "short_answer", "prompt": "Test question 8", "answer_key": "answer8", "max_words": 2},
+                    {"index": 9, "type": "short_answer", "prompt": "Test question 9", "answer_key": "answer9", "max_words": 2},
+                    {"index": 10, "type": "short_answer", "prompt": "Test question 10", "answer_key": "answer10", "max_words": 2}
                 ]
             },
             {
@@ -737,8 +745,16 @@ def test_ai_import_and_track_management():
                 "title": "Section 2",
                 "instructions": "Complete the notes below.",
                 "questions": [
-                    {"index": i, "type": "multiple_choice", "prompt": f"Question {i}", "answer_key": "A", "options": ["A", "B", "C"]}
-                    for i in range(11, 21)
+                    {"index": 11, "type": "multiple_choice", "prompt": "Question 11", "answer_key": "A", "options": ["A", "B", "C"]},
+                    {"index": 12, "type": "multiple_choice", "prompt": "Question 12", "answer_key": "B", "options": ["A", "B", "C"]},
+                    {"index": 13, "type": "multiple_choice", "prompt": "Question 13", "answer_key": "C", "options": ["A", "B", "C"]},
+                    {"index": 14, "type": "multiple_choice", "prompt": "Question 14", "answer_key": "A", "options": ["A", "B", "C"]},
+                    {"index": 15, "type": "multiple_choice", "prompt": "Question 15", "answer_key": "B", "options": ["A", "B", "C"]},
+                    {"index": 16, "type": "multiple_choice", "prompt": "Question 16", "answer_key": "C", "options": ["A", "B", "C"]},
+                    {"index": 17, "type": "multiple_choice", "prompt": "Question 17", "answer_key": "A", "options": ["A", "B", "C"]},
+                    {"index": 18, "type": "multiple_choice", "prompt": "Question 18", "answer_key": "B", "options": ["A", "B", "C"]},
+                    {"index": 19, "type": "multiple_choice", "prompt": "Question 19", "answer_key": "C", "options": ["A", "B", "C"]},
+                    {"index": 20, "type": "multiple_choice", "prompt": "Question 20", "answer_key": "A", "options": ["A", "B", "C"]}
                 ]
             },
             {
@@ -746,8 +762,16 @@ def test_ai_import_and_track_management():
                 "title": "Section 3",
                 "instructions": "Complete the notes below.",
                 "questions": [
-                    {"index": i, "type": "short_answer", "prompt": f"Question {i}", "answer_key": f"answer{i}", "max_words": 2}
-                    for i in range(21, 31)
+                    {"index": 21, "type": "short_answer", "prompt": "Question 21", "answer_key": "answer21", "max_words": 2},
+                    {"index": 22, "type": "short_answer", "prompt": "Question 22", "answer_key": "answer22", "max_words": 2},
+                    {"index": 23, "type": "short_answer", "prompt": "Question 23", "answer_key": "answer23", "max_words": 2},
+                    {"index": 24, "type": "short_answer", "prompt": "Question 24", "answer_key": "answer24", "max_words": 2},
+                    {"index": 25, "type": "short_answer", "prompt": "Question 25", "answer_key": "answer25", "max_words": 2},
+                    {"index": 26, "type": "short_answer", "prompt": "Question 26", "answer_key": "answer26", "max_words": 2},
+                    {"index": 27, "type": "short_answer", "prompt": "Question 27", "answer_key": "answer27", "max_words": 2},
+                    {"index": 28, "type": "short_answer", "prompt": "Question 28", "answer_key": "answer28", "max_words": 2},
+                    {"index": 29, "type": "short_answer", "prompt": "Question 29", "answer_key": "answer29", "max_words": 2},
+                    {"index": 30, "type": "short_answer", "prompt": "Question 30", "answer_key": "answer30", "max_words": 2}
                 ]
             },
             {
@@ -755,8 +779,16 @@ def test_ai_import_and_track_management():
                 "title": "Section 4",
                 "instructions": "Complete the notes below.",
                 "questions": [
-                    {"index": i, "type": "short_answer", "prompt": f"Question {i}", "answer_key": f"answer{i}", "max_words": 2}
-                    for i in range(31, 41)
+                    {"index": 31, "type": "short_answer", "prompt": "Question 31", "answer_key": "answer31", "max_words": 2},
+                    {"index": 32, "type": "short_answer", "prompt": "Question 32", "answer_key": "answer32", "max_words": 2},
+                    {"index": 33, "type": "short_answer", "prompt": "Question 33", "answer_key": "answer33", "max_words": 2},
+                    {"index": 34, "type": "short_answer", "prompt": "Question 34", "answer_key": "answer34", "max_words": 2},
+                    {"index": 35, "type": "short_answer", "prompt": "Question 35", "answer_key": "answer35", "max_words": 2},
+                    {"index": 36, "type": "short_answer", "prompt": "Question 36", "answer_key": "answer36", "max_words": 2},
+                    {"index": 37, "type": "short_answer", "prompt": "Question 37", "answer_key": "answer37", "max_words": 2},
+                    {"index": 38, "type": "short_answer", "prompt": "Question 38", "answer_key": "answer38", "max_words": 2},
+                    {"index": 39, "type": "short_answer", "prompt": "Question 39", "answer_key": "answer39", "max_words": 2},
+                    {"index": 40, "type": "short_answer", "prompt": "Question 40", "answer_key": "answer40", "max_words": 2}
                 ]
             }
         ]
