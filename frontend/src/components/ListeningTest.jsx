@@ -647,7 +647,7 @@ export function ListeningTest({ examId, audioRef }) {
       </header>
 
       {/* Main Content - Add padding-top to account for fixed header */}
-      <main className={`flex-1 p-6 pb-44 ${isHeaderHidden ? 'pt-20' : 'pt-36'}`}>
+      <main className={`flex-1 p-6 pb-20 ${isHeaderHidden ? 'pt-20' : 'pt-36'}`}>
         <div className="max-w-5xl mx-auto">
           <div id="highlightable-content">
             <div className="bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 mb-6">
