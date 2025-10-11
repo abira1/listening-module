@@ -227,16 +227,16 @@ export function ReadingTest({ examId }) {
       );
 
       // Also submit to backend for grading
-      await BackendService.createSubmission({
-        id: submissionId,
+      const backendSubmissionData = {
         exam_id: examId,
-        student_id: user?.uid || 'anonymous',
-        student_name: user?.name || 'Anonymous',
-        student_email: user?.email || null,
+        user_id_or_session: user?.uid || `anonymous_${Date.now()}`,
         answers: answers,
-        submitted_at: new Date().toISOString(),
-        is_published: false,
-      });
+        started_at: new Date().toISOString(),
+        finished_at: new Date().toISOString(),
+        progress_percent: 100,
+      };
+      
+      await BackendService.createSubmission(backendSubmissionData);
 
       setSubmissionComplete(true);
       setExamFinished(true);
