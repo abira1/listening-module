@@ -68,6 +68,7 @@ class ExamUpdate(BaseModel):
     is_active: Optional[bool] = None
     started_at: Optional[str] = None
     stopped_at: Optional[str] = None
+    is_visible: Optional[bool] = None
 
 class Exam(BaseModel):
     model_config = ConfigDict(extra="ignore")
