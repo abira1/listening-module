@@ -106,24 +106,37 @@ export function WritingTest({ examId }) {
     setExamFinished(true);
 
     try {
-      // Prepare submission data
-      const submissionData = {
+      // Prepare submission data for backend
+      const backendSubmissionData = {
         exam_id: examId,
-        student_id: user?.uid || 'anonymous',
-        student_email: user?.email || 'anonymous@example.com',
-        student_name: user?.displayName || user?.name || 'Anonymous Student',
+        user_id_or_session: user?.uid || `anonymous_${Date.now()}`,
         answers: answers,
-        submitted_at: new Date().toISOString(),
-        time_taken: examData.exam.duration_seconds - timeRemaining,
+        started_at: new Date().toISOString(),
+        finished_at: new Date().toISOString(),
+        progress_percent: 100,
       };
+
+      // Save to backend first (includes auto-grading)
+      const gradedSubmission = await BackendService.createSubmission(backendSubmissionData);
 
       // Save to Firebase for real-time updates
       if (isAuthenticated && user) {
-        await FirebaseAuthService.createSubmission(examId, user.uid, submissionData);
+        const firebaseSubmissionData = {
+          examId: examId,
+          examTitle: examData?.exam?.title || 'IELTS Writing Test',
+          studentUid: user.uid,
+          studentName: user.displayName || user.name,
+          studentEmail: user.email,
+          answers: answers,
+          score: null, // Score hidden until published by admin
+          totalQuestions: gradedSubmission.total_questions,
+          percentage: null,
+          startedAt: backendSubmissionData.started_at,
+          finishedAt: backendSubmissionData.finished_at,
+          isPublished: false
+        };
+        await FirebaseAuthService.createSubmission(examId, user.uid, firebaseSubmissionData);
       }
-
-      // Also save to backend
-      await BackendService.createSubmission(submissionData);
 
       setSubmissionComplete(true);
       
