@@ -309,13 +309,16 @@ export function ListeningTest({ examId, audioRef }) {
       setSubmissionComplete(true);
     } catch (error) {
       console.error('Error submitting exam:', error);
+      console.error('Error details:', error.message, error.response);
       
       // Check if it's a duplicate submission error
       if (error.message && error.message.includes('already submitted')) {
         alert('You have already submitted this exam. Each student can attempt an exam only once.');
         navigate(isAuthenticated ? '/student/dashboard' : '/');
       } else {
-        alert('Failed to submit test. Please try again.');
+        // Show detailed error message
+        const errorMsg = error.message || 'Failed to submit test. Please try again.';
+        alert(`Error submitting test: ${errorMsg}\n\nPlease contact your instructor if the problem persists.`);
         setIsSubmitting(false);
         setExamFinished(false);
       }
