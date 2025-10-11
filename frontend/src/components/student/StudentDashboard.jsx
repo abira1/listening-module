@@ -701,7 +701,7 @@ export function StudentDashboard() {
             <ProgressChart submissions={submissions} />
           </div>
         )}
-            </>
+        </>
           )}
         </main>
       </div>
