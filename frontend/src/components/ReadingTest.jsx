@@ -493,7 +493,7 @@ export function ReadingTest({ examId }) {
       </header>
 
       {/* Main Content - Split Screen with Passage on left, Questions on right */}
-      <main className="flex-1 flex pb-32" style={{ paddingTop: isHeaderHidden ? '80px' : '136px' }} id="highlightable-content">
+      <main className="flex-1 flex pb-20" style={{ paddingTop: isHeaderHidden ? '80px' : '136px' }} id="highlightable-content">
         {/* Left Side: Reading Passage - 60% width */}
         <div className="w-[60%] bg-white border-r-2 border-gray-300 overflow-y-auto">
           <div className="p-8">
