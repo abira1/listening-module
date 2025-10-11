@@ -25,6 +25,8 @@ export function AdminRouter() {
         <Route path="/tests/:examId/questions" element={<AdminLayout><QuestionManager /></AdminLayout>} />
         <Route path="/students" element={<AdminLayout><StudentManagement /></AdminLayout>} />
         <Route path="/submissions" element={<AdminLayout><SubmissionManagement /></AdminLayout>} />
+        <Route path="/ai-import" element={<AdminLayout><AIImport /></AdminLayout>} />
+        <Route path="/tracks" element={<AdminLayout><TrackLibrary /></AdminLayout>} />
         <Route path="/analytics" element={<AdminLayout><Analytics /></AdminLayout>} />
         <Route path="/settings" element={<AdminLayout><Settings /></AdminLayout>} />
       </Route>
