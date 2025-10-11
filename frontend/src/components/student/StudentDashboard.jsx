@@ -701,7 +701,10 @@ export function StudentDashboard() {
             <ProgressChart submissions={submissions} />
           </div>
         )}
-      </main>
+            </>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
