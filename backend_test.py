@@ -698,6 +698,530 @@ def test_exam_cleanup(exam_id):
         print_error(f"Exam deletion request failed: {str(e)}")
         return False
 
+def test_ai_import_and_track_management():
+    """Test AI Import and Track Management System - Complete Test Suite"""
+    print_test_header("AI Import and Track Management System - Complete Test Suite")
+    
+    print_info("Testing newly implemented AI Import and Track Management system:")
+    print_info("1. Track Listing (GET /api/tracks)")
+    print_info("2. AI Import Validation (POST /api/tracks/validate-import)")
+    print_info("3. Track Creation from AI (POST /api/tracks/import-from-ai)")
+    print_info("4. Track Details (GET /api/tracks/{track_id})")
+    print_info("5. Track Update (PUT /api/tracks/{track_id})")
+    print_info("6. Track Deletion (DELETE /api/tracks/{track_id})")
+    print_info("")
+    
+    results = {}
+    created_track_id = None
+    created_exam_id = None
+    
+    # Sample JSON for testing (valid listening test)
+    valid_listening_json = {
+        "test_type": "listening",
+        "title": "IELTS Listening Practice Test 2",
+        "description": "Complete IELTS Listening test with 4 sections and 40 questions",
+        "duration_seconds": 2004,
+        "audio_url": "https://audio.jukehost.co.uk/F9irt6LcsYuP93ulaMo42JfXBEcABytV",
+        "sections": [
+            {
+                "index": 1,
+                "title": "Section 1",
+                "instructions": "Complete the notes below.",
+                "questions": [
+                    {"index": i, "type": "short_answer", "prompt": f"Test question {i}", "answer_key": f"answer{i}", "max_words": 2}
+                    for i in range(1, 11)
+                ]
+            },
+            {
+                "index": 2,
+                "title": "Section 2",
+                "instructions": "Complete the notes below.",
+                "questions": [
+                    {"index": i, "type": "multiple_choice", "prompt": f"Question {i}", "answer_key": "A", "options": ["A", "B", "C"]}
+                    for i in range(11, 21)
+                ]
+            },
+            {
+                "index": 3,
+                "title": "Section 3",
+                "instructions": "Complete the notes below.",
+                "questions": [
+                    {"index": i, "type": "short_answer", "prompt": f"Question {i}", "answer_key": f"answer{i}", "max_words": 2}
+                    for i in range(21, 31)
+                ]
+            },
+            {
+                "index": 4,
+                "title": "Section 4",
+                "instructions": "Complete the notes below.",
+                "questions": [
+                    {"index": i, "type": "short_answer", "prompt": f"Question {i}", "answer_key": f"answer{i}", "max_words": 2}
+                    for i in range(31, 41)
+                ]
+            }
+        ]
+    }
+    
+    # Test 1: Track Listing (GET /api/tracks)
+    print_info("\n--- Test 1: Track Listing ---")
+    print_info("Testing: GET /api/tracks")
+    print_info("Expected: Should return empty array initially or existing tracks")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/tracks", timeout=10)
+        if response.status_code == 200:
+            tracks = response.json()
+            print_success(f"✅ Track listing works - Status: {response.status_code}")
+            print_info(f"Found {len(tracks)} existing tracks")
+            
+            if tracks:
+                for i, track in enumerate(tracks[:3]):  # Show first 3 tracks
+                    print_info(f"  Track {i+1}: {track.get('title', 'No title')} (Type: {track.get('track_type', 'Unknown')})")
+            else:
+                print_info("  No tracks found (this is normal for initial state)")
+            
+            results['track_listing'] = True
+        else:
+            print_error(f"❌ Track listing failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['track_listing'] = False
+    except Exception as e:
+        print_error(f"❌ Track listing request error: {str(e)}")
+        results['track_listing'] = False
+    
+    # Test 2: Track Listing with Filters
+    print_info("\n--- Test 2: Track Listing with Filters ---")
+    print_info("Testing: GET /api/tracks?track_type=listening&status=published")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/tracks?track_type=listening&status=published", timeout=10)
+        if response.status_code == 200:
+            filtered_tracks = response.json()
+            print_success(f"✅ Filtered track listing works - Status: {response.status_code}")
+            print_info(f"Found {len(filtered_tracks)} listening tracks with published status")
+            results['track_listing_filtered'] = True
+        else:
+            print_error(f"❌ Filtered track listing failed - Status: {response.status_code}")
+            results['track_listing_filtered'] = False
+    except Exception as e:
+        print_error(f"❌ Filtered track listing error: {str(e)}")
+        results['track_listing_filtered'] = False
+    
+    # Test 3: AI Import Validation - Valid JSON
+    print_info("\n--- Test 3: AI Import Validation - Valid JSON ---")
+    print_info("Testing: POST /api/tracks/validate-import")
+    print_info("Expected: Should validate successfully with 4 sections, 40 questions")
+    
+    try:
+        response = requests.post(
+            f"{BACKEND_URL}/tracks/validate-import",
+            json=valid_listening_json,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            validation_result = response.json()
+            print_success(f"✅ Validation successful - Status: {response.status_code}")
+            print_info(f"Valid: {validation_result.get('valid')}")
+            print_info(f"Test type: {validation_result.get('test_type')}")
+            print_info(f"Total questions: {validation_result.get('total_questions')}")
+            print_info(f"Total sections: {validation_result.get('total_sections')}")
+            print_info(f"Duration: {validation_result.get('duration_minutes')} minutes")
+            print_info(f"Has audio: {validation_result.get('has_audio')}")
+            
+            # Verify validation results
+            if (validation_result.get('valid') == True and 
+                validation_result.get('total_questions') == 40 and
+                validation_result.get('total_sections') == 4 and
+                validation_result.get('test_type') == 'listening'):
+                print_success("✅ Validation results are correct")
+                results['validation_valid'] = True
+            else:
+                print_error("❌ Validation results are incorrect")
+                results['validation_valid'] = False
+        else:
+            print_error(f"❌ Validation failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['validation_valid'] = False
+    except Exception as e:
+        print_error(f"❌ Validation request error: {str(e)}")
+        results['validation_valid'] = False
+    
+    # Test 4: AI Import Validation - Invalid JSON (Wrong Section Count)
+    print_info("\n--- Test 4: AI Import Validation - Invalid JSON (Wrong Section Count) ---")
+    print_info("Testing: POST /api/tracks/validate-import with 3 sections instead of 4")
+    
+    invalid_json = valid_listening_json.copy()
+    invalid_json["sections"] = invalid_json["sections"][:3]  # Only 3 sections
+    
+    try:
+        response = requests.post(
+            f"{BACKEND_URL}/tracks/validate-import",
+            json=invalid_json,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            validation_result = response.json()
+            print_success(f"✅ Validation response received - Status: {response.status_code}")
+            
+            if validation_result.get('valid') == False:
+                print_success("✅ Correctly identified invalid JSON (wrong section count)")
+                print_info(f"Errors: {validation_result.get('errors', [])}")
+                results['validation_invalid_sections'] = True
+            else:
+                print_error("❌ Should have failed validation for wrong section count")
+                results['validation_invalid_sections'] = False
+        else:
+            print_error(f"❌ Validation request failed - Status: {response.status_code}")
+            results['validation_invalid_sections'] = False
+    except Exception as e:
+        print_error(f"❌ Invalid validation request error: {str(e)}")
+        results['validation_invalid_sections'] = False
+    
+    # Test 5: AI Import Validation - Invalid JSON (Wrong Question Count)
+    print_info("\n--- Test 5: AI Import Validation - Invalid JSON (Wrong Question Count) ---")
+    print_info("Testing: POST /api/tracks/validate-import with 35 questions instead of 40")
+    
+    invalid_json_questions = valid_listening_json.copy()
+    # Remove 5 questions from last section
+    invalid_json_questions["sections"][3]["questions"] = invalid_json_questions["sections"][3]["questions"][:5]
+    
+    try:
+        response = requests.post(
+            f"{BACKEND_URL}/tracks/validate-import",
+            json=invalid_json_questions,
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            validation_result = response.json()
+            print_success(f"✅ Validation response received - Status: {response.status_code}")
+            
+            if validation_result.get('valid') == False:
+                print_success("✅ Correctly identified invalid JSON (wrong question count)")
+                print_info(f"Errors: {validation_result.get('errors', [])}")
+                results['validation_invalid_questions'] = True
+            else:
+                print_error("❌ Should have failed validation for wrong question count")
+                results['validation_invalid_questions'] = False
+        else:
+            print_error(f"❌ Validation request failed - Status: {response.status_code}")
+            results['validation_invalid_questions'] = False
+    except Exception as e:
+        print_error(f"❌ Invalid validation request error: {str(e)}")
+        results['validation_invalid_questions'] = False
+    
+    # Test 6: Track Creation from AI
+    print_info("\n--- Test 6: Track Creation from AI ---")
+    print_info("Testing: POST /api/tracks/import-from-ai")
+    print_info("Expected: Should create complete listening track with exam, sections, questions, and track record")
+    
+    try:
+        response = requests.post(
+            f"{BACKEND_URL}/tracks/import-from-ai",
+            json=valid_listening_json,
+            headers={"Content-Type": "application/json"},
+            timeout=15
+        )
+        
+        if response.status_code == 200:
+            creation_result = response.json()
+            print_success(f"✅ Track creation successful - Status: {response.status_code}")
+            print_info(f"Success: {creation_result.get('success')}")
+            print_info(f"Track ID: {creation_result.get('track_id')}")
+            print_info(f"Exam ID: {creation_result.get('exam_id')}")
+            print_info(f"Questions created: {creation_result.get('questions_created')}")
+            print_info(f"Sections created: {creation_result.get('sections_created')}")
+            print_info(f"Message: {creation_result.get('message')}")
+            
+            # Verify creation results
+            if (creation_result.get('success') == True and 
+                creation_result.get('questions_created') == 40 and
+                creation_result.get('sections_created') == 4):
+                print_success("✅ Track creation results are correct")
+                created_track_id = creation_result.get('track_id')
+                created_exam_id = creation_result.get('exam_id')
+                results['track_creation'] = True
+            else:
+                print_error("❌ Track creation results are incorrect")
+                results['track_creation'] = False
+        else:
+            print_error(f"❌ Track creation failed - Status: {response.status_code}")
+            print_error(f"Response: {response.text}")
+            results['track_creation'] = False
+    except Exception as e:
+        print_error(f"❌ Track creation request error: {str(e)}")
+        results['track_creation'] = False
+    
+    # Test 7: Verify Exam Creation
+    print_info("\n--- Test 7: Verify Exam Creation ---")
+    if created_exam_id:
+        print_info(f"Testing: GET /api/exams/{created_exam_id}")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/exams/{created_exam_id}", timeout=10)
+            if response.status_code == 200:
+                exam_data = response.json()
+                print_success(f"✅ Exam created successfully - Status: {response.status_code}")
+                print_info(f"Exam title: {exam_data.get('title')}")
+                print_info(f"Exam type: {exam_data.get('exam_type')}")
+                print_info(f"Question count: {exam_data.get('question_count')}")
+                print_info(f"Duration: {exam_data.get('duration_seconds')} seconds")
+                print_info(f"Published: {exam_data.get('published')}")
+                print_info(f"Audio URL: {exam_data.get('audio_url', 'None')}")
+                
+                # Verify exam details
+                if (exam_data.get('exam_type') == 'listening' and
+                    exam_data.get('question_count') == 40 and
+                    exam_data.get('published') == True):
+                    print_success("✅ Exam details are correct")
+                    results['exam_verification'] = True
+                else:
+                    print_error("❌ Exam details are incorrect")
+                    results['exam_verification'] = False
+            else:
+                print_error(f"❌ Exam verification failed - Status: {response.status_code}")
+                results['exam_verification'] = False
+        except Exception as e:
+            print_error(f"❌ Exam verification error: {str(e)}")
+            results['exam_verification'] = False
+    else:
+        print_error("❌ No exam ID available for verification")
+        results['exam_verification'] = False
+    
+    # Test 8: Verify Question Indices are Sequential
+    print_info("\n--- Test 8: Verify Question Indices are Sequential ---")
+    if created_exam_id:
+        print_info(f"Testing: GET /api/exams/{created_exam_id}/full")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/exams/{created_exam_id}/full", timeout=10)
+            if response.status_code == 200:
+                full_exam = response.json()
+                print_success(f"✅ Full exam data retrieved - Status: {response.status_code}")
+                
+                # Check question indices
+                all_questions = []
+                for section in full_exam.get('sections', []):
+                    all_questions.extend(section.get('questions', []))
+                
+                indices = [q.get('index') for q in all_questions]
+                indices.sort()
+                expected_indices = list(range(1, 41))  # 1 to 40
+                
+                print_info(f"Found {len(all_questions)} questions")
+                print_info(f"Question indices: {indices[:10]}...{indices[-10:] if len(indices) > 10 else indices}")
+                
+                if indices == expected_indices:
+                    print_success("✅ Question indices are sequential (1-40)")
+                    results['question_indices'] = True
+                else:
+                    print_error(f"❌ Question indices are not sequential. Expected: 1-40, Got: {indices}")
+                    results['question_indices'] = False
+            else:
+                print_error(f"❌ Full exam data retrieval failed - Status: {response.status_code}")
+                results['question_indices'] = False
+        except Exception as e:
+            print_error(f"❌ Question indices verification error: {str(e)}")
+            results['question_indices'] = False
+    else:
+        print_error("❌ No exam ID available for question verification")
+        results['question_indices'] = False
+    
+    # Test 9: Track Details
+    print_info("\n--- Test 9: Track Details ---")
+    if created_track_id:
+        print_info(f"Testing: GET /api/tracks/{created_track_id}")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/tracks/{created_track_id}", timeout=10)
+            if response.status_code == 200:
+                track_data = response.json()
+                print_success(f"✅ Track details retrieved - Status: {response.status_code}")
+                print_info(f"Track ID: {track_data.get('id')}")
+                print_info(f"Track type: {track_data.get('track_type')}")
+                print_info(f"Title: {track_data.get('title')}")
+                print_info(f"Status: {track_data.get('status')}")
+                print_info(f"Exam ID: {track_data.get('exam_id')}")
+                
+                # Check exam_details are included
+                exam_details = track_data.get('exam_details')
+                if exam_details:
+                    print_success("✅ Exam details are included in track response")
+                    print_info(f"Exam published: {exam_details.get('published')}")
+                    print_info(f"Exam active: {exam_details.get('is_active')}")
+                    results['track_details'] = True
+                else:
+                    print_error("❌ Exam details missing from track response")
+                    results['track_details'] = False
+            else:
+                print_error(f"❌ Track details retrieval failed - Status: {response.status_code}")
+                results['track_details'] = False
+        except Exception as e:
+            print_error(f"❌ Track details error: {str(e)}")
+            results['track_details'] = False
+    else:
+        print_error("❌ No track ID available for details test")
+        results['track_details'] = False
+    
+    # Test 10: Track Update
+    print_info("\n--- Test 10: Track Update ---")
+    if created_track_id:
+        print_info(f"Testing: PUT /api/tracks/{created_track_id}")
+        
+        update_data = {
+            "title": "Updated IELTS Listening Practice Test 2",
+            "description": "Updated description for the listening test",
+            "status": "published"
+        }
+        
+        try:
+            response = requests.put(
+                f"{BACKEND_URL}/tracks/{created_track_id}",
+                json=update_data,
+                headers={"Content-Type": "application/json"},
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                update_result = response.json()
+                print_success(f"✅ Track update successful - Status: {response.status_code}")
+                print_info(f"Success: {update_result.get('success')}")
+                print_info(f"Message: {update_result.get('message')}")
+                
+                # Verify update by getting track details again
+                verify_response = requests.get(f"{BACKEND_URL}/tracks/{created_track_id}", timeout=10)
+                if verify_response.status_code == 200:
+                    updated_track = verify_response.json()
+                    if updated_track.get('title') == update_data['title']:
+                        print_success("✅ Track title updated correctly")
+                        results['track_update'] = True
+                    else:
+                        print_error("❌ Track title not updated correctly")
+                        results['track_update'] = False
+                else:
+                    print_error("❌ Could not verify track update")
+                    results['track_update'] = False
+            else:
+                print_error(f"❌ Track update failed - Status: {response.status_code}")
+                print_error(f"Response: {response.text}")
+                results['track_update'] = False
+        except Exception as e:
+            print_error(f"❌ Track update error: {str(e)}")
+            results['track_update'] = False
+    else:
+        print_error("❌ No track ID available for update test")
+        results['track_update'] = False
+    
+    # Test 11: Verify Exam Title Also Updated
+    print_info("\n--- Test 11: Verify Exam Title Also Updated ---")
+    if created_exam_id:
+        print_info(f"Testing: GET /api/exams/{created_exam_id}")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/exams/{created_exam_id}", timeout=10)
+            if response.status_code == 200:
+                exam_data = response.json()
+                if exam_data.get('title') == "Updated IELTS Listening Practice Test 2":
+                    print_success("✅ Exam title also updated when track was updated")
+                    results['exam_title_sync'] = True
+                else:
+                    print_error(f"❌ Exam title not synced. Got: {exam_data.get('title')}")
+                    results['exam_title_sync'] = False
+            else:
+                print_error(f"❌ Exam title verification failed - Status: {response.status_code}")
+                results['exam_title_sync'] = False
+        except Exception as e:
+            print_error(f"❌ Exam title sync verification error: {str(e)}")
+            results['exam_title_sync'] = False
+    else:
+        print_error("❌ No exam ID available for title sync verification")
+        results['exam_title_sync'] = False
+    
+    # Test 12: Track Deletion (Soft Delete)
+    print_info("\n--- Test 12: Track Deletion (Soft Delete) ---")
+    if created_track_id:
+        print_info(f"Testing: DELETE /api/tracks/{created_track_id}")
+        
+        try:
+            response = requests.delete(f"{BACKEND_URL}/tracks/{created_track_id}", timeout=10)
+            
+            if response.status_code == 200:
+                delete_result = response.json()
+                print_success(f"✅ Track deletion successful - Status: {response.status_code}")
+                print_info(f"Success: {delete_result.get('success')}")
+                print_info(f"Message: {delete_result.get('message')}")
+                
+                # Verify track is archived (soft deleted)
+                verify_response = requests.get(f"{BACKEND_URL}/tracks/{created_track_id}", timeout=10)
+                if verify_response.status_code == 200:
+                    archived_track = verify_response.json()
+                    if archived_track.get('status') == 'archived':
+                        print_success("✅ Track status changed to 'archived' (soft delete)")
+                        results['track_deletion'] = True
+                    else:
+                        print_error(f"❌ Track status not changed to archived. Got: {archived_track.get('status')}")
+                        results['track_deletion'] = False
+                else:
+                    print_error("❌ Could not verify track deletion")
+                    results['track_deletion'] = False
+            else:
+                print_error(f"❌ Track deletion failed - Status: {response.status_code}")
+                print_error(f"Response: {response.text}")
+                results['track_deletion'] = False
+        except Exception as e:
+            print_error(f"❌ Track deletion error: {str(e)}")
+            results['track_deletion'] = False
+    else:
+        print_error("❌ No track ID available for deletion test")
+        results['track_deletion'] = False
+    
+    # Test 13: Test 404 for Non-existent Track
+    print_info("\n--- Test 13: Test 404 for Non-existent Track ---")
+    print_info("Testing: GET /api/tracks/non-existent-track-id")
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/tracks/non-existent-track-id", timeout=10)
+        if response.status_code == 404:
+            print_success("✅ Correctly returns 404 for non-existent track")
+            results['track_404'] = True
+        else:
+            print_error(f"❌ Should return 404 for non-existent track. Got: {response.status_code}")
+            results['track_404'] = False
+    except Exception as e:
+        print_error(f"❌ Non-existent track test error: {str(e)}")
+        results['track_404'] = False
+    
+    # Summary
+    print_info("\n--- AI Import and Track Management System Test Summary ---")
+    passed_tests = sum(1 for result in results.values() if result)
+    total_tests = len(results)
+    
+    if passed_tests == total_tests:
+        print_success(f"🎉 ALL AI IMPORT AND TRACK MANAGEMENT TESTS PASSED ({passed_tests}/{total_tests})")
+        print_success("✅ Track listing works with and without filters")
+        print_success("✅ AI import validation correctly identifies valid and invalid JSON")
+        print_success("✅ Track creation from AI creates complete exam structure")
+        print_success("✅ Question indices are sequential and properly indexed")
+        print_success("✅ Track details include exam information")
+        print_success("✅ Track updates sync with exam title/description")
+        print_success("✅ Track deletion performs soft delete (archive)")
+        print_success("✅ Error handling works correctly (404 for non-existent tracks)")
+        print_success("✅ AI Import and Track Management system is fully operational!")
+    else:
+        print_error(f"❌ SOME TESTS FAILED ({passed_tests}/{total_tests})")
+        for test_name, result in results.items():
+            status = "PASS" if result else "FAIL"
+            color = Colors.GREEN if result else Colors.RED
+            print(f"  {color}{status} - {test_name.replace('_', ' ').title()}{Colors.END}")
+    
+    return results
+
+
 def run_all_tests():
     """Run all backend API tests in sequence"""
     print(f"{Colors.BOLD}{Colors.BLUE}")
