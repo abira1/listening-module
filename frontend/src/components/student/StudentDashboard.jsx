@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import FirebaseAuthService from '../../services/FirebaseAuthService';
 import { BackendService } from '../../services/BackendService';
-import { LogOut, User, BookOpen, CheckCircle, Clock, FileText, Award, HeadphonesIcon, BookIcon, PenToolIcon, TrophyIcon, BarChart3, ArrowRight, Star, Home, Settings, Bell, HelpCircle } from 'lucide-react';
+import { LogOut, User, BookOpen, CheckCircle, Clock, FileText, Award, HeadphonesIcon, BookIcon, PenToolIcon, TrophyIcon, BarChart3, ArrowRight, Star, Home, Settings, Bell, HelpCircle, Calendar } from 'lucide-react';
 import { ProgressChart } from './ProgressChart';
 import { ref, onValue, off } from 'firebase/database';
 import { database } from '../../config/firebase';
@@ -18,6 +18,14 @@ export function StudentDashboard() {
   const [examStatuses, setExamStatuses] = useState({});
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showProfile, setShowProfile] = useState(false);
+
+  // Helper function to get user initials
+  const getUserInitials = (name) => {
+    if (!name) return 'U';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  };
 
   useEffect(() => {
     if (!authLoading && !user) {
