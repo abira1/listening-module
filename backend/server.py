@@ -1180,21 +1180,9 @@ async def toggle_exam_visibility(
     request: Request
 ):
     """Admin only: Toggle exam visibility to students"""
+    require_admin_access(request)
+    
     try:
-        # Check admin authentication
-        session_token = request.cookies.get('session_token')
-        if not session_token:
-            raise HTTPException(status_code=401, detail="Not authenticated")
-        
-        # Get user from session
-        user = await AuthService.get_user_from_session(db, session_token)
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid session")
-        
-        # Check if user is admin
-        if user.get('email') not in ['shahsultanweb@gmail.com', 'aminulislam004474@gmail.com']:
-            raise HTTPException(status_code=403, detail="Not authorized - Admin only")
-        
         # Find exam
         exam = await db.exams.find_one({"id": exam_id})
         if not exam:
@@ -1211,7 +1199,8 @@ async def toggle_exam_visibility(
         
         # Get updated exam
         updated_exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
-        logger.info(f"Admin {user.get('email')} set exam {exam_id} visibility to {is_visible}")
+        admin_email = request.headers.get("X-Admin-Email", "unknown")
+        logger.info(f"Admin {admin_email} set exam {exam_id} visibility to {is_visible}")
         
         return Exam(**updated_exam)
     except HTTPException:
