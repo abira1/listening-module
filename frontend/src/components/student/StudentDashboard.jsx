@@ -144,38 +144,92 @@ export function StudentDashboard() {
   const avgPercentage = totalQuestions > 0 ? Math.round((avgScore / totalQuestions) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Bar */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <img
-                src="https://customer-assets.emergentagent.com/job_ce28ff48-be0c-4e05-8c09-33992c069cda/artifacts/xkwz06jy_Shah-Sultan-Logo-2.png"
-                alt="Shah Sultan's IELTS Academy"
-                className="h-10"
-              />
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user?.full_name}</p>
-                <p className="text-xs text-gray-500">{user?.institution || 'Student'}</p>
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
+      <div className="w-64 bg-white border-r flex flex-col fixed h-full">
+        {/* Logo */}
+        <div className="p-6 border-b">
+          <img
+            src="https://customer-assets.emergentagent.com/job_ce28ff48-be0c-4e05-8c09-33992c069cda/artifacts/xkwz06jy_Shah-Sultan-Logo-2.png"
+            alt="Shah Sultan's IELTS Academy"
+            className="h-12 mx-auto"
+          />
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4">
+          <div className="space-y-1">
+            <button
+              onClick={() => { setActiveTab('dashboard'); setShowProfile(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                activeTab === 'dashboard' && !showProfile
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <Home className="w-5 h-5" />
+              <span className="font-medium">Dashboard</span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('tests'); setShowProfile(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                activeTab === 'tests' && !showProfile
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <BookOpen className="w-5 h-5" />
+              <span className="font-medium">Mock Tests</span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('results'); setShowProfile(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                activeTab === 'results' && !showProfile
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <BarChart3 className="w-5 h-5" />
+              <span className="font-medium">Results</span>
+            </button>
+
+            <button
+              onClick={() => setShowProfile(true)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                showProfile
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <Settings className="w-5 h-5" />
+              <span className="font-medium">Profile</span>
+            </button>
+          </div>
+        </nav>
+
+        {/* User Profile Section */}
+        <div className="p-4 border-t">
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            {user?.profile_picture ? (
+              <img src={user.profile_picture} alt="Profile" className="w-10 h-10 rounded-full border-2 border-blue-200" />
+            ) : (
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-blue-600" />
               </div>
-              {user?.profile_picture ? (
-                <img src={user.profile_picture} alt="Profile" className="w-10 h-10 rounded-full border-2 border-blue-200" />
-              ) : (
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-blue-600" />
-                </div>
-              )}
-              <button
-                onClick={handleLogout}
-                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                title="Logout"
-              >
-                <LogOut className="w-5 h-5" />
-              </button>
+            )}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 truncate">{user?.full_name}</p>
+              <p className="text-xs text-gray-500 truncate">{user?.email}</p>
             </div>
+            <button
+              onClick={handleLogout}
+              className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
