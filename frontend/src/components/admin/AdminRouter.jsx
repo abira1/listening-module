@@ -11,6 +11,8 @@ import { Analytics } from './Analytics';
 import { Settings } from './Settings';
 import { AdminLogin } from './AdminLogin';
 import { ProtectedRoute } from './ProtectedRoute';
+import { AIImport } from './AIImport';
+import { TrackLibrary } from './TrackLibrary';
 
 export function AdminRouter() {
   return (
