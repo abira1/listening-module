@@ -277,7 +277,7 @@ export function StudentDashboard() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                       <div className="px-4 py-3 bg-gray-50 rounded-lg border">
-                        <p className="text-gray-900">{user?.full_name || 'N/A'}</p>
+                        <p className="text-gray-900">{user?.full_name || user?.name || 'N/A'}</p>
                       </div>
                     </div>
 
