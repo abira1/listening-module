@@ -923,7 +923,8 @@ def test_ai_import_and_track_management():
     print_info("\n--- Test 5: AI Import Validation - Invalid JSON (Wrong Question Count) ---")
     print_info("Testing: POST /api/tracks/validate-import with 35 questions instead of 40")
     
-    invalid_json_questions = valid_listening_json.copy()
+    import copy
+    invalid_json_questions = copy.deepcopy(valid_listening_json)
     # Remove 5 questions from last section
     invalid_json_questions["sections"][3]["questions"] = invalid_json_questions["sections"][3]["questions"][:5]
     
