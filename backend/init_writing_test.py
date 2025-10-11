@@ -63,6 +63,7 @@ async def init_writing_test():
         "is_active": False,
         "started_at": None,
         "stopped_at": None,
+        "is_visible": True,
     }
     
     await db.exams.insert_one(exam_data)
