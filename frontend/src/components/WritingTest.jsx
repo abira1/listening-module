@@ -364,7 +364,7 @@ export function WritingTest({ examId }) {
       </header>
 
       {/* Main Content - Horizontal Split Layout */}
-      <main className="flex-1 flex pb-[100px]" style={{ paddingTop: isHeaderHidden ? '80px' : '136px' }} id="highlightable-content">
+      <main className="flex-1 flex pb-[60px]" style={{ paddingTop: isHeaderHidden ? '80px' : '136px' }} id="highlightable-content">
         {/* Left Side: Task Prompt - 40% width */}
         <div className="w-[40%] bg-white border-r-2 border-gray-300 overflow-y-auto">
           <div className="p-8">
