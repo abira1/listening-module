@@ -721,7 +721,7 @@ export function ListeningTest({ examId, audioRef }) {
       <footer 
         role="navigation" 
         className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg"
-        style={{ height: '100px' }}
+        style={{ height: '60px' }}
       >
         <h1 className="reader-only">Navigation</h1>
         
