@@ -1304,10 +1304,22 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_db():
-    """Initialize IELTS tests on startup"""
+    """Initialize IELTS tests and database indexes on startup"""
+    # Initialize default tests
     await init_ielts_test()
     await init_reading_test()
     await init_writing_test()
+    
+    # Create indexes for new collections
+    try:
+        # Tracks indexes
+        await db.tracks.create_index([("track_type", 1), ("status", 1)])
+        await db.tracks.create_index([("created_by", 1)])
+        await db.tracks.create_index([("exam_id", 1)])
+        
+        logger.info("Database indexes created successfully")
+    except Exception as e:
+        logger.warning(f"Error creating indexes: {e}")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
