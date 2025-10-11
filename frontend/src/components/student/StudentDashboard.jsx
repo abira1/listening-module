@@ -711,6 +711,12 @@ export function StudentDashboard() {
           </div>
         </div>
 
+        {/* Progress Chart - Full Width on Dashboard */}
+        {submissions.length > 0 && (
+          <div className="mt-6">
+            <ProgressChart submissions={submissions} />
+          </div>
+        )}
         </>
           ) : activeTab === 'tests' ? (
             <>
