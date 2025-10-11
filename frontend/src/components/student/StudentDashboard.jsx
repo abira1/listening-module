@@ -374,24 +374,10 @@ export function StudentDashboard() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Mock Tests Section */}
-            <div className="bg-white rounded-2xl shadow-sm border">
-              <div className="p-6 border-b">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <TrophyIcon className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-gray-900">IELTS Mock Tests</h2>
-                      <p className="text-sm text-gray-500">Choose a test to begin practice</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-6 space-y-6">
+          {/* Right Column - Stats & Recent Activity */}
+          <div className="space-y-6">
                 {/* Listening Tests */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
