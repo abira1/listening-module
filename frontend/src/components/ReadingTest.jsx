@@ -242,7 +242,11 @@ export function ReadingTest({ examId }) {
       setExamFinished(true);
     } catch (error) {
       console.error('Error submitting exam:', error);
-      alert('Failed to submit exam. Please try again.');
+      console.error('Error details:', error.message, error.response);
+      
+      // Show detailed error message
+      const errorMsg = error.message || 'Failed to submit exam. Please try again.';
+      alert(`Error submitting exam: ${errorMsg}\n\nPlease contact your instructor if the problem persists.`);
       setIsSubmitting(false);
     }
   };
