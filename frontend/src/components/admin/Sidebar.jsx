@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileQuestion, Users, BarChart3, Settings, LogOut, X, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, FileQuestion, Users, BarChart3, Settings, LogOut, X, ClipboardList, Upload, Library } from 'lucide-react';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
 
 export function Sidebar({ isOpen, setIsOpen }) {
