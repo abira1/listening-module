@@ -89,6 +89,7 @@ class Exam(BaseModel):
     is_active: bool = False
     started_at: Optional[str] = None
     stopped_at: Optional[str] = None
+    is_visible: bool = True  # Controls visibility to students
 
 # Section Models
 class Section(BaseModel):
