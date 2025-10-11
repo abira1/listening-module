@@ -267,7 +267,8 @@ async def get_all_exams():
 @api_router.get("/exams/published", response_model=List[Exam])
 async def get_published_exams():
     try:
-        exams = await db.exams.find({"published": True}, {"_id": 0}).to_list(1000)
+        # Filter for both published AND visible exams
+        exams = await db.exams.find({"published": True, "is_visible": {"$ne": False}}, {"_id": 0}).to_list(1000)
         return [Exam(**exam) for exam in exams]
     except Exception as e:
         logger.error(f"Error fetching published exams: {e}")
