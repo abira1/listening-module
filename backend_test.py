@@ -4014,7 +4014,7 @@ if __name__ == "__main__":
             print_info("  (no args)             : Run AI Import and Track Management system tests (current focus)")
             sys.exit(1)
     else:
-        # Run the writing test as the default for this review request
-        success = run_writing_test_only()
+        # Run the AI import tests as the default for this review request
+        success = run_ai_import_tests()
     
     sys.exit(0 if success else 1)
