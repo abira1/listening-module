@@ -16,6 +16,8 @@ export function StudentDashboard() {
   const [loading, setLoading] = useState(true);
   const [attemptedExams, setAttemptedExams] = useState(new Set());
   const [examStatuses, setExamStatuses] = useState({});
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
