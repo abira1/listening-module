@@ -374,6 +374,244 @@ export function StudentDashboard() {
                 </div>
               </div>
             </div>
+
+            {/* Mock Tests Section on Dashboard */}
+            <div className="bg-white rounded-2xl shadow-sm border">
+              <div className="p-6 border-b">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <TrophyIcon className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-900">IELTS Mock Tests</h2>
+                      <p className="text-sm text-gray-500">Choose a test to begin practice</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Listening Tests */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <HeadphonesIcon className="w-4 h-4 text-purple-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900">Listening</h3>
+                    <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs font-medium">{listeningExams.length}</span>
+                  </div>
+                  {listeningExams.length === 0 ? (
+                    <div className="bg-gray-50 rounded-xl p-6 text-center border-2 border-dashed border-gray-200">
+                      <HeadphonesIcon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                      <p className="text-sm text-gray-500">No tests available</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {listeningExams.map((exam) => {
+                        const examStatus = getExamStatus(exam.id);
+                        const isCompleted = attemptedExams.has(exam.id);
+                        const status = examStatuses[exam.id];
+                        const isActive = status?.is_active || false;
+                        const canStart = isActive && !isCompleted;
+
+                        return (
+                          <div key={exam.id} className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 rounded-xl p-4 hover:shadow-md transition-all">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h4 className="font-semibold text-gray-900">{exam.title}</h4>
+                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${examStatus.color}`}>
+                                    {examStatus.status}
+                                  </span>
+                                  {isActive && !isCompleted && (
+                                    <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium animate-pulse">
+                                      • Live
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-4 text-xs text-gray-600">
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="w-3 h-3" />
+                                    {Math.floor(exam.duration_seconds / 60)} min
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <FileText className="w-3 h-3" />
+                                    {exam.question_count || 40} questions
+                                  </span>
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => handleStartExam(exam.id)}
+                                disabled={!canStart}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                                  !canStart
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    : 'bg-purple-600 text-white hover:bg-purple-700 shadow-sm'
+                                }`}
+                              >
+                                {isCompleted ? 'Done' : canStart ? (
+                                  <>
+                                    Start
+                                    <ArrowRight className="w-4 h-4" />
+                                  </>
+                                ) : 'Locked'}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Reading Tests */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <BookIcon className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900">Reading</h3>
+                    <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs font-medium">{readingExams.length}</span>
+                  </div>
+                  {readingExams.length === 0 ? (
+                    <div className="bg-gray-50 rounded-xl p-6 text-center border-2 border-dashed border-gray-200">
+                      <BookIcon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                      <p className="text-sm text-gray-500">No tests available</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {readingExams.map((exam) => {
+                        const examStatus = getExamStatus(exam.id);
+                        const isCompleted = attemptedExams.has(exam.id);
+                        const status = examStatuses[exam.id];
+                        const isActive = status?.is_active || false;
+                        const canStart = isActive && !isCompleted;
+
+                        return (
+                          <div key={exam.id} className="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 rounded-xl p-4 hover:shadow-md transition-all">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h4 className="font-semibold text-gray-900">{exam.title}</h4>
+                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${examStatus.color}`}>
+                                    {examStatus.status}
+                                  </span>
+                                  {isActive && !isCompleted && (
+                                    <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium animate-pulse">
+                                      • Live
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-4 text-xs text-gray-600">
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="w-3 h-3" />
+                                    {Math.floor(exam.duration_seconds / 60)} min
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <FileText className="w-3 h-3" />
+                                    {exam.question_count || 40} questions
+                                  </span>
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => handleStartExam(exam.id)}
+                                disabled={!canStart}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                                  !canStart
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm'
+                                }`}
+                              >
+                                {isCompleted ? 'Done' : canStart ? (
+                                  <>
+                                    Start
+                                    <ArrowRight className="w-4 h-4" />
+                                  </>
+                                ) : 'Locked'}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Writing Tests */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                      <PenToolIcon className="w-4 h-4 text-orange-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900">Writing</h3>
+                    <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs font-medium">{writingExams.length}</span>
+                  </div>
+                  {writingExams.length === 0 ? (
+                    <div className="bg-gray-50 rounded-xl p-6 text-center border-2 border-dashed border-gray-200">
+                      <PenToolIcon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                      <p className="text-sm text-gray-500">No tests available</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {writingExams.map((exam) => {
+                        const examStatus = getExamStatus(exam.id);
+                        const isCompleted = attemptedExams.has(exam.id);
+                        const status = examStatuses[exam.id];
+                        const isActive = status?.is_active || false;
+                        const canStart = isActive && !isCompleted;
+
+                        return (
+                          <div key={exam.id} className="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-100 rounded-xl p-4 hover:shadow-md transition-all">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h4 className="font-semibold text-gray-900">{exam.title}</h4>
+                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${examStatus.color}`}>
+                                    {examStatus.status}
+                                  </span>
+                                  {isActive && !isCompleted && (
+                                    <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium animate-pulse">
+                                      • Live
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-4 text-xs text-gray-600">
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="w-3 h-3" />
+                                    {Math.floor(exam.duration_seconds / 60)} min
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <FileText className="w-3 h-3" />
+                                    {exam.question_count || 2} tasks
+                                  </span>
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => handleStartExam(exam.id)}
+                                disabled={!canStart}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                                  !canStart
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    : 'bg-orange-600 text-white hover:bg-orange-700 shadow-sm'
+                                }`}
+                              >
+                                {isCompleted ? 'Done' : canStart ? (
+                                  <>
+                                    Start
+                                    <ArrowRight className="w-4 h-4" />
+                                  </>
+                                ) : 'Locked'}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Right Column - Stats & Recent Activity */}
