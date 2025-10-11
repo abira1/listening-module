@@ -238,26 +238,24 @@ export function TestManagement() {
                         <div className="text-sm text-gray-500 truncate" title={exam.description}>{exam.description}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       {exam.audio_url ? (
-                        <span className="text-green-600 text-sm flex items-center">
-                          <Volume2 className="w-4 h-4 mr-1" />
-                          Uploaded
+                        <span className="text-green-600 text-xs flex items-center justify-center">
+                          <Volume2 className="w-4 h-4" />
                         </span>
                       ) : (
-                        <span className="text-yellow-600 text-sm flex items-center">
-                          <AlertCircle className="w-4 h-4 mr-1" />
-                          Not uploaded
+                        <span className="text-gray-400 text-xs flex items-center justify-center">
+                          <Volume2 className="w-4 h-4" />
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">{exam.question_count || 0}/40</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs rounded-full ${exam.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                    <td className="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">{exam.question_count || 0}/40</td>
+                    <td className="px-4 py-4 whitespace-nowrap text-center">
+                      <span className={`px-2 py-1 text-xs rounded-full inline-block ${exam.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                         {exam.published ? 'Published' : 'Draft'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap text-center">
                       {exam.published ? (
                         <button 
                           onClick={() => handleToggleVisibility(exam.id, exam.is_visible !== false)} 
