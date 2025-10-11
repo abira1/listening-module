@@ -345,4 +345,96 @@ export const BackendService = {
       throw new Error('Failed to publish submission');
     }
   },
+
+  // ============================================================================
+  // AI IMPORT & TRACK MANAGEMENT
+  // ============================================================================
+
+  // AI Import operations
+  validateAIImport: async (jsonData) => {
+    try {
+      const response = await api.post('/tracks/validate-import', jsonData);
+      return response.data;
+    } catch (error) {
+      console.error('Error validating AI import:', error);
+      if (error.response?.data?.detail) {
+        throw new Error(error.response.data.detail);
+      }
+      throw new Error('Failed to validate JSON');
+    }
+  },
+
+  createTrackFromAI: async (jsonData) => {
+    try {
+      const response = await api.post('/tracks/import-from-ai', jsonData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating track from AI:', error);
+      if (error.response?.data?.detail) {
+        throw new Error(error.response.data.detail);
+      }
+      throw new Error('Failed to create track');
+    }
+  },
+
+  convertExamToTrack: async (examId) => {
+    try {
+      const response = await api.post(`/tracks/from-exam/${examId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error converting exam to track:', error);
+      throw new Error('Failed to convert exam to track');
+    }
+  },
+
+  // Track operations
+  getAllTracks: async (trackType = null, status = null) => {
+    try {
+      const params = {};
+      if (trackType) params.track_type = trackType;
+      if (status) params.status = status;
+      
+      const response = await api.get('/tracks', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching tracks:', error);
+      throw new Error('Failed to fetch tracks');
+    }
+  },
+
+  getTrack: async (trackId) => {
+    try {
+      const response = await api.get(`/tracks/${trackId}`);
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 404) {
+        return null;
+      }
+      console.error('Error fetching track:', error);
+      throw new Error('Failed to fetch track');
+    }
+  },
+
+  updateTrack: async (trackId, trackData) => {
+    try {
+      const response = await api.put(`/tracks/${trackId}`, trackData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating track:', error);
+      throw new Error('Failed to update track');
+    }
+  },
+
+  deleteTrack: async (trackId) => {
+    try {
+      const response = await api.delete(`/tracks/${trackId}`);
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 400 && error.response?.data?.detail?.includes('mock test')) {
+        throw new Error(error.response.data.detail);
+      }
+      console.error('Error deleting track:', error);
+      throw new Error('Failed to delete track');
+    }
+  },
 };
