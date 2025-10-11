@@ -129,7 +129,11 @@ export function WritingTest({ examId }) {
       
     } catch (error) {
       console.error('Error submitting exam:', error);
-      alert('There was an error submitting your test. Please try again.');
+      console.error('Error details:', error.message, error.response);
+      
+      // Show detailed error message
+      const errorMsg = error.message || 'There was an error submitting your test. Please try again.';
+      alert(`Error submitting test: ${errorMsg}\n\nPlease contact your instructor if the problem persists.`);
       setIsSubmitting(false);
       setExamFinished(false);
     }
