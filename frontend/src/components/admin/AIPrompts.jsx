@@ -130,12 +130,28 @@ For each passage, extract:
 - Instructions
 - All questions with correct types
 
-Question Types:
-- "true_false_not_given" - TRUE/FALSE/NOT GIVEN questions
-- "matching_paragraphs" - Which paragraph contains information
-- "sentence_completion" - Complete sentences with words from passage
-- "sentence_completion_wordlist" - Complete from given word list
-- "short_answer_reading" - Short answer questions
+IDENTIFY THE CORRECT QUESTION TYPE:
+
+1. "true_false_not_given" - TRUE/FALSE/NOT GIVEN questions
+2. "yes_no_not_given" - YES/NO/NOT GIVEN questions
+3. "matching_paragraphs" - Which paragraph contains information (answer with paragraph letter A, B, C)
+4. "matching_headings" - Match headings to paragraphs (Roman numerals i, ii, iii)
+5. "matching_information" - Which paragraph contains specific information
+6. "matching_features" - Match features to categories (e.g., match scientists to discoveries)
+7. "matching_sentence_endings" - Match sentence beginnings to endings
+8. "matching_draggable" - Drag and drop matching (e.g., "Choose SIX answers from the box A-G")
+   Format: {
+     "questions": [{"label": "Statement/question", "answer_key": "A"}],
+     "options": [{"key": "A", "text": "Full option text"}]
+   }
+9. "sentence_completion" - Complete sentences with words from passage
+10. "sentence_completion_wordlist" - Complete sentences from a given word list
+11. "short_answer_reading" - Short answer questions (Write NO MORE THAN...)
+12. "table_completion" - Complete a table
+13. "flow_chart_completion" - Complete a flow chart
+14. "diagram_completion" - Label a diagram
+15. "note_completion" - Complete notes
+16. "summary_completion" - Complete a summary
 
 Return ONLY valid JSON in this EXACT format:
 
