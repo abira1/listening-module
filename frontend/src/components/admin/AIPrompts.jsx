@@ -217,11 +217,18 @@ Return ONLY valid JSON in this EXACT format:
   ]
 }
 
-IMPORTANT:
+IMPORTANT RULES:
 - Extract ALL 40 questions across ALL 3 passages
 - Include COMPLETE passage text (800-1000 words each)
-- If passages have paragraph labels (A, B, C), include them
-- Answer keys must be exact
+- Keep paragraph labels (A, B, C, etc.) if present
+- Answer keys must be EXACT as shown in answer key section
+- For matching_draggable questions, create the nested structure with "questions" and "options" arrays
+- Look for keywords: "Choose from the box", "Match the following", "Write the correct letter"
+- Common IELTS formats:
+  * Questions 1-5: matching_paragraphs (Which paragraph contains...)
+  * Questions 6-10: sentence_completion or true_false_not_given
+  * Questions 11-13: matching_draggable or matching_features
+- Audio URL should be null for reading tests
 
 Now extract from this test:
 [PASTE YOUR PDF TEXT HERE]`,
