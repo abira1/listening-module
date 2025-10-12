@@ -11,14 +11,30 @@ export function AIPrompts() {
 Test Type: IELTS Listening
 Sections: 4 sections, 40 questions total
 
-For each question, identify:
+IMPORTANT: Identify the correct question type from this list:
+
+1. "short_answer" - Fill in the blank questions (Write NO MORE THAN TWO WORDS)
+2. "multiple_choice" - Choose from A, B, C, D options
+3. "map_labeling" - Label locations on a map (A-I options)
+4. "diagram_labeling" - Fill in parts of a diagram
+5. "matching_draggable" - Match items by dragging options (e.g., "Choose SIX answers from the box")
+   Format: {
+     "questions": [{"label": "Question text", "answer_key": "A"}],
+     "options": [{"key": "A", "text": "Option text"}]
+   }
+6. "table_completion" - Complete a table with words
+7. "note_completion" - Complete notes with words
+8. "sentence_completion" - Complete sentences
+9. "flow_chart_completion" - Complete flow chart steps
+
+For each question, extract:
 - Question number (1-40)
 - Section (1-4)
-- Question type: "short_answer", "multiple_choice", "map_labeling", or "diagram_labeling"
-- Prompt/question text (keep exactly as is, including any blank spaces like __________)
-- Options (if multiple choice or labeling)
+- Question type (from list above)
+- Prompt/question text (keep exactly as is, including blanks __________)
+- Options (if applicable)
 - Answer key (correct answer)
-- Max words (if applicable, e.g., "TWO WORDS" = 2, "ONE WORD AND/OR A NUMBER" = 2)
+- Max words (if applicable, e.g., "TWO WORDS" = 2)
 - Image URL (if map/diagram, otherwise null)
 
 Return ONLY valid JSON in this EXACT format (no additional text before or after):
