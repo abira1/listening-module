@@ -387,10 +387,8 @@ export const BackendService = {
       return response.data;
     } catch (error) {
       console.error('Error validating AI import:', error);
-      if (error.response?.data?.detail) {
-        throw new Error(error.response.data.detail);
-      }
-      throw new Error('Failed to validate JSON');
+      // Re-throw error with response data intact for better error handling in component
+      throw error;
     }
   },
 
