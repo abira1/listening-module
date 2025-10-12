@@ -357,8 +357,34 @@ export function ReadingTest({ examId }) {
         return <SentenceCompletion question={question} answer={answer} onChange={onChange} />;
       case 'true_false_not_given':
         return <TrueFalseNotGiven question={question} answer={answer} onChange={onChange} />;
+      case 'yes_no_not_given':
+        return <TrueFalseNotGiven question={question} answer={answer} onChange={onChange} />;
       case 'short_answer_reading':
         return <ShortAnswerReading question={question} answer={answer} onChange={onChange} />;
+      case 'matching_draggable':
+        // Handle matching draggable questions with multiple sub-questions
+        const questions = question.payload?.questions || [];
+        const startIndex = question.index;
+        
+        // Create a sub-answers object for this matching group
+        const matchingAnswers = {};
+        questions.forEach((q, idx) => {
+          const qIndex = startIndex + idx;
+          if (answers[qIndex]) {
+            matchingAnswers[qIndex] = answers[qIndex];
+          }
+        });
+        
+        return (
+          <div className="mb-6">
+            <MatchingDraggable
+              question={question}
+              answers={matchingAnswers}
+              onAnswerChange={(qIndex, value) => handleAnswerChange(qIndex, value)}
+              questionStartIndex={startIndex}
+            />
+          </div>
+        );
       default:
         return (
           <div className="mb-4 p-4 bg-gray-100 rounded">
