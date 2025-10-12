@@ -101,12 +101,20 @@ Return ONLY valid JSON in this EXACT format (no additional text before or after)
   ]
 }
 
-IMPORTANT:
+IMPORTANT RULES:
 - Extract ALL 40 questions across ALL 4 sections
-- Keep question text exactly as written in PDF
+- Keep question text EXACTLY as written in PDF
 - For short_answer questions, include the blank (__________)
 - Answer keys must be exact (case-insensitive for text, exact letter for multiple choice)
-- Audio URL is REQUIRED - get it from external source or use placeholder
+- Audio URL is REQUIRED - Use format: "PASTE_YOUR_AUDIO_URL_HERE" as placeholder
+- For matching_draggable questions, use the nested format shown above with "questions" and "options" arrays
+- Identify question types carefully - look for keywords like "Choose from the box", "Match", "Complete the table"
+
+AUDIO URL INSTRUCTIONS:
+The audio_url field is CRITICAL for listening tests. You should:
+1. Use a reliable audio hosting service (JukeHost, Cloudinary, Google Drive with direct link)
+2. Make sure it's a DIRECT link ending in .mp3, .wav, or .m4a
+3. If not available, use: "PASTE_YOUR_AUDIO_URL_HERE" as placeholder
 
 Now extract from this test:
 [PASTE YOUR PDF TEXT HERE]`,
