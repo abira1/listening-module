@@ -191,6 +191,26 @@ Return ONLY valid JSON in this EXACT format:
           "answer_key": "TRUE",
           "options": ["TRUE", "FALSE", "NOT GIVEN"],
           "wordlist": null
+        },
+        {
+          "index": 12,
+          "type": "matching_draggable",
+          "prompt": "Match each discovery to the correct scientist.",
+          "answer_key": null,
+          "payload": {
+            "instructions": "Choose SIX answers from the box and write the correct letter, A-G, next to the questions.",
+            "questions": [
+              {"label": "14. Theory of Relativity", "answer_key": "A"},
+              {"label": "15. Laws of Motion", "answer_key": "C"},
+              {"label": "16. Vaccination", "answer_key": "B"}
+            ],
+            "options": [
+              {"key": "A", "text": "Albert Einstein"},
+              {"key": "B", "text": "Louis Pasteur"},
+              {"key": "C", "text": "Isaac Newton"},
+              {"key": "D", "text": "Marie Curie"}
+            ]
+          }
         }
       ]
     }
