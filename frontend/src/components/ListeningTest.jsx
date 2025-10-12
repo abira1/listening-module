@@ -5,6 +5,7 @@ import FirebaseAuthService from '../services/FirebaseAuthService';
 import { useAuth } from '../contexts/AuthContext';
 import { Clock, Volume2, ChevronLeft, ChevronRight, HelpCircle, EyeOff, User } from 'lucide-react';
 import HighlightManager from '../lib/HighlightManager';
+import { MatchingDraggable } from './questions/MatchingDraggable';
 import '../styles/navigation.css';
 
 export function ListeningTest({ examId, audioRef }) {
