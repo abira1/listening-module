@@ -507,6 +507,35 @@ export function ListeningTest({ examId, audioRef }) {
           </div>
         );
 
+      case 'matching_draggable':
+        // For matching_draggable, we need to handle multiple questions within one component
+        const questions = question.payload?.questions || [];
+        const startIndex = question.index;
+        
+        // Create a sub-answers object for this matching group
+        const matchingAnswers = {};
+        questions.forEach((q, idx) => {
+          const qIndex = startIndex + idx;
+          if (answers[qIndex]) {
+            matchingAnswers[qIndex] = answers[qIndex];
+          }
+        });
+        
+        return (
+          <div 
+            key={question.id} 
+            className="mb-6" 
+            data-question-index={startIndex}
+          >
+            <MatchingDraggable
+              question={question}
+              answers={matchingAnswers}
+              onAnswerChange={handleAnswerChange}
+              questionStartIndex={startIndex}
+            />
+          </div>
+        );
+
       default:
         return (
           <div key={question.id} className="mb-4" data-question-index={questionNum}>
