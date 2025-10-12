@@ -357,43 +357,32 @@ async def validate_import(import_data: AIImportRequest):
     Validate AI-generated JSON without creating anything
     Returns validation summary with section breakdown
     """
-    try:
-        # Build section breakdown
-        section_breakdown = []
-        for section in import_data.sections:
-            # Count question types
-            question_types = {}
-            for q in section.questions:
-                question_types[q.type] = question_types.get(q.type, 0) + 1
-            
-            section_breakdown.append({
-                "section_number": section.index,
-                "title": section.title,
-                "question_count": len(section.questions),
-                "question_types": question_types,
-                "has_passage": section.passage_text is not None and len(section.passage_text) > 0
-            })
+    # Build section breakdown
+    section_breakdown = []
+    for section in import_data.sections:
+        # Count question types
+        question_types = {}
+        for q in section.questions:
+            question_types[q.type] = question_types.get(q.type, 0) + 1
         
-        return ValidationResponse(
-            valid=True,
-            test_type=import_data.test_type,
-            title=import_data.title,
-            total_questions=sum(len(s.questions) for s in import_data.sections),
-            total_sections=len(import_data.sections),
-            duration_minutes=import_data.duration_seconds // 60,
-            has_audio=import_data.audio_url is not None,
-            section_breakdown=section_breakdown
-        )
-        
-    except Exception as e:
-        # Return validation errors
-        error_message = str(e)
-        if hasattr(e, 'errors'):
-            errors = [f"{err['loc'][-1]}: {err['msg']}" for err in e.errors()]
-        else:
-            errors = [error_message]
-        
-        return ValidationResponse(valid=False, errors=errors)
+        section_breakdown.append({
+            "section_number": section.index,
+            "title": section.title,
+            "question_count": len(section.questions),
+            "question_types": question_types,
+            "has_passage": section.passage_text is not None and len(section.passage_text) > 0
+        })
+    
+    return ValidationResponse(
+        valid=True,
+        test_type=import_data.test_type,
+        title=import_data.title,
+        total_questions=sum(len(s.questions) for s in import_data.sections),
+        total_sections=len(import_data.sections),
+        duration_minutes=import_data.duration_seconds // 60,
+        has_audio=import_data.audio_url is not None,
+        section_breakdown=section_breakdown
+    )
 
 
 @router.post("/api/tracks/import-from-ai", response_model=TrackCreateResponse)
