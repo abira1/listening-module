@@ -8,6 +8,7 @@ import { MatchingParagraphs } from './reading/MatchingParagraphs';
 import { SentenceCompletion } from './reading/SentenceCompletion';
 import { TrueFalseNotGiven } from './reading/TrueFalseNotGiven';
 import { ShortAnswerReading } from './reading/ShortAnswerReading';
+import { MatchingDraggable } from './questions/MatchingDraggable';
 import HighlightManager from '../lib/HighlightManager';
 import '../styles/navigation.css';
 
