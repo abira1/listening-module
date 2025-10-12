@@ -46,15 +46,51 @@ export function AIImport() {
         showToast('❌ Validation errors found', 'error');
       }
     } catch (error) {
+      console.error('Validation error:', error);
+      
+      // Handle JSON syntax errors
       if (error.message.includes('JSON') || error.message.includes('Unexpected')) {
         setValidationResult({
           valid: false,
-          errors: ['Invalid JSON format. Please check your syntax.']
+          errors: ['Invalid JSON format. Please check your syntax. Use jsonlint.com to validate.']
         });
-      } else {
+      } 
+      // Handle backend validation errors
+      else if (error.response?.data) {
+        const errorData = error.response.data;
+        let errors = [];
+        
+        // Handle Pydantic validation errors
+        if (errorData.detail && Array.isArray(errorData.detail)) {
+          errors = errorData.detail.map(err => {
+            const field = err.loc ? err.loc.join(' → ') : 'Unknown field';
+            const message = err.msg || 'Validation error';
+            return `${field}: ${message}`;
+          });
+        } 
+        // Handle string error detail
+        else if (typeof errorData.detail === 'string') {
+          errors = [errorData.detail];
+        }
+        // Handle error object
+        else if (errorData.errors) {
+          errors = errorData.errors;
+        }
+        // Fallback
+        else {
+          errors = ['Validation failed. Please check your JSON structure.'];
+        }
+        
         setValidationResult({
           valid: false,
-          errors: [error.message || 'Validation failed']
+          errors: errors
+        });
+      }
+      // Handle other errors
+      else {
+        setValidationResult({
+          valid: false,
+          errors: [error.message || 'Validation failed. Please check your JSON.']
         });
       }
       showToast('Validation failed', 'error');
