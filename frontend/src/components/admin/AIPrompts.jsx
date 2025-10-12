@@ -44,7 +44,7 @@ Return ONLY valid JSON in this EXACT format (no additional text before or after)
   "title": "IELTS Listening Practice Test X",
   "description": "Complete IELTS Listening test with 4 sections and 40 questions",
   "duration_seconds": 2004,
-  "audio_url": "PASTE_AUDIO_URL_HERE",
+  "audio_url": "PASTE_YOUR_AUDIO_URL_HERE",
   "sections": [
     {
       "index": 1,
@@ -77,6 +77,24 @@ Return ONLY valid JSON in this EXACT format (no additional text before or after)
           "max_words": null,
           "options": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
           "image_url": "https://example.com/map.jpg"
+        },
+        {
+          "index": 14,
+          "type": "matching_draggable",
+          "prompt": "Match each statement to the correct person.",
+          "answer_key": null,
+          "payload": {
+            "instructions": "Choose SIX answers from the box and write the correct letter, A-G, next to the questions.",
+            "questions": [
+              {"label": "First person's achievement", "answer_key": "A"},
+              {"label": "Second person's achievement", "answer_key": "C"}
+            ],
+            "options": [
+              {"key": "A", "text": "Invented the telephone"},
+              {"key": "B", "text": "Discovered electricity"},
+              {"key": "C", "text": "Created the internet"}
+            ]
+          }
         }
       ]
     }
