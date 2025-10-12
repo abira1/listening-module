@@ -1,0 +1,43 @@
+{
+  "test_type": "writing",
+  "title": "IELTS Writing Practice Test 2",
+  "description": "Complete IELTS Academic Writing test with Task 1 (describe visual data) and Task 2 (essay)",
+  "duration_seconds": 3600,
+  "audio_url": null,
+  "sections": [
+    {
+      "index": 1,
+      "title": "Writing Task 1",
+      "instructions": "You should spend about 20 minutes on this task.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "writing_task",
+          "prompt": "The chart below shows the amount of leisure time enjoyed by men and women of different employment status in the UK in 1998-99.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+          "answer_key": null,
+          "min_words": 150,
+          "task_number": 1,
+          "chart_image": "https://www.ielts-exam.net/images/writing_task1_bar_chart.jpg",
+          "instructions": "You should spend about 20 minutes on this task."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Writing Task 2",
+      "instructions": "You should spend about 40 minutes on this task.",
+      "questions": [
+        {
+          "index": 2,
+          "type": "writing_task",
+          "prompt": "Some people believe that professionals, such as doctors and engineers, should be required to work in the country where they did their training. Others believe they should be free to work in another country if they wish.\n\nDiscuss both these views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "answer_key": null,
+          "min_words": 250,
+          "task_number": 2,
+          "chart_image": null,
+          "instructions": "You should spend about 40 minutes on this task."
+        }
+      ]
+    }
+  ]
+}

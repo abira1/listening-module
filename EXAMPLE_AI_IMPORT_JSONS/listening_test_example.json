@@ -1,0 +1,328 @@
+{
+  "test_type": "listening",
+  "title": "IELTS Listening Practice Test 2",
+  "description": "Complete IELTS Listening test with 4 sections and 40 questions covering social context, everyday situations, educational discussions, and academic lectures",
+  "duration_seconds": 2004,
+  "audio_url": "https://audio.jukehost.co.uk/F9irt6LcsYuP93ulaMo42JfXBEcABytV",
+  "sections": [
+    {
+      "index": 1,
+      "title": "Section 1",
+      "instructions": "Complete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "short_answer",
+          "prompt": "Type of job: __________",
+          "answer_key": "part-time",
+          "max_words": 2
+        },
+        {
+          "index": 2,
+          "type": "short_answer",
+          "prompt": "Working days: __________ and Sunday",
+          "answer_key": "Saturday",
+          "max_words": 1
+        },
+        {
+          "index": 3,
+          "type": "short_answer",
+          "prompt": "Hourly rate: £ __________",
+          "answer_key": "8.50",
+          "max_words": 1
+        },
+        {
+          "index": 4,
+          "type": "short_answer",
+          "prompt": "Start time: __________ a.m.",
+          "answer_key": "9:00",
+          "max_words": 1
+        },
+        {
+          "index": 5,
+          "type": "short_answer",
+          "prompt": "End time: __________ p.m.",
+          "answer_key": "5:30",
+          "max_words": 1
+        },
+        {
+          "index": 6,
+          "type": "short_answer",
+          "prompt": "Break time: __________ minutes",
+          "answer_key": "30",
+          "max_words": 1
+        },
+        {
+          "index": 7,
+          "type": "short_answer",
+          "prompt": "Lunch location: __________",
+          "answer_key": "staff room",
+          "max_words": 2
+        },
+        {
+          "index": 8,
+          "type": "short_answer",
+          "prompt": "Uniform provided: __________ and shoes",
+          "answer_key": "shirt",
+          "max_words": 1
+        },
+        {
+          "index": 9,
+          "type": "short_answer",
+          "prompt": "Training duration: __________ days",
+          "answer_key": "three",
+          "max_words": 1
+        },
+        {
+          "index": 10,
+          "type": "short_answer",
+          "prompt": "Interview date: __________",
+          "answer_key": "Monday",
+          "max_words": 1
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Section 2",
+      "instructions": "Label the map below. Write the correct letter, A-I, next to Questions 11-16.",
+      "questions": [
+        {
+          "index": 11,
+          "type": "map_labeling",
+          "prompt": "Ferry Terminal",
+          "answer_key": "A",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_sample_1_02.jpg"
+        },
+        {
+          "index": 12,
+          "type": "map_labeling",
+          "prompt": "Information Centre",
+          "answer_key": "B",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_sample_1_02.jpg"
+        },
+        {
+          "index": 13,
+          "type": "map_labeling",
+          "prompt": "Car Park",
+          "answer_key": "E",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_sample_1_02.jpg"
+        },
+        {
+          "index": 14,
+          "type": "map_labeling",
+          "prompt": "Bus Stop",
+          "answer_key": "C",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_sample_1_02.jpg"
+        },
+        {
+          "index": 15,
+          "type": "map_labeling",
+          "prompt": "Ticket Office",
+          "answer_key": "H",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_sample_1_02.jpg"
+        },
+        {
+          "index": 16,
+          "type": "map_labeling",
+          "prompt": "Gift Shop",
+          "answer_key": "F",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_sample_1_02.jpg"
+        },
+        {
+          "index": 17,
+          "type": "multiple_choice",
+          "prompt": "The tour begins at:",
+          "answer_key": "C",
+          "options": ["A. The museum entrance", "B. The gift shop", "C. The ferry terminal", "D. The car park"]
+        },
+        {
+          "index": 18,
+          "type": "multiple_choice",
+          "prompt": "How long does the tour last?",
+          "answer_key": "B",
+          "options": ["A. 1 hour", "B. 2 hours", "C. 3 hours", "D. 4 hours"]
+        },
+        {
+          "index": 19,
+          "type": "multiple_choice",
+          "prompt": "What is included in the tour price?",
+          "answer_key": "A",
+          "options": ["A. Ferry ride and guide", "B. Lunch and drinks", "C. Souvenirs", "D. Museum entry"]
+        },
+        {
+          "index": 20,
+          "type": "multiple_choice",
+          "prompt": "Booking can be made by:",
+          "answer_key": "D",
+          "options": ["A. Phone only", "B. Email only", "C. In person only", "D. All of the above"]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Section 3",
+      "instructions": "Choose the correct letter, A, B, or C.",
+      "questions": [
+        {
+          "index": 21,
+          "type": "multiple_choice",
+          "prompt": "What is the main topic of their presentation?",
+          "answer_key": "B",
+          "options": ["A. Climate change", "B. Renewable energy", "C. Solar panels", "D. Wind turbines"]
+        },
+        {
+          "index": 22,
+          "type": "multiple_choice",
+          "prompt": "The presentation is due in:",
+          "answer_key": "C",
+          "options": ["A. One week", "B. Two weeks", "C. Three weeks", "D. One month"]
+        },
+        {
+          "index": 23,
+          "type": "multiple_choice",
+          "prompt": "They need to submit:",
+          "answer_key": "A",
+          "options": ["A. PowerPoint and report", "B. Video only", "C. Report only", "D. Poster"]
+        },
+        {
+          "index": 24,
+          "type": "multiple_choice",
+          "prompt": "The tutor suggested they:",
+          "answer_key": "B",
+          "options": ["A. Change the topic", "B. Add more research", "C. Reduce content", "D. Start over"]
+        },
+        {
+          "index": 25,
+          "type": "multiple_choice",
+          "prompt": "They will meet next:",
+          "answer_key": "C",
+          "options": ["A. Monday", "B. Tuesday", "C. Wednesday", "D. Thursday"]
+        },
+        {
+          "index": 26,
+          "type": "short_answer",
+          "prompt": "Library book title: __________",
+          "answer_key": "Green Future",
+          "max_words": 2
+        },
+        {
+          "index": 27,
+          "type": "short_answer",
+          "prompt": "Author's name: __________",
+          "answer_key": "Dr. Smith",
+          "max_words": 2
+        },
+        {
+          "index": 28,
+          "type": "short_answer",
+          "prompt": "Year published: __________",
+          "answer_key": "2020",
+          "max_words": 1
+        },
+        {
+          "index": 29,
+          "type": "multiple_choice",
+          "prompt": "The case study is about:",
+          "answer_key": "A",
+          "options": ["A. Germany", "B. France", "C. Spain", "D. Italy"]
+        },
+        {
+          "index": 30,
+          "type": "multiple_choice",
+          "prompt": "They will present for:",
+          "answer_key": "B",
+          "options": ["A. 10 minutes", "B. 15 minutes", "C. 20 minutes", "D. 30 minutes"]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Section 4",
+      "instructions": "Label the diagram below. Write the correct letter, A-F, next to Questions 31-35. Complete the sentences below. Write NO MORE THAN TWO WORDS for each answer.",
+      "questions": [
+        {
+          "index": 31,
+          "type": "diagram_labeling",
+          "prompt": "Control rods",
+          "answer_key": "A",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_diagram.jpg"
+        },
+        {
+          "index": 32,
+          "type": "diagram_labeling",
+          "prompt": "Reactor vessel",
+          "answer_key": "B",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_diagram.jpg"
+        },
+        {
+          "index": 33,
+          "type": "diagram_labeling",
+          "prompt": "Steam generator",
+          "answer_key": "C",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_diagram.jpg"
+        },
+        {
+          "index": 34,
+          "type": "diagram_labeling",
+          "prompt": "Turbine",
+          "answer_key": "D",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_diagram.jpg"
+        },
+        {
+          "index": 35,
+          "type": "diagram_labeling",
+          "prompt": "Cooling tower",
+          "answer_key": "E",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "image_url": "https://www.ielts-exam.net/images/IELTS_Listening_diagram.jpg"
+        },
+        {
+          "index": 36,
+          "type": "short_answer",
+          "prompt": "The reactor uses __________ as fuel.",
+          "answer_key": "uranium",
+          "max_words": 1
+        },
+        {
+          "index": 37,
+          "type": "short_answer",
+          "prompt": "The process is called __________.",
+          "answer_key": "nuclear fission",
+          "max_words": 2
+        },
+        {
+          "index": 38,
+          "type": "short_answer",
+          "prompt": "Energy is converted to __________.",
+          "answer_key": "electricity",
+          "max_words": 1
+        },
+        {
+          "index": 39,
+          "type": "short_answer",
+          "prompt": "Safety is controlled by __________.",
+          "answer_key": "control rods",
+          "max_words": 2
+        },
+        {
+          "index": 40,
+          "type": "short_answer",
+          "prompt": "Water is cooled in the __________.",
+          "answer_key": "cooling tower",
+          "max_words": 2
+        }
+      ]
+    }
+  ]
+}
