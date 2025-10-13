@@ -7,16 +7,25 @@ Total: ~50 questions across Listening, Reading, and Writing sections.
 import sys
 import uuid
 from datetime import datetime
-
-# Determine if running as script or imported
-if __name__ == '__main__':
-    from server import exams_collection, sections_collection, questions_collection
-else:
-    from backend.server import exams_collection, sections_collection, questions_collection
+from motor.motor_asyncio import AsyncIOMotorClient
+import os
 
 
 def create_question_preview_test():
     """Create comprehensive question type preview test"""
+    
+    # Connect to MongoDB directly (synchronous for initialization)
+    from pymongo import MongoClient
+    
+    MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+    DB_NAME = os.environ.get('DB_NAME', 'ielts_platform')
+    
+    client = MongoClient(MONGO_URL)
+    db = client[DB_NAME]
+    
+    exams_collection = db.exams
+    sections_collection = db.sections
+    questions_collection = db.questions
     
     exam_id = "question-type-preview-test"
     
