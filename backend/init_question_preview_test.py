@@ -49,6 +49,7 @@ def create_question_preview_test():
         "is_active": True,  # Active by default
         "submission_count": 0,
         "created_at": datetime.utcnow().isoformat(),
+        "updated_at": datetime.utcnow().isoformat(),
         "started_at": None,
         "stopped_at": None
     }
