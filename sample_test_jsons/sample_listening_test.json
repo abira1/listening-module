@@ -1,0 +1,207 @@
+{
+  "title": "IELTS Listening Practice Test - Sample",
+  "description": "Complete listening test with all question types",
+  "test_type": "listening",
+  "duration_seconds": 2400,
+  "audio_url": "https://example.com/audio.mp3",
+  "audio_source_method": "url",
+  "loop_audio": false,
+  "published": true,
+  "sections": [
+    {
+      "index": 1,
+      "title": "Section 1 - Conversation",
+      "instructions": "You will hear a conversation about a job application.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "short_answer_listening",
+          "prompt": "What type of job is advertised?",
+          "answer_key": "part-time",
+          "max_words": 2,
+          "marks": 1
+        },
+        {
+          "index": 2,
+          "type": "form_completion",
+          "form_title": "Application Form",
+          "fields": [
+            {
+              "index": 2,
+              "label": "Applicant Name:",
+              "answer_key": "Sarah Johnson",
+              "max_words": 3
+            },
+            {
+              "index": 3,
+              "label": "Phone Number:",
+              "answer_key": "555-1234",
+              "max_words": 2
+            },
+            {
+              "index": 4,
+              "label": "Available From:",
+              "answer_key": "15 March",
+              "max_words": 2
+            }
+          ],
+          "marks": 3
+        },
+        {
+          "index": 5,
+          "type": "multiple_choice_single",
+          "prompt": "What is the hourly rate?",
+          "options": ["$8.50", "$9.00", "$10.50"],
+          "answer_key": "A",
+          "marks": 1
+        },
+        {
+          "index": 6,
+          "type": "multiple_choice_multiple",
+          "prompt": "Which TWO benefits are mentioned?",
+          "options": ["Staff discount", "Free meals", "Parking", "Health insurance"],
+          "answer_key": ["A", "C"],
+          "select_count": 2,
+          "marks": 1
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Section 2 - Tour Description",
+      "instructions": "You will hear a tour guide describing a facility.",
+      "questions": [
+        {
+          "index": 7,
+          "type": "map_labeling",
+          "prompt": "Restaurant",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "B",
+          "image_url": "https://example.com/map.png",
+          "marks": 1
+        },
+        {
+          "index": 8,
+          "type": "map_labeling",
+          "prompt": "Gift Shop",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "E",
+          "image_url": "https://example.com/map.png",
+          "marks": 1
+        },
+        {
+          "index": 9,
+          "type": "note_completion_listening",
+          "title": "Tour Information",
+          "notes": [
+            {
+              "index": 9,
+              "text": "• Opening hours: __BLANK__ to 5pm",
+              "answer_key": "9am",
+              "max_words": 1
+            },
+            {
+              "index": 10,
+              "text": "• Entry cost: $__BLANK__ per adult",
+              "answer_key": "15",
+              "max_words": 1
+            }
+          ],
+          "marks": 2
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Section 3 - Academic Discussion",
+      "instructions": "You will hear two students discussing their research project.",
+      "questions": [
+        {
+          "index": 11,
+          "type": "matching",
+          "instructions": "Match each person to their opinion",
+          "left_items": [
+            {"id": 11, "text": "Student A"},
+            {"id": 12, "text": "Student B"}
+          ],
+          "right_items": [
+            {"key": "A", "text": "Data collection is complete"},
+            {"key": "B", "text": "More research is needed"},
+            {"key": "C", "text": "The hypothesis is incorrect"}
+          ],
+          "answer_key": {"11": "A", "12": "B"},
+          "marks": 2
+        },
+        {
+          "index": 13,
+          "type": "table_completion_listening",
+          "table_title": "Research Timeline",
+          "headers": ["Phase", "Duration", "Completion Date"],
+          "rows": [
+            {
+              "index": 13,
+              "cells": ["Planning", "__BLANK__", "Jan 15"],
+              "blank_position": 1,
+              "answer_key": "2 weeks",
+              "max_words": 2
+            },
+            {
+              "index": 14,
+              "cells": ["Data Collection", "3 months", "__BLANK__"],
+              "blank_position": 2,
+              "answer_key": "April 30",
+              "max_words": 2
+            }
+          ],
+          "marks": 2
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Section 4 - Academic Lecture",
+      "instructions": "You will hear a lecture about renewable energy.",
+      "questions": [
+        {
+          "index": 15,
+          "type": "diagram_labeling",
+          "prompt": "_____ panel: converts sunlight",
+          "answer_key": "Solar",
+          "max_words": 1,
+          "image_url": "https://example.com/diagram.png",
+          "marks": 1
+        },
+        {
+          "index": 16,
+          "type": "flowchart_completion_listening",
+          "title": "Energy Conversion Process",
+          "steps": [
+            {"text": "Sunlight hits panel"},
+            {"index": 16, "text": "__BLANK__", "answer_key": "Generates electricity", "max_words": 2},
+            {"text": "Stored in battery"},
+            {"index": 17, "text": "__BLANK__", "answer_key": "Powers devices", "max_words": 2}
+          ],
+          "marks": 2
+        },
+        {
+          "index": 18,
+          "type": "summary_completion_listening",
+          "summary": "Renewable energy was first used in __18__ and has grown __19__% since then.",
+          "blanks": [
+            {"index": 18, "answer_key": "1970", "max_words": 1},
+            {"index": 19, "answer_key": "300", "max_words": 1}
+          ],
+          "marks": 2
+        },
+        {
+          "index": 20,
+          "type": "sentence_completion_listening",
+          "prompt": "The main advantage is _____ cost over time.",
+          "answer_key": "lower",
+          "max_words": 1,
+          "marks": 1
+        }
+      ]
+    }
+  ]
+}
