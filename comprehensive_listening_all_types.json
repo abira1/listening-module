@@ -1,0 +1,331 @@
+{
+  "test_type": "listening",
+  "title": "Comprehensive Listening Test - All Supported Question Types",
+  "description": "Complete IELTS Listening test demonstrating all 4 supported question types with multiple examples of each. Total: 40 questions across 4 sections.",
+  "duration_seconds": 2400,
+  "audio_url": "https://audio.jukehost.co.uk/F9irt6LcsYuP93ulaMo42JfXBEcABytV",
+  "sections": [
+    {
+      "index": 1,
+      "title": "Section 1: Short Answer Questions",
+      "instructions": "You will hear a conversation about accommodation. Answer questions 1-10.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "short_answer",
+          "prompt": "What type of job is being advertised?",
+          "answer_key": "part-time",
+          "max_words": 2
+        },
+        {
+          "index": 2,
+          "type": "short_answer",
+          "prompt": "When is the position available?",
+          "answer_key": "weekend",
+          "max_words": 1
+        },
+        {
+          "index": 3,
+          "type": "short_answer",
+          "prompt": "What is the monthly rent?",
+          "answer_key": "850 dollars",
+          "max_words": 2
+        },
+        {
+          "index": 4,
+          "type": "short_answer",
+          "prompt": "How many bedrooms does the apartment have?",
+          "answer_key": "two",
+          "max_words": 1
+        },
+        {
+          "index": 5,
+          "type": "short_answer",
+          "prompt": "What is the name of the landlord?",
+          "answer_key": "Mr. Johnson",
+          "max_words": 2
+        },
+        {
+          "index": 6,
+          "type": "short_answer",
+          "prompt": "Which street is the apartment located on?",
+          "answer_key": "Baker Street",
+          "max_words": 2
+        },
+        {
+          "index": 7,
+          "type": "short_answer",
+          "prompt": "What utilities are included in the rent?",
+          "answer_key": "water and electricity",
+          "max_words": 3
+        },
+        {
+          "index": 8,
+          "type": "short_answer",
+          "prompt": "When can the tenant move in?",
+          "answer_key": "first of July",
+          "max_words": 3
+        },
+        {
+          "index": 9,
+          "type": "short_answer",
+          "prompt": "What is the security deposit amount?",
+          "answer_key": "500 dollars",
+          "max_words": 2
+        },
+        {
+          "index": 10,
+          "type": "short_answer",
+          "prompt": "What is the contact phone number?",
+          "answer_key": "555-1234",
+          "max_words": 1
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Section 2: Multiple Choice and Map Labeling",
+      "instructions": "You will hear information about a campus tour. Answer questions 11-20.",
+      "questions": [
+        {
+          "index": 11,
+          "type": "multiple_choice",
+          "prompt": "What is the main purpose of the tour?",
+          "options": ["To recruit students", "To show facilities", "To introduce staff", "To explain rules"],
+          "answer_key": "B"
+        },
+        {
+          "index": 12,
+          "type": "multiple_choice",
+          "prompt": "How long does the tour last?",
+          "options": ["30 minutes", "45 minutes", "1 hour", "90 minutes"],
+          "answer_key": "C"
+        },
+        {
+          "index": 13,
+          "type": "multiple_choice",
+          "prompt": "Where does the tour start?",
+          "options": ["Main entrance", "Library", "Cafeteria", "Sports center"],
+          "answer_key": "A"
+        },
+        {
+          "index": 14,
+          "type": "multiple_choice",
+          "prompt": "What should visitors bring?",
+          "options": ["ID card", "Registration form", "Photo", "Payment"],
+          "answer_key": "A"
+        },
+        {
+          "index": 15,
+          "type": "map_labeling",
+          "prompt": "Library Building",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "B",
+          "image_url": "https://i.ibb.co/ZMZqXvK/ferry-map.png"
+        },
+        {
+          "index": 16,
+          "type": "map_labeling",
+          "prompt": "Student Center",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "D",
+          "image_url": "https://i.ibb.co/ZMZqXvK/ferry-map.png"
+        },
+        {
+          "index": 17,
+          "type": "map_labeling",
+          "prompt": "Cafeteria",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "A",
+          "image_url": "https://i.ibb.co/ZMZqXvK/ferry-map.png"
+        },
+        {
+          "index": 18,
+          "type": "map_labeling",
+          "prompt": "Sports Complex",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "F",
+          "image_url": "https://i.ibb.co/ZMZqXvK/ferry-map.png"
+        },
+        {
+          "index": 19,
+          "type": "map_labeling",
+          "prompt": "Administration Building",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "C",
+          "image_url": "https://i.ibb.co/ZMZqXvK/ferry-map.png"
+        },
+        {
+          "index": 20,
+          "type": "map_labeling",
+          "prompt": "Parking Area",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "E",
+          "image_url": "https://i.ibb.co/ZMZqXvK/ferry-map.png"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Section 3: Diagram Labeling",
+      "instructions": "You will hear a discussion about a research project. Answer questions 21-30.",
+      "questions": [
+        {
+          "index": 21,
+          "type": "diagram_labeling",
+          "prompt": "_____ rods: uranium/plutonium isotope",
+          "answer_key": "Fuel",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 22,
+          "type": "diagram_labeling",
+          "prompt": "_____ chamber: where reactions occur",
+          "answer_key": "Reactor",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 23,
+          "type": "diagram_labeling",
+          "prompt": "_____ rods: absorb neutrons to control reaction",
+          "answer_key": "Control",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 24,
+          "type": "diagram_labeling",
+          "prompt": "_____ moderator: slows down neutrons",
+          "answer_key": "Graphite",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 25,
+          "type": "diagram_labeling",
+          "prompt": "_____ system: removes excess heat",
+          "answer_key": "Cooling",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 26,
+          "type": "diagram_labeling",
+          "prompt": "_____ vessel: contains the reactor core",
+          "answer_key": "Pressure",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 27,
+          "type": "multiple_choice",
+          "prompt": "What was the main finding of the research?",
+          "options": ["Efficiency improved", "Cost decreased", "Safety increased", "Speed enhanced"],
+          "answer_key": "A"
+        },
+        {
+          "index": 28,
+          "type": "multiple_choice",
+          "prompt": "Who funded the research?",
+          "options": ["Government", "University", "Private company", "International org"],
+          "answer_key": "B"
+        },
+        {
+          "index": 29,
+          "type": "short_answer",
+          "prompt": "What was the sample size?",
+          "answer_key": "200 participants",
+          "max_words": 2
+        },
+        {
+          "index": 30,
+          "type": "short_answer",
+          "prompt": "How long did the study last?",
+          "answer_key": "5 years",
+          "max_words": 2
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Section 4: Mixed Question Types",
+      "instructions": "You will hear a lecture about climate change. Answer questions 31-40.",
+      "questions": [
+        {
+          "index": 31,
+          "type": "multiple_choice",
+          "prompt": "What is the main topic of the lecture?",
+          "options": ["Climate change causes", "Environmental solutions", "Global warming effects", "Renewable energy"],
+          "answer_key": "C"
+        },
+        {
+          "index": 32,
+          "type": "multiple_choice",
+          "prompt": "According to the speaker, what is the biggest threat?",
+          "options": ["Rising temperatures", "Sea level rise", "Extreme weather", "Food shortage"],
+          "answer_key": "B"
+        },
+        {
+          "index": 33,
+          "type": "short_answer",
+          "prompt": "By how many degrees has the global temperature risen?",
+          "answer_key": "1.5 degrees",
+          "max_words": 2
+        },
+        {
+          "index": 34,
+          "type": "short_answer",
+          "prompt": "How many meters has sea level increased?",
+          "answer_key": "0.8 meters",
+          "max_words": 2
+        },
+        {
+          "index": 35,
+          "type": "short_answer",
+          "prompt": "What year is the target for net zero emissions?",
+          "answer_key": "2050",
+          "max_words": 1
+        },
+        {
+          "index": 36,
+          "type": "short_answer",
+          "prompt": "What percentage of energy should come from renewables?",
+          "answer_key": "90 percent",
+          "max_words": 2
+        },
+        {
+          "index": 37,
+          "type": "diagram_labeling",
+          "prompt": "_____ emissions: main greenhouse gas",
+          "answer_key": "Carbon dioxide",
+          "max_words": 2,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 38,
+          "type": "diagram_labeling",
+          "prompt": "_____ effect: traps heat in atmosphere",
+          "answer_key": "Greenhouse",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 39,
+          "type": "multiple_choice",
+          "prompt": "What solution does the speaker recommend first?",
+          "options": ["Carbon capture", "Renewable energy", "Reforestation", "Nuclear power"],
+          "answer_key": "B"
+        },
+        {
+          "index": 40,
+          "type": "multiple_choice",
+          "prompt": "What is the speaker's overall message?",
+          "options": ["It's too late", "Urgent action needed", "Technology will save us", "Government must act"],
+          "answer_key": "B"
+        }
+      ]
+    }
+  ]
+}

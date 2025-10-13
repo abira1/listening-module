@@ -1,0 +1,312 @@
+{
+  "test_type": "reading",
+  "title": "Comprehensive Reading Test - All Supported Question Types",
+  "description": "Complete IELTS Academic Reading test demonstrating all 5 supported question types with multiple examples of each. Total: 40 questions across 3 sections.",
+  "duration_seconds": 3600,
+  "sections": [
+    {
+      "index": 1,
+      "title": "Passage 1: The History of Music and Brain Performance",
+      "instructions": "Read the passage and answer questions 1-14.",
+      "passage_text": "Music has been an integral part of human culture for thousands of years. Paragraph A discusses the earliest archaeological evidence of musical instruments, dating back to 40,000 years ago. Flutes made from bird bones and mammoth ivory were discovered in caves in southern Germany. These ancient instruments demonstrate that music was important to our ancestors.\n\nParagraph B explores how music affects the human brain. Recent neurological studies have shown that listening to music activates multiple regions of the brain simultaneously. The auditory cortex processes sound, while the motor cortex responds to rhythm. The limbic system, responsible for emotions, is also heavily involved. This widespread neural activation suggests music is deeply embedded in our cognitive architecture.\n\nParagraph C examines the effects of music on learning and memory. Several studies have investigated whether music can enhance academic performance. Researchers at Stanford University found that students who listened to classical music before exams showed improved concentration. However, the effect was temporary and varied between individuals. Some students performed better, while others showed no significant change.\n\nParagraph D discusses the controversial 'Mozart Effect.' In 1993, a study claimed that listening to Mozart's music could temporarily boost IQ scores. This finding captured public imagination and led to widespread recommendations. Parents began playing Mozart to infants, hoping to enhance their intelligence. However, subsequent research has failed to replicate these dramatic results. Most scientists now believe the original study's findings were exaggerated.\n\nParagraph E looks at music education in schools. Learning to play a musical instrument requires discipline, practice, and coordination. Studies have shown that children who receive music education often demonstrate improved mathematical abilities and language skills. The transfer of skills from music to other domains is well-documented. However, researchers debate whether music training causes these improvements or whether naturally gifted children simply excel in multiple areas.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "matching_paragraphs",
+          "prompt": "A description of ancient musical instruments",
+          "options": ["A", "B", "C", "D", "E"],
+          "answer_key": "A"
+        },
+        {
+          "index": 2,
+          "type": "matching_paragraphs",
+          "prompt": "Reference to a debunked scientific claim",
+          "options": ["A", "B", "C", "D", "E"],
+          "answer_key": "D"
+        },
+        {
+          "index": 3,
+          "type": "matching_paragraphs",
+          "prompt": "Information about brain regions activated by music",
+          "options": ["A", "B", "C", "D", "E"],
+          "answer_key": "B"
+        },
+        {
+          "index": 4,
+          "type": "matching_paragraphs",
+          "prompt": "Discussion of music education benefits",
+          "options": ["A", "B", "C", "D", "E"],
+          "answer_key": "E"
+        },
+        {
+          "index": 5,
+          "type": "sentence_completion",
+          "prompt": "Flutes discovered in Germany were made from bird bones and _____.",
+          "answer_key": "mammoth ivory",
+          "max_words": 2
+        },
+        {
+          "index": 6,
+          "type": "sentence_completion",
+          "prompt": "The _____ cortex in the brain processes sound.",
+          "answer_key": "auditory",
+          "max_words": 1
+        },
+        {
+          "index": 7,
+          "type": "sentence_completion",
+          "prompt": "The _____ system is responsible for emotions.",
+          "answer_key": "limbic",
+          "max_words": 1
+        },
+        {
+          "index": 8,
+          "type": "sentence_completion",
+          "prompt": "Stanford researchers found that music improved students' _____.",
+          "answer_key": "concentration",
+          "max_words": 1
+        },
+        {
+          "index": 9,
+          "type": "true_false_not_given",
+          "prompt": "All kinds of music can enhance brain performance.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "NOT GIVEN"
+        },
+        {
+          "index": 10,
+          "type": "true_false_not_given",
+          "prompt": "The original Mozart Effect study has been successfully replicated.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "FALSE"
+        },
+        {
+          "index": 11,
+          "type": "true_false_not_given",
+          "prompt": "Music education improves mathematical abilities.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "TRUE"
+        },
+        {
+          "index": 12,
+          "type": "true_false_not_given",
+          "prompt": "Playing an instrument requires discipline and practice.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "TRUE"
+        },
+        {
+          "index": 13,
+          "type": "short_answer_reading",
+          "prompt": "In which country were ancient flutes discovered?",
+          "answer_key": "Germany",
+          "max_words": 1
+        },
+        {
+          "index": 14,
+          "type": "short_answer_reading",
+          "prompt": "In what year was the Mozart Effect study published?",
+          "answer_key": "1993",
+          "max_words": 1
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Passage 2: Renewable Energy Technologies",
+      "instructions": "Read the passage and answer questions 15-27.",
+      "passage_text": "The transition to renewable energy is one of the most critical challenges facing humanity in the 21st century. Solar power has emerged as a leading solution, with photovoltaic cells converting sunlight directly into electricity. The efficiency of solar panels has improved dramatically over the past decade, from around 15% to over 22% in commercial applications. This technological advancement has made solar energy increasingly competitive with fossil fuels.\n\nWind energy represents another major renewable source. Modern wind turbines can generate up to 12 megawatts of electricity, enough to power thousands of homes. Offshore wind farms, located in coastal waters, benefit from stronger and more consistent winds than their onshore counterparts. Denmark has become a world leader in wind energy, with wind turbines supplying over 40% of the country's electricity needs.\n\nHydroelectric power has been used for over a century and remains the largest source of renewable electricity globally. Dams harness the energy of flowing water to generate electricity. While highly efficient, large hydroelectric projects can have significant environmental impacts, including habitat destruction and changes to river ecosystems. Small-scale hydroelectric installations offer a more environmentally friendly alternative.\n\nEnergy storage remains a crucial challenge for renewable systems. Solar and wind energy are intermittent, producing power only when the sun shines or wind blows. Advanced battery technologies, particularly lithium-ion batteries, are improving rapidly. Grid-scale storage facilities can store excess renewable energy for use during periods of low production. The future energy system will likely combine multiple renewable sources with sophisticated storage and distribution networks.",
+      "questions": [
+        {
+          "index": 15,
+          "type": "matching_paragraphs",
+          "prompt": "Information about solar panel efficiency improvements",
+          "options": ["A", "B", "C", "D"],
+          "answer_key": "A"
+        },
+        {
+          "index": 16,
+          "type": "matching_paragraphs",
+          "prompt": "Discussion of energy storage challenges",
+          "options": ["A", "B", "C", "D"],
+          "answer_key": "D"
+        },
+        {
+          "index": 17,
+          "type": "matching_paragraphs",
+          "prompt": "Details about Denmark's wind energy success",
+          "options": ["A", "B", "C", "D"],
+          "answer_key": "B"
+        },
+        {
+          "index": 18,
+          "type": "matching_paragraphs",
+          "prompt": "Environmental impacts of hydroelectric dams",
+          "options": ["A", "B", "C", "D"],
+          "answer_key": "C"
+        },
+        {
+          "index": 19,
+          "type": "sentence_completion",
+          "prompt": "Solar panel efficiency has improved from 15% to over _____.",
+          "answer_key": "22%",
+          "max_words": 1
+        },
+        {
+          "index": 20,
+          "type": "sentence_completion",
+          "prompt": "Modern wind turbines can generate up to _____ megawatts.",
+          "answer_key": "12",
+          "max_words": 1
+        },
+        {
+          "index": 21,
+          "type": "sentence_completion",
+          "prompt": "In Denmark, wind turbines supply over _____ of electricity.",
+          "answer_key": "40%",
+          "max_words": 1
+        },
+        {
+          "index": 22,
+          "type": "true_false_not_given",
+          "prompt": "Solar energy is now cheaper than fossil fuels.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "NOT GIVEN"
+        },
+        {
+          "index": 23,
+          "type": "true_false_not_given",
+          "prompt": "Offshore wind farms have stronger winds than onshore farms.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "TRUE"
+        },
+        {
+          "index": 24,
+          "type": "true_false_not_given",
+          "prompt": "Hydroelectric power is the largest renewable electricity source.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "TRUE"
+        },
+        {
+          "index": 25,
+          "type": "short_answer_reading",
+          "prompt": "What type of batteries are improving rapidly?",
+          "answer_key": "lithium-ion",
+          "max_words": 2
+        },
+        {
+          "index": 26,
+          "type": "short_answer_reading",
+          "prompt": "Which country is a world leader in wind energy?",
+          "answer_key": "Denmark",
+          "max_words": 1
+        },
+        {
+          "index": 27,
+          "type": "sentence_completion_wordlist",
+          "prompt": "Solar and wind energy are _____, producing power only at certain times.",
+          "answer_key": "intermittent",
+          "wordlist": ["intermittent", "consistent", "efficient", "expensive", "renewable", "sustainable"]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Passage 3: Artificial Intelligence and Society",
+      "instructions": "Read the passage and answer questions 28-40.",
+      "passage_text": "Artificial Intelligence (AI) is transforming every aspect of modern life, from healthcare to transportation. Machine learning algorithms can now diagnose diseases with accuracy rivaling human doctors. In radiology, AI systems analyze medical images to detect tumors, fractures, and other abnormalities. These systems process thousands of images quickly, helping doctors make faster, more accurate diagnoses.\n\nAutonomous vehicles represent one of the most visible AI applications. Self-driving cars use sensors, cameras, and sophisticated algorithms to navigate roads safely. Companies like Tesla, Waymo, and Uber have invested billions in developing this technology. Proponents argue autonomous vehicles will reduce traffic accidents caused by human error. However, critics raise concerns about safety, liability, and job displacement for professional drivers.\n\nIn education, AI-powered tutoring systems provide personalized instruction tailored to individual students' needs. These systems track student progress, identify weaknesses, and adjust teaching methods accordingly. Early results suggest AI tutoring can improve student outcomes, particularly in mathematics and science.\n\nThe workplace is also being transformed by AI. Automation is replacing routine tasks in manufacturing, data entry, and customer service. Some economists predict that up to 40% of current jobs could be automated within two decades. This prospect raises important questions about the future of work and the need for worker retraining programs.",
+      "questions": [
+        {
+          "index": 28,
+          "type": "matching_paragraphs",
+          "prompt": "Discussion of AI in medical diagnosis",
+          "options": ["A", "B", "C", "D"],
+          "answer_key": "A"
+        },
+        {
+          "index": 29,
+          "type": "matching_paragraphs",
+          "prompt": "Information about self-driving cars",
+          "options": ["A", "B", "C", "D"],
+          "answer_key": "B"
+        },
+        {
+          "index": 30,
+          "type": "matching_paragraphs",
+          "prompt": "Examples of workplace automation",
+          "options": ["A", "B", "C", "D"],
+          "answer_key": "D"
+        },
+        {
+          "index": 31,
+          "type": "matching_paragraphs",
+          "prompt": "AI applications in education",
+          "options": ["A", "B", "C", "D"],
+          "answer_key": "C"
+        },
+        {
+          "index": 32,
+          "type": "sentence_completion",
+          "prompt": "AI systems in radiology detect tumors, fractures, and other _____.",
+          "answer_key": "abnormalities",
+          "max_words": 1
+        },
+        {
+          "index": 33,
+          "type": "sentence_completion",
+          "prompt": "Self-driving cars use sensors, cameras, and sophisticated _____.",
+          "answer_key": "algorithms",
+          "max_words": 1
+        },
+        {
+          "index": 34,
+          "type": "sentence_completion",
+          "prompt": "AI tutoring systems provide _____ instruction tailored to individual needs.",
+          "answer_key": "personalized",
+          "max_words": 1
+        },
+        {
+          "index": 35,
+          "type": "true_false_not_given",
+          "prompt": "AI can diagnose diseases as accurately as human doctors.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "TRUE"
+        },
+        {
+          "index": 36,
+          "type": "true_false_not_given",
+          "prompt": "Autonomous vehicles are completely safe.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "NOT GIVEN"
+        },
+        {
+          "index": 37,
+          "type": "true_false_not_given",
+          "prompt": "AI tutoring improves outcomes in mathematics and science.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "TRUE"
+        },
+        {
+          "index": 38,
+          "type": "true_false_not_given",
+          "prompt": "Up to 40% of jobs could be automated within two decades.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "TRUE"
+        },
+        {
+          "index": 39,
+          "type": "short_answer_reading",
+          "prompt": "Name one company investing in self-driving technology.",
+          "answer_key": "Tesla",
+          "max_words": 1
+        },
+        {
+          "index": 40,
+          "type": "sentence_completion_wordlist",
+          "prompt": "Critics raise concerns about safety, liability, and job _____ for drivers.",
+          "answer_key": "displacement",
+          "wordlist": ["displacement", "satisfaction", "training", "opportunities", "security", "benefits"]
+        }
+      ]
+    }
+  ]
+}
