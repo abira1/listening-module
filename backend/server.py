@@ -18,6 +18,8 @@ from init_writing_test import init_writing_test
 from auth_service import AuthService
 from ai_import_service import get_router as get_ai_import_router
 from track_service import get_router as get_track_router
+from question_type_schemas import detect_question_type, validate_question_structure
+from auto_import_handler import AutoImportHandler
 
 
 ROOT_DIR = Path(__file__).parent
