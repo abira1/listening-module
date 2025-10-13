@@ -798,6 +798,70 @@ async def upload_audio_file(file: UploadFile = File(...)):
         logger.error(f"Error uploading audio file: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to upload audio file: {str(e)}")
 
+
+# ============================================================================
+# AUTO-IMPORT TEST FROM JSON
+# ============================================================================
+
+@api_router.post("/admin/import-test-json")
+async def import_test_from_json_data(test_data: Dict[str, Any]):
+    """
+    Import a complete test from JSON data.
+    Automatically detects question types and creates test.
+    """
+    try:
+        handler = AutoImportHandler(db)
+        results = await handler.import_from_json(test_data)
+        
+        return {
+            "status": "success" if results["success"] else "failed",
+            "exam_id": results["exam_id"],
+            "summary": {
+                "sections_created": results["sections_created"],
+                "questions_created": results["questions_created"],
+                "questions_by_type": results["questions_detected"]
+            },
+            "errors": results["errors"],
+            "warnings": results["warnings"]
+        }
+    except Exception as e:
+        logger.error(f"Error importing test: {e}")
+        raise HTTPException(status_code=500, detail=f"Import failed: {str(e)}")
+
+@api_router.post("/admin/import-test-file")
+async def import_test_from_file(file: UploadFile = File(...)):
+    """
+    Upload a JSON file and import as IELTS test.
+    Automatically detects question types.
+    """
+    try:
+        import json
+        
+        # Read JSON file
+        content = await file.read()
+        json_data = json.loads(content)
+        
+        # Import
+        handler = AutoImportHandler(db)
+        results = await handler.import_from_json(json_data)
+        
+        return {
+            "status": "success" if results["success"] else "failed",
+            "exam_id": results["exam_id"],
+            "summary": {
+                "sections_created": results["sections_created"],
+                "questions_created": results["questions_created"],
+                "questions_by_type": results["questions_detected"]
+            },
+            "errors": results["errors"],
+            "warnings": results["warnings"]
+        }
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid JSON file: {str(e)}")
+    except Exception as e:
+        logger.error(f"Error importing test: {e}")
+        raise HTTPException(status_code=500, detail=f"Import failed: {str(e)}")
+
 # ============================================================================
 # AUTHENTICATION ENDPOINTS
 # ============================================================================
