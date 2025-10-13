@@ -1,0 +1,378 @@
+{
+  "test_type": "listening",
+  "title": "Comprehensive Listening Test - All Question Types",
+  "description": "A comprehensive IELTS Listening test demonstrating all 12 question types with at least 2 questions of each type. Total: 40 questions across 4 sections.",
+  "duration_seconds": 2400,
+  "audio_url": "https://audio.jukehost.co.uk/F9irt6LcsYuP93ulaMo42JfXBEcABytV",
+  "sections": [
+    {
+      "index": 1,
+      "title": "Section 1: Multiple Choice & Short Answer",
+      "instructions": "You will hear a conversation about accommodation. Answer questions 1-10.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "short_answer_listening",
+          "prompt": "What type of job is being advertised?",
+          "answer_key": "part-time",
+          "max_words": 2
+        },
+        {
+          "index": 2,
+          "type": "short_answer_listening",
+          "prompt": "When is the position available?",
+          "answer_key": "weekend",
+          "max_words": 1
+        },
+        {
+          "index": 3,
+          "type": "multiple_choice_single",
+          "prompt": "What is the speaker's main concern?",
+          "options": ["Cost", "Location", "Facilities", "Size"],
+          "answer_key": "B"
+        },
+        {
+          "index": 4,
+          "type": "multiple_choice_single",
+          "prompt": "How does the speaker prefer to travel?",
+          "options": ["By car", "By bus", "By train", "By bicycle"],
+          "answer_key": "C"
+        },
+        {
+          "index": 5,
+          "type": "multiple_choice_multiple",
+          "prompt": "Which TWO facilities are mentioned?",
+          "options": ["Swimming pool", "Gym", "Library", "Parking lot"],
+          "answer_key": ["A", "C"],
+          "select_count": 2
+        },
+        {
+          "index": 6,
+          "type": "multiple_choice_multiple",
+          "prompt": "Which TWO items are included in the rent?",
+          "options": ["Internet", "Electricity", "Water", "Gas"],
+          "answer_key": ["B", "D"],
+          "select_count": 2
+        },
+        {
+          "index": 7,
+          "type": "sentence_completion_listening",
+          "prompt": "The apartment is located near the ____ center.",
+          "answer_key": "shopping",
+          "max_words": 1
+        },
+        {
+          "index": 8,
+          "type": "sentence_completion_listening",
+          "prompt": "The monthly rent is ____ dollars.",
+          "answer_key": "850",
+          "max_words": 1
+        },
+        {
+          "index": 9,
+          "type": "form_completion",
+          "form_title": "Rental Application Form",
+          "fields": [
+            {
+              "index": 9,
+              "label": "Full Name:",
+              "answer_key": "Sarah Mitchell",
+              "max_words": 3
+            },
+            {
+              "index": 10,
+              "label": "Contact Number:",
+              "answer_key": "555-7892",
+              "max_words": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Section 2: Maps, Diagrams & Matching",
+      "instructions": "You will hear information about a campus tour. Answer questions 11-20.",
+      "questions": [
+        {
+          "index": 11,
+          "type": "map_labeling",
+          "prompt": "Library Building",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "B",
+          "image_url": "https://i.ibb.co/ZMZqXvK/ferry-map.png"
+        },
+        {
+          "index": 12,
+          "type": "map_labeling",
+          "prompt": "Student Center",
+          "options": ["A", "B", "C", "D", "E", "F"],
+          "answer_key": "D",
+          "image_url": "https://i.ibb.co/ZMZqXvK/ferry-map.png"
+        },
+        {
+          "index": 13,
+          "type": "diagram_labeling",
+          "prompt": "_____ rods: uranium/plutonium isotope",
+          "answer_key": "Fuel",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 14,
+          "type": "diagram_labeling",
+          "prompt": "_____ chamber: where reactions occur",
+          "answer_key": "Reactor",
+          "max_words": 1,
+          "image_url": "https://i.ibb.co/9hxBvYT/reactor-diagram.png"
+        },
+        {
+          "index": 15,
+          "type": "matching",
+          "instructions": "Match each facility to its description",
+          "left_items": [
+            {"id": 15, "text": "Sports Complex"},
+            {"id": 16, "text": "Arts Building"}
+          ],
+          "right_items": [
+            {"key": "A", "text": "Recently renovated"},
+            {"key": "B", "text": "Under construction"},
+            {"key": "C", "text": "Closing for repairs"}
+          ],
+          "answer_key": {"15": "A", "16": "B"}
+        },
+        {
+          "index": 17,
+          "type": "note_completion_listening",
+          "title": "Campus Facilities",
+          "notes": [
+            {
+              "index": 17,
+              "text": "• Opening hours: __BLANK__",
+              "answer_key": "8am to 10pm",
+              "max_words": 3
+            },
+            {
+              "index": 18,
+              "text": "• Membership fee: $__BLANK__",
+              "answer_key": "50",
+              "max_words": 1
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "type": "table_completion_listening",
+          "table_title": "Weekly Schedule",
+          "headers": ["Day", "Activity", "Time"],
+          "rows": [
+            {
+              "index": 19,
+              "cells": ["Monday", "__BLANK__", "2pm"],
+              "blank_position": 1,
+              "answer_key": "Yoga class"
+            },
+            {
+              "index": 20,
+              "cells": ["Wednesday", "Swimming", "__BLANK__"],
+              "blank_position": 2,
+              "answer_key": "6pm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Section 3: Flowcharts & Summaries",
+      "instructions": "You will hear a discussion about a research project. Answer questions 21-30.",
+      "questions": [
+        {
+          "index": 21,
+          "type": "flowchart_completion_listening",
+          "title": "Research Process",
+          "steps": [
+            {
+              "index": 21,
+              "text": "__BLANK__",
+              "answer_key": "Literature review",
+              "max_words": 2
+            },
+            {
+              "text": "Design experiment"
+            },
+            {
+              "index": 22,
+              "text": "__BLANK__",
+              "answer_key": "Collect data",
+              "max_words": 2
+            },
+            {
+              "text": "Analyze results"
+            }
+          ]
+        },
+        {
+          "index": 23,
+          "type": "summary_completion_listening",
+          "summary": "The research began in __23__ when scientists discovered __24__. The project lasted for __25__ years.",
+          "blanks": [
+            {
+              "index": 23,
+              "answer_key": "2018",
+              "max_words": 1
+            },
+            {
+              "index": 24,
+              "answer_key": "new enzyme",
+              "max_words": 2
+            },
+            {
+              "index": 25,
+              "answer_key": "5",
+              "max_words": 1
+            }
+          ]
+        },
+        {
+          "index": 26,
+          "type": "multiple_choice_single",
+          "prompt": "What was the main finding of the research?",
+          "options": ["Enzymes increase efficiency", "Temperature affects growth", "pH levels are critical", "Light exposure matters"],
+          "answer_key": "A"
+        },
+        {
+          "index": 27,
+          "type": "multiple_choice_single",
+          "prompt": "Who funded the research project?",
+          "options": ["Government agency", "Private company", "University", "International organization"],
+          "answer_key": "C"
+        },
+        {
+          "index": 28,
+          "type": "short_answer_listening",
+          "prompt": "What was the sample size for the study?",
+          "answer_key": "200 participants",
+          "max_words": 2
+        },
+        {
+          "index": 29,
+          "type": "sentence_completion_listening",
+          "prompt": "The results were published in a ____ journal.",
+          "answer_key": "scientific",
+          "max_words": 1
+        },
+        {
+          "index": 30,
+          "type": "sentence_completion_listening",
+          "prompt": "The research team consisted of ____ members.",
+          "answer_key": "12",
+          "max_words": 1
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Section 4: Academic Lecture - Mixed Types",
+      "instructions": "You will hear a lecture about climate change. Answer questions 31-40.",
+      "questions": [
+        {
+          "index": 31,
+          "type": "note_completion_listening",
+          "title": "Climate Change Effects",
+          "notes": [
+            {
+              "index": 31,
+              "text": "• Global temperature rise: __BLANK__ degrees",
+              "answer_key": "1.5",
+              "max_words": 1
+            },
+            {
+              "index": 32,
+              "text": "• Sea level increase: __BLANK__ meters",
+              "answer_key": "0.8",
+              "max_words": 1
+            }
+          ]
+        },
+        {
+          "index": 33,
+          "type": "table_completion_listening",
+          "table_title": "Carbon Emissions by Country",
+          "headers": ["Country", "Emissions (tons)", "Change"],
+          "rows": [
+            {
+              "index": 33,
+              "cells": ["USA", "__BLANK__", "+5%"],
+              "blank_position": 1,
+              "answer_key": "5 billion"
+            },
+            {
+              "index": 34,
+              "cells": ["China", "10 billion", "__BLANK__"],
+              "blank_position": 2,
+              "answer_key": "+8%"
+            }
+          ]
+        },
+        {
+          "index": 35,
+          "type": "flowchart_completion_listening",
+          "title": "Carbon Cycle",
+          "steps": [
+            {
+              "text": "CO2 absorbed by plants"
+            },
+            {
+              "index": 35,
+              "text": "__BLANK__",
+              "answer_key": "Photosynthesis occurs",
+              "max_words": 2
+            },
+            {
+              "text": "Oxygen released"
+            },
+            {
+              "index": 36,
+              "text": "__BLANK__",
+              "answer_key": "Animals breathe",
+              "max_words": 2
+            }
+          ]
+        },
+        {
+          "index": 37,
+          "type": "summary_completion_listening",
+          "summary": "Climate models predict that by __37__, global temperatures will rise by __38__ degrees.",
+          "blanks": [
+            {
+              "index": 37,
+              "answer_key": "2050",
+              "max_words": 1
+            },
+            {
+              "index": 38,
+              "answer_key": "2.5",
+              "max_words": 1
+            }
+          ]
+        },
+        {
+          "index": 39,
+          "type": "multiple_choice_multiple",
+          "prompt": "Which TWO solutions are mentioned by the speaker?",
+          "options": ["Renewable energy", "Nuclear power", "Carbon capture", "Forest preservation"],
+          "answer_key": ["A", "C"],
+          "select_count": 2
+        },
+        {
+          "index": 40,
+          "type": "short_answer_listening",
+          "prompt": "What is the main message of the lecture?",
+          "answer_key": "urgent action needed",
+          "max_words": 3
+        }
+      ]
+    }
+  ]
+}
