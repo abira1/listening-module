@@ -542,6 +542,142 @@ export function ListeningTest({ examId, audioRef }) {
           </div>
         );
 
+      case 'multiple_choice_multiple':
+        return (
+          <div 
+            key={question.id} 
+            className="mb-6" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
+            <MultipleChoiceMultiple
+              question={question}
+              answer={answers[questionNum]}
+              onChange={handleAnswerChange}
+              questionNum={questionNum}
+            />
+          </div>
+        );
+
+      case 'matching':
+        return (
+          <div 
+            key={question.id} 
+            className="mb-4" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
+            <div className="flex items-start gap-2">
+              <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
+              <div className="flex-1">
+                <p className="text-gray-700 mb-2">{question.payload.prompt}</p>
+                <p className="text-sm text-gray-600 mb-2 font-medium">{question.payload.question}</p>
+                <select
+                  value={answers[questionNum] || ''}
+                  onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+                  onFocus={() => setCurrentQuestionIndex(questionNum)}
+                  className="w-64 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select an option...</option>
+                  {question.payload.options.map((opt, idx) => {
+                    const optionLabel = String.fromCharCode(65 + idx);
+                    return (
+                      <option key={opt} value={optionLabel}>
+                        {optionLabel}. {opt}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'form_completion':
+        return (
+          <div 
+            key={question.id} 
+            className="mb-4" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
+            <FormCompletion
+              question={question}
+              answer={answers[questionNum]}
+              onChange={handleAnswerChange}
+              questionNum={questionNum}
+            />
+          </div>
+        );
+
+      case 'note_completion':
+        return (
+          <div 
+            key={question.id} 
+            className="mb-4" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
+            <NoteCompletion
+              question={question}
+              answer={answers[questionNum]}
+              onChange={handleAnswerChange}
+              questionNum={questionNum}
+            />
+          </div>
+        );
+
+      case 'table_completion':
+        return (
+          <div 
+            key={question.id} 
+            className="mb-4" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
+            <TableCompletion
+              question={question}
+              answer={answers[questionNum]}
+              onChange={handleAnswerChange}
+              questionNum={questionNum}
+            />
+          </div>
+        );
+
+      case 'flowchart_completion':
+        return (
+          <div 
+            key={question.id} 
+            className="mb-4" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
+            <FlowchartCompletion
+              question={question}
+              answer={answers[questionNum]}
+              onChange={handleAnswerChange}
+              questionNum={questionNum}
+            />
+          </div>
+        );
+
+      case 'summary_completion':
+        return (
+          <div 
+            key={question.id} 
+            className="mb-4" 
+            data-question-index={questionNum}
+            onClick={() => setCurrentQuestionIndex(questionNum)}
+          >
+            <SummaryCompletion
+              question={question}
+              answer={answers[questionNum]}
+              onChange={handleAnswerChange}
+              questionNum={questionNum}
+            />
+          </div>
+        );
+
       default:
         return (
           <div key={question.id} className="mb-4" data-question-index={questionNum}>
