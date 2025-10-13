@@ -1416,6 +1416,13 @@ async def startup_db():
     await init_reading_test()
     await init_writing_test()
     
+    # Initialize Question Type Preview Test (for admin testing)
+    try:
+        create_question_preview_test()
+        logger.info("Question Type Preview Test initialized")
+    except Exception as e:
+        logger.error(f"Error initializing Question Type Preview Test: {str(e)}")
+    
     # Create indexes for new collections
     try:
         # Tracks indexes
