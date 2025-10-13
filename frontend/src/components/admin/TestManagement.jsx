@@ -180,6 +180,14 @@ export function TestManagement() {
           <p className="text-gray-600">Create and manage IELTS Listening tests</p>
         </div>
         <div className="flex space-x-3">
+          <Link
+            to="/exam/question-type-preview-test"
+            target="_blank"
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-md flex items-center shadow-md transition-all"
+          >
+            <BookOpen className="w-4 h-4 mr-2" />
+            Question Type Preview
+          </Link>
           <button onClick={handleCreateTest} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
             <Plus className="w-4 h-4 mr-1" />
             Create Test
