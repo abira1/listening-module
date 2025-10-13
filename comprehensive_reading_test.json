@@ -1,0 +1,327 @@
+{
+  "test_type": "reading",
+  "title": "Comprehensive Reading Test - All Question Types",
+  "description": "A comprehensive IELTS Reading test demonstrating all 14 question types with at least 2 questions of each type. Total: 40 questions across 3 sections.",
+  "duration_seconds": 3600,
+  "sections": [
+    {
+      "index": 1,
+      "title": "Passage 1: The History of Music and Brain Performance",
+      "instructions": "Read the passage and answer questions 1-14.",
+      "passage_text": "Music has been an integral part of human culture for thousands of years. Paragraph A discusses the earliest archaeological evidence of musical instruments, dating back to 40,000 years ago. Flutes made from bird bones and mammoth ivory were discovered in caves in southern Germany. These ancient instruments demonstrate that music was important to our ancestors.\n\nParagraph B explores how music affects the human brain. Recent neurological studies have shown that listening to music activates multiple regions of the brain simultaneously. The auditory cortex processes sound, while the motor cortex responds to rhythm. The limbic system, responsible for emotions, is also heavily involved. This widespread neural activation suggests music is deeply embedded in our cognitive architecture.\n\nParagraph C examines the effects of music on learning and memory. Several studies have investigated whether music can enhance academic performance. Researchers at Stanford University found that students who listened to classical music before exams showed improved concentration. However, the effect was temporary and varied between individuals. Some students performed better, while others showed no significant change.\n\nParagraph D discusses the controversial 'Mozart Effect.' In 1993, a study claimed that listening to Mozart's music could temporarily boost IQ scores. This finding captured public imagination and led to widespread recommendations. Parents began playing Mozart to infants, hoping to enhance their intelligence. However, subsequent research has failed to replicate these dramatic results. Most scientists now believe the original study's findings were exaggerated.\n\nParagraph E looks at music education in schools. Learning to play a musical instrument requires discipline, practice, and coordination. Studies have shown that children who receive music education often demonstrate improved mathematical abilities and language skills. The transfer of skills from music to other domains is well-documented. However, researchers debate whether music training causes these improvements or whether naturally gifted children simply excel in multiple areas.\n\nParagraph F explores the therapeutic uses of music. Music therapy is now an established medical practice, used to treat conditions ranging from depression to Alzheimer's disease. Patients with dementia often retain musical memories long after other memories have faded. Singing familiar songs can trigger emotional responses and improve quality of life. The power of music to reach patients when other therapies fail is remarkable.\n\nParagraph G considers the future of music research. Advances in brain imaging technology allow scientists to observe neural activity in real-time as people listen to music. These studies are revealing the complex ways music influences cognition and emotion. Future research may unlock new applications for music in education, therapy, and cognitive enhancement. The relationship between music and the human mind continues to fascinate researchers worldwide.\n\nParagraph H concludes by noting that while many questions remain unanswered, one thing is certain: music will continue to play a vital role in human culture and development for generations to come.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "matching_paragraphs",
+          "prompt": "A description of ancient musical instruments",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H"],
+          "answer_key": "A"
+        },
+        {
+          "index": 2,
+          "type": "matching_paragraphs",
+          "prompt": "Reference to a debunked scientific claim",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H"],
+          "answer_key": "D"
+        },
+        {
+          "index": 3,
+          "type": "matching_headings",
+          "paragraph_ref": "Paragraph B",
+          "headings": [
+            {"key": "i", "text": "Ancient discoveries"},
+            {"key": "ii", "text": "Brain activation patterns"},
+            {"key": "iii", "text": "Educational benefits"},
+            {"key": "iv", "text": "Controversial findings"}
+          ],
+          "answer_key": "ii"
+        },
+        {
+          "index": 4,
+          "type": "matching_headings",
+          "paragraph_ref": "Paragraph F",
+          "headings": [
+            {"key": "i", "text": "Ancient discoveries"},
+            {"key": "ii", "text": "Brain activation patterns"},
+            {"key": "iii", "text": "Medical applications"},
+            {"key": "iv", "text": "Future research"}
+          ],
+          "answer_key": "iii"
+        },
+        {
+          "index": 5,
+          "type": "sentence_completion_reading",
+          "prompt": "Flutes discovered in Germany were made from bird bones and ____.",
+          "answer_key": "mammoth ivory",
+          "max_words": 2
+        },
+        {
+          "index": 6,
+          "type": "sentence_completion_reading",
+          "prompt": "The ____ cortex in the brain processes sound.",
+          "answer_key": "auditory",
+          "max_words": 1
+        },
+        {
+          "index": 7,
+          "type": "multiple_choice_single_reading",
+          "prompt": "According to the Stanford study, music's effect on concentration was:",
+          "options": ["Permanent and universal", "Temporary and variable", "Negative for most students", "Only effective for music majors"],
+          "answer_key": "B"
+        },
+        {
+          "index": 8,
+          "type": "multiple_choice_single_reading",
+          "prompt": "What is the main point of Paragraph D?",
+          "options": ["Mozart was a genius", "The Mozart Effect has been disproven", "Parents should play music to infants", "IQ can be permanently increased"],
+          "answer_key": "B"
+        },
+        {
+          "index": 9,
+          "type": "true_false_not_given",
+          "prompt": "All kinds of music can enhance brain performance.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "NOT GIVEN"
+        },
+        {
+          "index": 10,
+          "type": "true_false_not_given",
+          "prompt": "The original Mozart Effect study has been successfully replicated.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "FALSE"
+        },
+        {
+          "index": 11,
+          "type": "yes_no_not_given",
+          "prompt": "The author believes music education is beneficial for children.",
+          "options": ["YES", "NO", "NOT GIVEN"],
+          "answer_key": "YES"
+        },
+        {
+          "index": 12,
+          "type": "yes_no_not_given",
+          "prompt": "The author thinks all children should learn a musical instrument.",
+          "options": ["YES", "NO", "NOT GIVEN"],
+          "answer_key": "NOT GIVEN"
+        },
+        {
+          "index": 13,
+          "type": "multiple_choice_multiple_reading",
+          "prompt": "Which TWO brain regions are mentioned as being activated by music?",
+          "options": ["Auditory cortex", "Visual cortex", "Motor cortex", "Prefrontal cortex"],
+          "answer_key": ["A", "C"],
+          "select_count": 2
+        },
+        {
+          "index": 14,
+          "type": "multiple_choice_multiple_reading",
+          "prompt": "Which TWO conditions can music therapy help treat?",
+          "options": ["Depression", "Diabetes", "Alzheimer's disease", "Broken bones"],
+          "answer_key": ["A", "C"],
+          "select_count": 2
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Passage 2: Renewable Energy Technologies",
+      "instructions": "Read the passage and answer questions 15-27.",
+      "passage_text": "The transition to renewable energy is one of the most critical challenges facing humanity in the 21st century. Solar power has emerged as a leading solution, with photovoltaic cells converting sunlight directly into electricity. The efficiency of solar panels has improved dramatically over the past decade, from around 15% to over 22% in commercial applications. This technological advancement has made solar energy increasingly competitive with fossil fuels.\n\nWind energy represents another major renewable source. Modern wind turbines can generate up to 12 megawatts of electricity, enough to power thousands of homes. Offshore wind farms, located in coastal waters, benefit from stronger and more consistent winds than their onshore counterparts. Denmark has become a world leader in wind energy, with wind turbines supplying over 40% of the country's electricity needs.\n\nHydroelectric power has been used for over a century and remains the largest source of renewable electricity globally. Dams harness the energy of flowing water to generate electricity. While highly efficient, large hydroelectric projects can have significant environmental impacts, including habitat destruction and changes to river ecosystems. Small-scale hydroelectric installations offer a more environmentally friendly alternative.\n\nGeothermal energy taps into the Earth's internal heat. In volcanic regions like Iceland, geothermal power provides both electricity and heating for buildings. The technology is reliable and produces minimal greenhouse gas emissions. However, geothermal resources are geographically limited, making this technology unsuitable for many regions.\n\nBiomass energy involves burning organic materials like wood, agricultural waste, and dedicated energy crops. While technically renewable, biomass is controversial because combustion releases carbon dioxide. Supporters argue that the carbon is part of a natural cycle, as plants absorb CO2 during growth. Critics contend that burning forests for energy accelerates climate change.\n\nEnergy storage remains a crucial challenge for renewable systems. Solar and wind energy are intermittent, producing power only when the sun shines or wind blows. Advanced battery technologies, particularly lithium-ion batteries, are improving rapidly. Grid-scale storage facilities can store excess renewable energy for use during periods of low production. Pumped hydro storage, which uses excess electricity to pump water uphill, represents another storage solution.\n\nThe future energy system will likely combine multiple renewable sources with sophisticated storage and distribution networks. Smart grids can balance supply and demand in real-time, directing electricity where it's needed most efficiently. The International Energy Agency predicts that renewables will supply over 90% of global electricity by 2050, provided governments maintain supportive policies and investment continues.",
+      "questions": [
+        {
+          "index": 15,
+          "type": "matching_sentence_endings",
+          "sentence_beginning": "The efficiency of solar panels has",
+          "endings": [
+            {"key": "A", "text": "decreased significantly in recent years."},
+            {"key": "B", "text": "improved from 15% to over 22%."},
+            {"key": "C", "text": "remained constant for decades."},
+            {"key": "D", "text": "reached the theoretical maximum."}
+          ],
+          "answer_key": "B"
+        },
+        {
+          "index": 16,
+          "type": "matching_sentence_endings",
+          "sentence_beginning": "Offshore wind farms benefit from",
+          "endings": [
+            {"key": "A", "text": "cheaper construction costs."},
+            {"key": "B", "text": "stronger and more consistent winds."},
+            {"key": "C", "text": "easier maintenance access."},
+            {"key": "D", "text": "lower environmental impact."}
+          ],
+          "answer_key": "B"
+        },
+        {
+          "index": 17,
+          "type": "matching_features",
+          "instructions": "Match each energy type to its characteristic",
+          "statements": [
+            {"id": 17, "text": "Geographically limited"},
+            {"id": 18, "text": "Controversial carbon emissions"}
+          ],
+          "features": [
+            {"key": "A", "text": "Solar energy"},
+            {"key": "B", "text": "Geothermal energy"},
+            {"key": "C", "text": "Biomass energy"},
+            {"key": "D", "text": "Wind energy"}
+          ],
+          "answer_key": {"17": "B", "18": "C"}
+        },
+        {
+          "index": 19,
+          "type": "note_completion_reading",
+          "title": "Wind Energy in Denmark",
+          "notes": [
+            {"index": 19, "text": "• Wind supplies over __BLANK__% of electricity", "answer_key": "40", "max_words": 1},
+            {"index": 20, "text": "• Modern turbines generate up to __BLANK__ megawatts", "answer_key": "12", "max_words": 1}
+          ]
+        },
+        {
+          "index": 21,
+          "type": "table_completion_reading",
+          "table_title": "Renewable Energy Comparison",
+          "headers": ["Energy Type", "Key Advantage", "Main Challenge"],
+          "rows": [
+            {
+              "index": 21,
+              "cells": ["Solar", "__BLANK__", "Intermittent"],
+              "blank_position": 1,
+              "answer_key": "Abundant resource",
+              "max_words": 2
+            },
+            {
+              "index": 22,
+              "cells": ["Hydroelectric", "Highly efficient", "__BLANK__"],
+              "blank_position": 2,
+              "answer_key": "Environmental impact",
+              "max_words": 2
+            }
+          ]
+        },
+        {
+          "index": 23,
+          "type": "flowchart_completion_reading",
+          "title": "Energy Storage Process",
+          "steps": [
+            {"text": "Excess renewable energy generated"},
+            {"index": 23, "text": "__BLANK__", "answer_key": "Store in batteries", "max_words": 3},
+            {"text": "Low production period"},
+            {"index": 24, "text": "__BLANK__", "answer_key": "Release stored energy", "max_words": 3}
+          ]
+        },
+        {
+          "index": 25,
+          "type": "summary_completion_text",
+          "summary": "Renewable energy is becoming increasingly viable. Solar panel efficiency has improved to __25__%, while wind turbines can generate __26__ megawatts. By 2050, renewables may supply __27__% of global electricity.",
+          "blanks": [
+            {"index": 25, "answer_key": "22", "max_words": 1},
+            {"index": 26, "answer_key": "12", "max_words": 1},
+            {"index": 27, "answer_key": "90", "max_words": 1}
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Passage 3: Artificial Intelligence and Society",
+      "instructions": "Read the passage and answer questions 28-40.",
+      "passage_text": "Artificial Intelligence (AI) is transforming every aspect of modern life, from healthcare to transportation. Machine learning algorithms can now diagnose diseases with accuracy rivaling human doctors. In radiology, AI systems analyze medical images to detect tumors, fractures, and other abnormalities. These systems process thousands of images quickly, helping doctors make faster, more accurate diagnoses.\n\nAutonomous vehicles represent one of the most visible AI applications. Self-driving cars use sensors, cameras, and sophisticated algorithms to navigate roads safely. Companies like Tesla, Waymo, and Uber have invested billions in developing this technology. Proponents argue autonomous vehicles will reduce traffic accidents caused by human error. However, critics raise concerns about safety, liability, and job displacement for professional drivers.\n\nIn education, AI-powered tutoring systems provide personalized instruction tailored to individual students' needs. These systems track student progress, identify weaknesses, and adjust teaching methods accordingly. Language learning apps like Duolingo use AI to optimize lesson difficulty and spacing. Early results suggest AI tutoring can improve student outcomes, particularly in mathematics and science.\n\nThe workplace is also being transformed by AI. Automation is replacing routine tasks in manufacturing, data entry, and customer service. Some economists predict that up to 40% of current jobs could be automated within two decades. This prospect raises important questions about the future of work and the need for worker retraining programs. Others argue that AI will create new job categories that don't yet exist.\n\nEthical concerns surrounding AI are growing. Facial recognition systems can identify individuals in crowds, raising privacy issues. Algorithmic bias, where AI systems perpetuate or amplify existing social inequalities, has been documented in criminal justice, hiring, and lending decisions. Researchers and policymakers are working to develop ethical guidelines for AI development and deployment.\n\nAI's environmental impact is also significant. Training large language models requires enormous computational resources and electricity. A single AI model can consume as much energy as hundreds of households use in a year. As AI becomes more prevalent, its carbon footprint will grow. Developing energy-efficient AI algorithms is becoming a priority for researchers.\n\nRegulation of AI technology varies widely between countries. The European Union is developing comprehensive AI regulations that emphasize transparency and accountability. China is investing heavily in AI while maintaining strict government control over its development. The United States has taken a more laissez-faire approach, relying primarily on industry self-regulation.\n\nLooking forward, AI's impact on society will depend on how we choose to develop and deploy these technologies. With thoughtful regulation, ethical guidelines, and public engagement, AI has the potential to address major challenges like climate change, disease, and poverty. However, without proper safeguards, AI could exacerbate inequality and threaten privacy and security. The choices we make today will shape the AI-enabled future for generations to come.",
+      "questions": [
+        {
+          "index": 28,
+          "type": "matching_paragraphs",
+          "prompt": "Discussion of AI's energy consumption",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H"],
+          "answer_key": "F"
+        },
+        {
+          "index": 29,
+          "type": "matching_paragraphs",
+          "prompt": "Examples of workplace automation",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H"],
+          "answer_key": "D"
+        },
+        {
+          "index": 30,
+          "type": "matching_headings",
+          "paragraph_ref": "Paragraph B",
+          "headings": [
+            {"key": "i", "text": "Medical applications"},
+            {"key": "ii", "text": "Self-driving technology"},
+            {"key": "iii", "text": "Educational tools"},
+            {"key": "iv", "text": "Ethical concerns"}
+          ],
+          "answer_key": "ii"
+        },
+        {
+          "index": 31,
+          "type": "matching_headings",
+          "paragraph_ref": "Paragraph E",
+          "headings": [
+            {"key": "i", "text": "Medical applications"},
+            {"key": "ii", "text": "Self-driving technology"},
+            {"key": "iii", "text": "Educational tools"},
+            {"key": "iv", "text": "Ethical concerns"}
+          ],
+          "answer_key": "iv"
+        },
+        {
+          "index": 32,
+          "type": "matching_features",
+          "instructions": "Match each country/region to its AI regulatory approach",
+          "statements": [
+            {"id": 32, "text": "Comprehensive regulations emphasizing transparency"},
+            {"id": 33, "text": "Industry self-regulation"}
+          ],
+          "features": [
+            {"key": "A", "text": "European Union"},
+            {"key": "B", "text": "United States"},
+            {"key": "C", "text": "China"},
+            {"key": "D", "text": "Japan"}
+          ],
+          "answer_key": {"32": "A", "33": "B"}
+        },
+        {
+          "index": 34,
+          "type": "summary_completion_list",
+          "summary": "AI is transforming society in multiple ways. In healthcare, AI provides __34__ diagnoses. Autonomous vehicles may reduce __35__ accidents. However, concerns about __36__ and job displacement remain.",
+          "word_list": ["accurate", "expensive", "traffic", "workplace", "privacy", "government"],
+          "blanks": [
+            {"index": 34, "answer_key": "accurate"},
+            {"index": 35, "answer_key": "traffic"},
+            {"index": 36, "answer_key": "privacy"}
+          ]
+        },
+        {
+          "index": 37,
+          "type": "true_false_not_given",
+          "prompt": "AI tutoring systems are equally effective for all subjects.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "NOT GIVEN"
+        },
+        {
+          "index": 38,
+          "type": "true_false_not_given",
+          "prompt": "Some economists predict that 40% of jobs could be automated within 20 years.",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "answer_key": "TRUE"
+        },
+        {
+          "index": 39,
+          "type": "yes_no_not_given",
+          "prompt": "The author believes AI regulation is necessary.",
+          "options": ["YES", "NO", "NOT GIVEN"],
+          "answer_key": "YES"
+        },
+        {
+          "index": 40,
+          "type": "yes_no_not_given",
+          "prompt": "The author thinks AI will definitely solve climate change.",
+          "options": ["YES", "NO", "NOT GIVEN"],
+          "answer_key": "NOT GIVEN"
+        }
+      ]
+    }
+  ]
+}
