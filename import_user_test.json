@@ -1,0 +1,397 @@
+{
+  "test_type": "listening",
+  "title": "IELTS Listening bleeh",
+  "description": "Complete IELTS Listening test with 4 sections and 40 questions",
+  "duration_seconds": 2004,
+  "audio_url": "https://audio.jukehost.co.uk/7geL4u1bexFTaBQoAqW1uMBegX3bNiN7",
+  "sections": [
+    {
+      "index": 1,
+      "title": "Section 1",
+      "instructions": "Complete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "short_answer",
+          "prompt": "Type of company: __________",
+          "answer_key": "technology",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 2,
+          "type": "short_answer",
+          "prompt": "Position: __________",
+          "answer_key": "director",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 3,
+          "type": "short_answer",
+          "prompt": "Location: near the __________",
+          "answer_key": "station",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 4,
+          "type": "short_answer",
+          "prompt": "Preferred size of the area: __________ ft2",
+          "answer_key": "5000",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 5,
+          "type": "short_answer",
+          "prompt": "Requirements: 24-hour __________",
+          "answer_key": "security",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 6,
+          "type": "short_answer",
+          "prompt": "Requirements: __________ on ground floor",
+          "answer_key": "parking",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 7,
+          "type": "short_answer",
+          "prompt": "Preferred facilities: a (an) __________ to cook in",
+          "answer_key": "kitchen",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 8,
+          "type": "short_answer",
+          "prompt": "Preferred facilities: a (an) __________ away from the workspace",
+          "answer_key": "cafe",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 9,
+          "type": "short_answer",
+          "prompt": "Daily exercise: a (an) __________",
+          "answer_key": "gym",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 10,
+          "type": "short_answer",
+          "prompt": "Unnecessary: __________",
+          "answer_key": "restaurant",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Section 2",
+      "instructions": "Questions 11-14: Choose the correct letter, A, B or C. Questions 15-20: What characteristic has been offered for each facility? Choose SIX answers from the box and write the correct letter, A-G, next to questions.",
+      "questions": [
+        {
+          "index": 11,
+          "type": "multiple_choice",
+          "prompt": "The reason why this island attracts so many tourists is that",
+          "answer_key": "A",
+          "max_words": null,
+          "options": ["A. it's a good place to relax.", "B. the transport is very convenient.", "C. the ticket price is relatively low."],
+          "image_url": null
+        },
+        {
+          "index": 12,
+          "type": "multiple_choice",
+          "prompt": "What is recommended to bring when you visit the island?",
+          "answer_key": "A",
+          "max_words": null,
+          "options": ["A. a raincoat", "B. a sun umbrella", "C. a helmet"],
+          "image_url": null
+        },
+        {
+          "index": 13,
+          "type": "multiple_choice",
+          "prompt": "What is the most popular attraction at the resort?",
+          "answer_key": "B",
+          "max_words": null,
+          "options": ["A. the rose garden", "B. the sunset", "C. the freshwater pond"],
+          "image_url": null
+        },
+        {
+          "index": 14,
+          "type": "multiple_choice",
+          "prompt": "What could possibly surprise visitors to the island?",
+          "answer_key": "B",
+          "max_words": null,
+          "options": ["A. the size of the island", "B. a wide range of wildlife", "C. making new friends"],
+          "image_url": null
+        },
+        {
+          "index": 15,
+          "type": "short_answer",
+          "prompt": "tourist centre",
+          "answer_key": "E",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 16,
+          "type": "short_answer",
+          "prompt": "mountain",
+          "answer_key": "B",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 17,
+          "type": "short_answer",
+          "prompt": "small theatre",
+          "answer_key": "D",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 18,
+          "type": "short_answer",
+          "prompt": "art museum",
+          "answer_key": "C",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 19,
+          "type": "short_answer",
+          "prompt": "pond",
+          "answer_key": "F",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 20,
+          "type": "short_answer",
+          "prompt": "ancient building",
+          "answer_key": "A",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Section 3",
+      "instructions": "Questions 21-24: What feature is there for each character in the novels? Choose FOUR answers from the box and write the correct letter. Questions 25-30: Choose the correct letters.",
+      "questions": [
+        {
+          "index": 21,
+          "type": "short_answer",
+          "prompt": "Rosy",
+          "answer_key": "B",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 22,
+          "type": "short_answer",
+          "prompt": "Flory",
+          "answer_key": "F",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 23,
+          "type": "short_answer",
+          "prompt": "Lizzie",
+          "answer_key": "C",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 24,
+          "type": "short_answer",
+          "prompt": "Estelle",
+          "answer_key": "D",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 25,
+          "type": "multiple_choice",
+          "prompt": "What are the speakers' opinions about the literature lectures?",
+          "answer_key": "B",
+          "max_words": null,
+          "options": ["A. They are too noisy for virtual learning.", "B. They are well structured.", "C. There is insufficient time for discussion.", "D. They always start punctually.", "E. They are too shy to take part in discussions."],
+          "image_url": null
+        },
+        {
+          "index": 26,
+          "type": "multiple_choice",
+          "prompt": "What are the speakers' opinions about the literature lectures?",
+          "answer_key": "C",
+          "max_words": null,
+          "options": ["A. They are too noisy for virtual learning.", "B. They are well structured.", "C. There is insufficient time for discussion.", "D. They always start punctually.", "E. They are too shy to take part in discussions."],
+          "image_url": null
+        },
+        {
+          "index": 27,
+          "type": "multiple_choice",
+          "prompt": "What improvements can be made in the near future?",
+          "answer_key": "A",
+          "max_words": null,
+          "options": ["A. enhancing IT support", "B. providing more computers", "C. finding a good librarian", "D. buying some new photocopying machines", "E. becoming a good group leader"],
+          "image_url": null
+        },
+        {
+          "index": 28,
+          "type": "multiple_choice",
+          "prompt": "What improvements can be made in the near future?",
+          "answer_key": "D",
+          "max_words": null,
+          "options": ["A. enhancing IT support", "B. providing more computers", "C. finding a good librarian", "D. buying some new photocopying machines", "E. becoming a good group leader"],
+          "image_url": null
+        },
+        {
+          "index": 29,
+          "type": "multiple_choice",
+          "prompt": "What do the speakers think of the group discussions?",
+          "answer_key": "C",
+          "max_words": null,
+          "options": ["A. The class is too large.", "B. It's easy to find time to meet.", "C. Group sizes are suitable.", "D. The class time is properly managed.", "E. They find that the class is very effective."],
+          "image_url": null
+        },
+        {
+          "index": 30,
+          "type": "multiple_choice",
+          "prompt": "What do the speakers think of the group discussions?",
+          "answer_key": "E",
+          "max_words": null,
+          "options": ["A. The class is too large.", "B. It's easy to find time to meet.", "C. Group sizes are suitable.", "D. The class time is properly managed.", "E. They find that the class is very effective."],
+          "image_url": null
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Section 4",
+      "instructions": "Complete the notes below. Write NO MORE THAN TWO WORDS for each answer.",
+      "questions": [
+        {
+          "index": 31,
+          "type": "short_answer",
+          "prompt": "During the Industrial Revolution people moved to cities to work in the __________",
+          "answer_key": "factories",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 32,
+          "type": "short_answer",
+          "prompt": "In the 1850s, the culture was influenced greatly by __________ from different countries.",
+          "answer_key": "immigrants",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 33,
+          "type": "short_answer",
+          "prompt": "Originally music reflected the work life of different __________ in those days.",
+          "answer_key": "occupations",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 34,
+          "type": "short_answer",
+          "prompt": "Different songs were created in the same __________, although people were from a variety of nations.",
+          "answer_key": "language",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 35,
+          "type": "short_answer",
+          "prompt": "The songs written by the workers during this period mainly came from their feelings about harsh __________",
+          "answer_key": "conditions",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 36,
+          "type": "short_answer",
+          "prompt": "The musical trends were led by __________ performers.",
+          "answer_key": "professional",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 37,
+          "type": "short_answer",
+          "prompt": "During this period, some musical groups had expanded their popularity among __________",
+          "answer_key": "workers",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 38,
+          "type": "short_answer",
+          "prompt": "In the late 1870s, the __________ came into contact with these flourishing musical traditions.",
+          "answer_key": "middle class",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 39,
+          "type": "short_answer",
+          "prompt": "These musical genres still exert an influence on __________ culture.",
+          "answer_key": "modern",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 40,
+          "type": "short_answer",
+          "prompt": "Enthusiastic fans are still collecting and keeping the __________ of music from those days.",
+          "answer_key": "recordings",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        }
+      ]
+    }
+  ]
+}
