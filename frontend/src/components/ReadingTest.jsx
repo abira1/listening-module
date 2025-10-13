@@ -369,6 +369,81 @@ export function ReadingTest({ examId }) {
         return <TrueFalseNotGiven question={question} answer={answer} onChange={onChange} />;
       case 'short_answer_reading':
         return <ShortAnswerReading question={question} answer={answer} onChange={onChange} />;
+      case 'multiple_choice':
+        // Single answer multiple choice
+        return (
+          <div className="mb-6">
+            <div className="flex items-start gap-2">
+              <span className="font-semibold min-w-[3rem]">{question.index}.</span>
+              <div className="flex-1">
+                <p className="text-gray-700 mb-3">{question.payload.prompt}</p>
+                <div className="space-y-2">
+                  {question.payload.options.map((option, idx) => {
+                    const optionLabel = String.fromCharCode(65 + idx);
+                    return (
+                      <label key={idx} className="flex items-start gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                        <input
+                          type="radio"
+                          name={`question_${question.index}`}
+                          value={optionLabel}
+                          checked={answer === optionLabel}
+                          onChange={(e) => onChange(e.target.value)}
+                          className="mt-1"
+                        />
+                        <span className="text-gray-700">
+                          <span className="font-medium">{optionLabel}.</span> {option}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case 'multiple_choice_multiple':
+        return <MultipleChoiceMultiple question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
+      case 'note_completion':
+        return <NoteCompletion question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
+      case 'matching_headings':
+        return <MatchingHeadings question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
+      case 'summary_completion_text':
+        // Summary completion using words from text
+        return (
+          <div className="mb-4">
+            <div className="flex items-start gap-2">
+              <span className="font-semibold min-w-[3rem]">{question.index}.</span>
+              <div className="flex-1">
+                <div className="bg-purple-50 border-l-4 border-purple-400 p-3 mb-2">
+                  <p className="text-sm font-medium text-purple-800">📄 Summary (from text)</p>
+                </div>
+                <p className="text-gray-700 mb-2">{question.payload.prompt}</p>
+                <input
+                  type="text"
+                  value={answer}
+                  onChange={(e) => onChange(e.target.value)}
+                  placeholder="Use words from the text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {question.payload.max_words && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Maximum {question.payload.max_words} word(s) from the text
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      case 'summary_completion_list':
+        return <SummaryCompletionList question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
+      case 'flowchart_completion_reading':
+        return <FlowchartCompletion question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
+      case 'matching_sentence_endings':
+        return <MatchingSentenceEndings question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
+      case 'table_completion_reading':
+        return <TableCompletion question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
+      case 'matching_features':
+        return <MatchingFeatures question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
       case 'matching_draggable':
         // Handle matching draggable questions with multiple sub-questions
         const questions = question.payload?.questions || [];
