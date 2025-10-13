@@ -15,6 +15,7 @@ import shutil
 from init_ielts_test import init_ielts_test
 from init_reading_test import init_reading_test
 from init_writing_test import init_writing_test
+from init_question_preview_test import create_question_preview_test
 from auth_service import AuthService
 from ai_import_service import get_router as get_ai_import_router
 from track_service import get_router as get_track_router
