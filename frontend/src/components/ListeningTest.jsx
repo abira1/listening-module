@@ -6,6 +6,12 @@ import { useAuth } from '../contexts/AuthContext';
 import { Clock, Volume2, ChevronLeft, ChevronRight, HelpCircle, EyeOff, User } from 'lucide-react';
 import HighlightManager from '../lib/HighlightManager';
 import { MatchingDraggable } from './questions/MatchingDraggable';
+import { MultipleChoiceMultiple } from './questions/MultipleChoiceMultiple';
+import { FormCompletion } from './questions/FormCompletion';
+import { NoteCompletion } from './questions/NoteCompletion';
+import { TableCompletion } from './questions/TableCompletion';
+import { FlowchartCompletion } from './questions/FlowchartCompletion';
+import { SummaryCompletion } from './questions/SummaryCompletion';
 import '../styles/navigation.css';
 
 export function ListeningTest({ examId, audioRef }) {
