@@ -1,0 +1,451 @@
+{
+  "test_type": "listening",
+  "title": "IELTS Listening Practice Test - Matching Demo",
+  "description": "Demo test showcasing the new drag-and-drop matching question type",
+  "duration_seconds": 1800,
+  "audio_url": "https://audio.jukehost.co.uk/F9irt6LcsYuP93ulaMo42JfXBEcABytV",
+  "sections": [
+    {
+      "index": 1,
+      "title": "Section 1: Student Accommodation",
+      "instructions": "Complete the notes below. Write NO MORE THAN TWO WORDS for each answer.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "short_answer",
+          "prompt": "Type of accommodation needed: __________",
+          "answer_key": "shared flat",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 2,
+          "type": "short_answer",
+          "prompt": "Maximum rent per week: £__________",
+          "answer_key": "120",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 3,
+          "type": "multiple_choice",
+          "prompt": "What type of heating does the student prefer?",
+          "answer_key": "B",
+          "max_words": null,
+          "options": ["A. Gas central heating", "B. Electric heating", "C. Storage heaters"],
+          "image_url": null
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Section 2: University Facilities",
+      "instructions": "Questions 4-9",
+      "questions": [
+        {
+          "index": 4,
+          "type": "matching_draggable",
+          "prompt": "Match each facility to its correct location on campus.",
+          "answer_key": null,
+          "payload": {
+            "instructions": "Choose SIX answers from the box and write the correct letter, A-H, next to questions 4-9.",
+            "questions": [
+              {
+                "label": "The main library is located in",
+                "answer_key": "C"
+              },
+              {
+                "label": "The student cafeteria can be found in",
+                "answer_key": "A"
+              },
+              {
+                "label": "The sports center is situated in",
+                "answer_key": "F"
+              },
+              {
+                "label": "The computer labs are in",
+                "answer_key": "B"
+              },
+              {
+                "label": "The medical center is located in",
+                "answer_key": "E"
+              },
+              {
+                "label": "The international student office is in",
+                "answer_key": "D"
+              }
+            ],
+            "options": [
+              {
+                "key": "A",
+                "text": "Building A - Student Union"
+              },
+              {
+                "key": "B",
+                "text": "Building B - Science Block"
+              },
+              {
+                "key": "C",
+                "text": "Building C - Central Campus"
+              },
+              {
+                "key": "D",
+                "text": "Building D - Admin Block"
+              },
+              {
+                "key": "E",
+                "text": "Building E - Health Services"
+              },
+              {
+                "key": "F",
+                "text": "Building F - Sports Complex"
+              },
+              {
+                "key": "G",
+                "text": "Building G - Arts Center"
+              },
+              {
+                "key": "H",
+                "text": "Building H - Accommodation Office"
+              }
+            ]
+          }
+        },
+        {
+          "index": 10,
+          "type": "short_answer",
+          "prompt": "The gym is open until __________ on weekdays",
+          "answer_key": "10 pm",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Section 3: Research Project Discussion",
+      "instructions": "Questions 11-20",
+      "questions": [
+        {
+          "index": 11,
+          "type": "multiple_choice",
+          "prompt": "What is the main topic of the research project?",
+          "answer_key": "A",
+          "options": [
+            "A. Climate change effects",
+            "B. Urban development",
+            "C. Marine biology"
+          ],
+          "image_url": null
+        },
+        {
+          "index": 12,
+          "type": "matching_draggable",
+          "prompt": "Match each researcher to their area of expertise.",
+          "answer_key": null,
+          "payload": {
+            "instructions": "Choose FOUR answers from the box and write the correct letter, A-F, next to questions 12-15.",
+            "questions": [
+              {
+                "label": "Dr. Sarah Mitchell specializes in",
+                "answer_key": "B"
+              },
+              {
+                "label": "Professor David Chen focuses on",
+                "answer_key": "A"
+              },
+              {
+                "label": "Dr. Emma Watson researches",
+                "answer_key": "D"
+              },
+              {
+                "label": "Dr. Michael Brown studies",
+                "answer_key": "C"
+              }
+            ],
+            "options": [
+              {
+                "key": "A",
+                "text": "Renewable energy technologies"
+              },
+              {
+                "key": "B",
+                "text": "Ocean acidification patterns"
+              },
+              {
+                "key": "C",
+                "text": "Arctic ice sheet dynamics"
+              },
+              {
+                "key": "D",
+                "text": "Coral reef ecosystems"
+              },
+              {
+                "key": "E",
+                "text": "Atmospheric pressure systems"
+              },
+              {
+                "key": "F",
+                "text": "Deforestation rates"
+              }
+            ]
+          }
+        },
+        {
+          "index": 16,
+          "type": "short_answer",
+          "prompt": "The research will be conducted over a period of __________ months",
+          "answer_key": "18",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 17,
+          "type": "short_answer",
+          "prompt": "Data collection will begin in __________",
+          "answer_key": "March",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 18,
+          "type": "short_answer",
+          "prompt": "The project budget is approximately £__________",
+          "answer_key": "250000",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 19,
+          "type": "short_answer",
+          "prompt": "Findings will be published in the __________ Journal",
+          "answer_key": "Environmental Science",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 20,
+          "type": "short_answer",
+          "prompt": "The team will present at the __________ conference",
+          "answer_key": "international climate",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Section 4: Historical Discoveries",
+      "instructions": "Questions 21-40",
+      "questions": [
+        {
+          "index": 21,
+          "type": "matching_draggable",
+          "prompt": "Match each invention to the correct inventor.",
+          "answer_key": null,
+          "payload": {
+            "instructions": "Choose EIGHT answers from the box and write the correct letter, A-J, next to questions 21-28.",
+            "questions": [
+              {
+                "label": "The telephone was invented by",
+                "answer_key": "A"
+              },
+              {
+                "label": "The light bulb was created by",
+                "answer_key": "C"
+              },
+              {
+                "label": "The theory of relativity was developed by",
+                "answer_key": "E"
+              },
+              {
+                "label": "Penicillin was discovered by",
+                "answer_key": "F"
+              },
+              {
+                "label": "The World Wide Web was invented by",
+                "answer_key": "H"
+              },
+              {
+                "label": "The first practical airplane was built by",
+                "answer_key": "B"
+              },
+              {
+                "label": "Radioactivity was researched by",
+                "answer_key": "D"
+              },
+              {
+                "label": "The printing press was invented by",
+                "answer_key": "G"
+              }
+            ],
+            "options": [
+              {
+                "key": "A",
+                "text": "Alexander Graham Bell"
+              },
+              {
+                "key": "B",
+                "text": "Wright Brothers"
+              },
+              {
+                "key": "C",
+                "text": "Thomas Edison"
+              },
+              {
+                "key": "D",
+                "text": "Marie Curie"
+              },
+              {
+                "key": "E",
+                "text": "Albert Einstein"
+              },
+              {
+                "key": "F",
+                "text": "Alexander Fleming"
+              },
+              {
+                "key": "G",
+                "text": "Johannes Gutenberg"
+              },
+              {
+                "key": "H",
+                "text": "Tim Berners-Lee"
+              },
+              {
+                "key": "I",
+                "text": "Isaac Newton"
+              },
+              {
+                "key": "J",
+                "text": "Leonardo da Vinci"
+              }
+            ]
+          }
+        },
+        {
+          "index": 29,
+          "type": "short_answer",
+          "prompt": "The Industrial Revolution began in the __________ century",
+          "answer_key": "18th",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 30,
+          "type": "short_answer",
+          "prompt": "Steam power was crucial for __________ development",
+          "answer_key": "industrial",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 31,
+          "type": "multiple_choice",
+          "prompt": "What was the primary source of energy before coal?",
+          "answer_key": "B",
+          "options": [
+            "A. Oil",
+            "B. Water and wind",
+            "C. Nuclear power"
+          ],
+          "image_url": null
+        },
+        {
+          "index": 32,
+          "type": "multiple_choice",
+          "prompt": "Which country led the Industrial Revolution?",
+          "answer_key": "A",
+          "options": [
+            "A. Britain",
+            "B. France",
+            "C. Germany"
+          ],
+          "image_url": null
+        },
+        {
+          "index": 33,
+          "type": "short_answer",
+          "prompt": "The first successful steam engine was built by __________",
+          "answer_key": "James Watt",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 34,
+          "type": "short_answer",
+          "prompt": "Railways transformed __________ and passenger travel",
+          "answer_key": "freight transport",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 35,
+          "type": "short_answer",
+          "prompt": "Factory workers typically worked __________ hours per day",
+          "answer_key": "12 to 14",
+          "max_words": 3,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 36,
+          "type": "short_answer",
+          "prompt": "The cotton industry relied heavily on __________ from America",
+          "answer_key": "raw cotton",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 37,
+          "type": "short_answer",
+          "prompt": "Child labor was common in __________ and mines",
+          "answer_key": "textile factories",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 38,
+          "type": "short_answer",
+          "prompt": "The invention of the spinning jenny increased __________ production",
+          "answer_key": "thread",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 39,
+          "type": "short_answer",
+          "prompt": "Urban populations grew due to __________",
+          "answer_key": "rural migration",
+          "max_words": 2,
+          "options": null,
+          "image_url": null
+        },
+        {
+          "index": 40,
+          "type": "short_answer",
+          "prompt": "Living conditions in industrial cities were often __________",
+          "answer_key": "overcrowded",
+          "max_words": 1,
+          "options": null,
+          "image_url": null
+        }
+      ]
+    }
+  ]
+}

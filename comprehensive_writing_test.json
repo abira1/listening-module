@@ -1,0 +1,42 @@
+{
+  "test_type": "writing",
+  "title": "Comprehensive Writing Test - Both Task Types",
+  "description": "A comprehensive IELTS Writing test demonstrating the writing_task question type with 2 tasks as per IELTS format.",
+  "duration_seconds": 3600,
+  "sections": [
+    {
+      "index": 1,
+      "title": "Writing Task 1",
+      "instructions": "You should spend about 20 minutes on this task.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "writing_task",
+          "instructions": "You should spend about 20 minutes on this task.",
+          "prompt": "The bar chart below shows the percentage of renewable energy usage in five countries from 2010 to 2020.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+          "chart_image": "https://i.ibb.co/HGwX8pb/milk-export-chart.png",
+          "min_words": 150,
+          "task_number": 1,
+          "answer_key": null
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Writing Task 2",
+      "instructions": "You should spend about 40 minutes on this task.",
+      "questions": [
+        {
+          "index": 2,
+          "type": "writing_task",
+          "instructions": "You should spend about 40 minutes on this task.\n\nWrite about the following topic:",
+          "prompt": "Artificial Intelligence is increasingly being used in education to personalize learning and automate administrative tasks. Some people believe this technology will revolutionize education for the better, while others worry it will replace human teachers and reduce the quality of education.\n\nDiscuss both these views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "chart_image": null,
+          "min_words": 250,
+          "task_number": 2,
+          "answer_key": null
+        }
+      ]
+    }
+  ]
+}

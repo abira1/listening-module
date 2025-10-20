@@ -1,0 +1,9 @@
+# Ignore all audio files
+*.mp3
+*.wav
+*.m4a
+*.ogg
+*.flac
+
+# But keep this .gitignore file
+!.gitignore

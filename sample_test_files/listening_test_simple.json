@@ -1,0 +1,90 @@
+{
+  "test_type": "listening",
+  "title": "IELTS Listening Test - Simple",
+  "description": "Simple listening test with 10 questions",
+  "duration_seconds": 2004,
+  "audio_url": "https://example.com/audio.mp3",
+  "sections": [
+    {
+      "section_number": 1,
+      "title": "Section 1 - Conversation",
+      "description": "Listen to a conversation between two people",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "mcq_single",
+          "text": "What is the main topic of the conversation?",
+          "options": ["A) Booking a hotel", "B) Renting a car", "C) Planning a trip", "D) Buying tickets"],
+          "correctAnswers": ["A) Booking a hotel"]
+        },
+        {
+          "id": "q2",
+          "type": "mcq_single",
+          "text": "When does the speaker want to check in?",
+          "options": ["A) Monday", "B) Tuesday", "C) Wednesday", "D) Thursday"],
+          "correctAnswers": ["B) Tuesday"]
+        },
+        {
+          "id": "q3",
+          "type": "sentence_completion",
+          "text": "The hotel is located near the ___________",
+          "correctAnswers": ["city center"]
+        },
+        {
+          "id": "q4",
+          "type": "form_completion",
+          "text": "Fill in the guest name: ___________",
+          "correctAnswers": ["John Smith"]
+        },
+        {
+          "id": "q5",
+          "type": "mcq_multiple",
+          "text": "Which facilities are available? (Select all that apply)",
+          "options": ["A) Swimming pool", "B) Gym", "C) Restaurant", "D) Parking"],
+          "correctAnswers": ["A) Swimming pool", "B) Gym", "C) Restaurant"]
+        }
+      ]
+    },
+    {
+      "section_number": 2,
+      "title": "Section 2 - Monologue",
+      "description": "Listen to a monologue about a topic",
+      "questions": [
+        {
+          "id": "q6",
+          "type": "mcq_single",
+          "text": "What is the speaker's profession?",
+          "options": ["A) Teacher", "B) Doctor", "C) Engineer", "D) Lawyer"],
+          "correctAnswers": ["A) Teacher"]
+        },
+        {
+          "id": "q7",
+          "type": "true_false_ng",
+          "text": "The speaker has 10 years of experience",
+          "correctAnswers": ["False"]
+        },
+        {
+          "id": "q8",
+          "type": "matching",
+          "text": "Match the skills with the descriptions",
+          "items": ["Communication", "Problem-solving", "Leadership"],
+          "options": ["Ability to work with others", "Finding solutions", "Guiding a team"],
+          "correctAnswers": ["Ability to work with others", "Finding solutions", "Guiding a team"]
+        },
+        {
+          "id": "q9",
+          "type": "table_completion",
+          "text": "Complete the table with information from the audio",
+          "correctAnswers": ["2020"]
+        },
+        {
+          "id": "q10",
+          "type": "fill_gaps",
+          "text": "The speaker believes that __________ is the most important skill in today's world",
+          "correctAnswers": ["communication"]
+        }
+      ]
+    }
+  ]
+}
+

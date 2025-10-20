@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Test</title>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-pcKBkfMJLN_caBH1I_y75no8sQpPZq4",
+            authDomain: "ssiltes-mock.firebaseapp.com",
+            projectId: "ssiltes-mock",
+            storageBucket: "ssiltes-mock.firebasestorage.app",
+            messagingSenderId: "759861182123",
+            appId: "1:759861182123:web:10d21fae787a8cb8a141ee",
+            measurementId: "G-REH10C72P0",
+            databaseURL: "https://ssiltes-mock-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        console.log("Firebase initialized");
+
+        // Test database connection
+        async function testFirebase() {
+            try {
+                console.log("Testing Firebase connection...");
+                const examsRef = ref(database, 'exams');
+                const snapshot = await get(examsRef);
+                
+                if (snapshot.exists()) {
+                    console.log("✅ Firebase connected successfully");
+                    console.log("Data:", snapshot.val());
+                } else {
+                    console.log("✅ Firebase connected but no data found");
+                }
+                
+                document.getElementById('result').innerHTML = "Firebase connection successful!";
+            } catch (error) {
+                console.error("❌ Firebase error:", error);
+                document.getElementById('result').innerHTML = "Firebase error: " + error.message;
+            }
+        }
+
+        // Run test when page loads
+        window.onload = testFirebase;
+    </script>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <div id="result">Testing...</div>
+</body>
+</html>

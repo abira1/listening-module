@@ -1,0 +1,41 @@
+{
+  "test_type": "writing",
+  "title": "IELTS Writing Test - Simple",
+  "description": "Simple writing test with 2 tasks",
+  "duration_seconds": 3600,
+  "sections": [
+    {
+      "section_number": 1,
+      "title": "Writing Task 1",
+      "description": "Describe a chart or diagram",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "writing_task1",
+          "text": "The chart below shows the percentage of households with different types of technology in the UK from 2000 to 2020. Summarize the information by selecting and reporting the main features, and make comparisons where relevant.",
+          "minWords": 150,
+          "maxWords": 200,
+          "task_number": 1,
+          "marks": 25
+        }
+      ]
+    },
+    {
+      "section_number": 2,
+      "title": "Writing Task 2",
+      "description": "Write an essay",
+      "questions": [
+        {
+          "id": "q2",
+          "type": "writing_task2",
+          "text": "Some people believe that technology has made our lives more complicated, while others think it has simplified our lives. Discuss both views and give your own opinion.",
+          "minWords": 250,
+          "maxWords": 300,
+          "task_number": 2,
+          "marks": 40
+        }
+      ]
+    }
+  ]
+}
+

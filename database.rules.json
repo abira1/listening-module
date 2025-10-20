@@ -1,0 +1,61 @@
+{
+  "rules": {
+    // Exams - Public read for published exams, admin write only
+    "exams": {
+      ".read": true,
+      ".write": false,
+      "$examId": {
+        ".read": true,
+        ".write": false
+      }
+    },
+
+    // Sections - Public read, admin write only
+    "sections": {
+      ".read": true,
+      ".write": false,
+      "$sectionId": {
+        ".read": true,
+        ".write": false
+      }
+    },
+
+    // Questions - Public read, admin write only
+    "questions": {
+      ".read": true,
+      ".write": false,
+      "$questionId": {
+        ".read": true,
+        ".write": false
+      }
+    },
+
+    // Students - Authenticated users can read/write their own data
+    "students": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".validate": "newData.hasChildren(['uid', 'email', 'name'])"
+      }
+    },
+
+    // Submissions - Authenticated users can read/write their own submissions
+    "submissions": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$submissionId": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['id', 'exam_id', 'user_id_or_session'])"
+      }
+    },
+
+    // Admin list - For admin verification
+    "admins": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}

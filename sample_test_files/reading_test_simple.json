@@ -1,0 +1,100 @@
+{
+  "test_type": "reading",
+  "title": "IELTS Reading Test - Simple",
+  "description": "Simple reading test with 12 questions",
+  "duration_seconds": 3600,
+  "sections": [
+    {
+      "section_number": 1,
+      "title": "Passage 1 - Academic",
+      "description": "Read the passage about climate change",
+      "passage_text": "Climate change is one of the most pressing issues of our time. Rising global temperatures are causing significant changes to our planet's ecosystems. Scientists have documented increases in extreme weather events, rising sea levels, and shifts in wildlife populations.",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "true_false_ng",
+          "text": "Climate change is affecting global temperatures",
+          "correctAnswers": ["True"]
+        },
+        {
+          "id": "q2",
+          "type": "true_false_ng",
+          "text": "Sea levels are decreasing due to climate change",
+          "correctAnswers": ["False"]
+        },
+        {
+          "id": "q3",
+          "type": "true_false_ng",
+          "text": "The passage mentions the causes of climate change",
+          "correctAnswers": ["Not Given"]
+        },
+        {
+          "id": "q4",
+          "type": "matching_headings",
+          "text": "Match the following headings to the paragraphs",
+          "options": ["A) Global Temperature Rise", "B) Environmental Impact", "C) Scientific Evidence"],
+          "correctAnswers": ["C) Scientific Evidence"]
+        },
+        {
+          "id": "q5",
+          "type": "note_completion",
+          "text": "Complete the notes: Climate change causes __________ in extreme weather events",
+          "correctAnswers": ["increases"]
+        },
+        {
+          "id": "q6",
+          "type": "summary_completion",
+          "text": "Complete the summary: Scientists have documented __________ in wildlife populations",
+          "correctAnswers": ["shifts"]
+        }
+      ]
+    },
+    {
+      "section_number": 2,
+      "title": "Passage 2 - General",
+      "description": "Read the passage about renewable energy",
+      "passage_text": "Renewable energy sources such as solar and wind power are becoming increasingly important. These clean energy alternatives reduce our dependence on fossil fuels and help combat climate change. Many countries are investing heavily in renewable energy infrastructure.",
+      "questions": [
+        {
+          "id": "q7",
+          "type": "matching_features",
+          "text": "Match the features with the energy sources",
+          "options": ["Solar power", "Wind power"],
+          "correctAnswers": ["Clean energy", "Reduces fossil fuel dependence"]
+        },
+        {
+          "id": "q8",
+          "type": "matching_endings",
+          "text": "Complete the sentence: Renewable energy sources...",
+          "options": ["A) are becoming increasingly important", "B) are expensive to install", "C) are not effective"],
+          "correctAnswers": ["A) are becoming increasingly important"]
+        },
+        {
+          "id": "q9",
+          "type": "true_false_ng",
+          "text": "Renewable energy helps reduce dependence on fossil fuels",
+          "correctAnswers": ["True"]
+        },
+        {
+          "id": "q10",
+          "type": "note_completion",
+          "text": "Complete the notes: Many countries are investing in __________ energy infrastructure",
+          "correctAnswers": ["renewable"]
+        },
+        {
+          "id": "q11",
+          "type": "summary_completion",
+          "text": "Complete the summary: Solar and wind power are __________ energy alternatives",
+          "correctAnswers": ["clean"]
+        },
+        {
+          "id": "q12",
+          "type": "true_false_ng",
+          "text": "The passage mentions the cost of renewable energy",
+          "correctAnswers": ["Not Given"]
+        }
+      ]
+    }
+  ]
+}
+

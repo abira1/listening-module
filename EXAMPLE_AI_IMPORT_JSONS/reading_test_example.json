@@ -1,0 +1,291 @@
+{
+  "test_type": "reading",
+  "title": "IELTS Reading Practice Test 2",
+  "description": "Complete IELTS Academic Reading test with 3 passages and 40 questions covering diverse academic topics",
+  "duration_seconds": 3600,
+  "audio_url": null,
+  "sections": [
+    {
+      "index": 1,
+      "title": "Passage 1: The History of Chocolate",
+      "passage_text": "A. The cocoa tree, Theobroma cacao, was first cultivated by the Maya, Toltec, and Aztec peoples of Central America over 3,000 years ago. The Maya prepared a spicy drink from cocoa beans mixed with chillies, cornmeal and water. This bitter beverage was far from the sweet chocolate we know today.\n\nB. When Spanish conquistadors arrived in the Americas in the 16th century, they were introduced to this exotic drink. Hernán Cortés brought cocoa beans back to Spain in 1528, where sugar was added to make the drink more palatable to European tastes. By the 17th century, chocolate houses became fashionable gathering places in London, similar to modern coffee shops.\n\nC. The industrialization of chocolate production began in the 19th century. In 1828, Dutch chemist Coenraad van Houten invented a process to remove much of the cocoa butter from roasted cocoa beans, resulting in cocoa powder. This innovation made chocolate drinks more affordable and less greasy. Twenty years later, in 1847, Joseph Fry discovered that adding melted cocoa butter back into Dutch cocoa created a smooth paste that could be molded - the world's first solid eating chocolate.\n\nD. Milk chocolate was invented in 1875 by Swiss chocolatier Daniel Peter, who spent eight years experimenting with different formulas. He finally succeeded by using condensed milk, which had been invented by Henri Nestlé. This partnership marked the beginning of Nestlé's chocolate empire.\n\nE. Today, the chocolate industry is worth over $100 billion annually. The Ivory Coast and Ghana produce nearly 60% of the world's cocoa supply. However, the industry faces challenges including climate change, deforestation, and labor concerns. Fair trade certification has emerged as one solution to ensure ethical production practices.\n\nF. Modern chocolate production is a complex process involving fermentation, drying, roasting, and conching. Premium chocolates often have cocoa content of 70% or higher, and single-origin chocolates, made from beans from specific regions, are becoming increasingly popular among connoisseurs. Despite health concerns about sugar and fat content, dark chocolate has been found to contain beneficial antioxidants and may have cardiovascular benefits when consumed in moderation.",
+      "instructions": "Questions 1-13. Reading Passage 1 has six paragraphs, A-F.",
+      "questions": [
+        {
+          "index": 1,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph contains the following information? The origin of cocoa cultivation.",
+          "answer_key": "A"
+        },
+        {
+          "index": 2,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph mentions chocolate consumption venues in Europe.",
+          "answer_key": "B"
+        },
+        {
+          "index": 3,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph discusses the invention of milk chocolate.",
+          "answer_key": "D"
+        },
+        {
+          "index": 4,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph addresses environmental and social issues.",
+          "answer_key": "E"
+        },
+        {
+          "index": 5,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph describes the modern manufacturing process.",
+          "answer_key": "F"
+        },
+        {
+          "index": 6,
+          "type": "sentence_completion",
+          "prompt": "The Maya mixed cocoa beans with __________ to make a drink.",
+          "answer_key": "chillies"
+        },
+        {
+          "index": 7,
+          "type": "sentence_completion",
+          "prompt": "Hernán Cortés introduced cocoa to __________ in 1528.",
+          "answer_key": "Spain"
+        },
+        {
+          "index": 8,
+          "type": "sentence_completion",
+          "prompt": "The process to create cocoa powder was invented by __________.",
+          "answer_key": "Coenraad van Houten"
+        },
+        {
+          "index": 9,
+          "type": "true_false_not_given",
+          "prompt": "Chocolate was initially consumed as a beverage.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 10,
+          "type": "true_false_not_given",
+          "prompt": "The first solid eating chocolate was created in the 18th century.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 11,
+          "type": "true_false_not_given",
+          "prompt": "Daniel Peter worked alone to invent milk chocolate.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 12,
+          "type": "short_answer_reading",
+          "prompt": "What percentage of cocoa is found in premium chocolates?",
+          "answer_key": "70%",
+          "max_words": 1
+        },
+        {
+          "index": 13,
+          "type": "short_answer_reading",
+          "prompt": "Which two African countries produce most of the world's cocoa?",
+          "answer_key": "Ivory Coast and Ghana",
+          "max_words": 4
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Passage 2: Artificial Intelligence in Healthcare",
+      "passage_text": "A. Artificial Intelligence (AI) is revolutionizing healthcare in ways that seemed impossible just a decade ago. From diagnosing diseases to developing new drugs, AI systems are augmenting the capabilities of medical professionals and improving patient outcomes. The integration of machine learning algorithms with vast medical datasets has created unprecedented opportunities for innovation in healthcare delivery.\n\nB. One of the most promising applications of AI in medicine is diagnostic imaging. Deep learning algorithms can now analyze X-rays, CT scans, and MRIs with accuracy that rivals or exceeds human radiologists. A study published in Nature Medicine found that an AI system developed by Google Health could detect breast cancer in mammograms with fewer false positives and false negatives than human experts. Similar systems are being developed for detecting diabetic retinopathy, lung cancer, and brain tumors.\n\nC. AI is also transforming drug discovery and development, a process that traditionally takes over a decade and costs billions of dollars. Machine learning algorithms can predict how different molecules will behave in the human body, significantly reducing the time and cost of bringing new medications to market. For example, Atomwise, a San Francisco-based company, uses AI to predict drug effectiveness and has identified potential treatments for Ebola and multiple sclerosis in mere days, compared to the months or years required by conventional methods.\n\nD. In clinical settings, AI-powered chatbots and virtual assistants are improving patient engagement and care coordination. These systems can answer common medical questions, schedule appointments, remind patients to take medications, and even provide initial symptom assessment. While they cannot replace human healthcare providers, they can handle routine inquiries and administrative tasks, freeing medical staff to focus on more complex patient needs.\n\nE. Predictive analytics is another area where AI is making significant contributions. By analyzing patient data, including genetic information, lifestyle factors, and medical history, AI systems can predict disease risk and recommend preventive measures. For instance, an AI algorithm might identify patients at high risk of developing diabetes and suggest lifestyle modifications before the disease manifests. This shift from reactive to proactive healthcare has the potential to reduce healthcare costs while improving population health.\n\nF. Despite these advances, the implementation of AI in healthcare faces several challenges. Privacy concerns are paramount, as AI systems require access to vast amounts of sensitive patient data. There are also questions about liability when AI makes diagnostic or treatment errors. Furthermore, the 'black box' nature of many AI algorithms makes it difficult for doctors to understand how decisions are made, which can undermine trust. Regulatory frameworks are struggling to keep pace with technological advancement, creating uncertainty for healthcare organizations considering AI adoption.\n\nG. Looking forward, the successful integration of AI in healthcare will require collaboration between technologists, medical professionals, ethicists, and policymakers. Clear guidelines for data privacy, algorithm transparency, and clinical validation are essential. Medical education must evolve to prepare future healthcare providers to work effectively alongside AI systems. With thoughtful implementation, AI has the potential to democratize healthcare access, reduce costs, and save millions of lives worldwide.",
+      "instructions": "Questions 14-27. Reading Passage 2 has seven paragraphs, A-G.",
+      "questions": [
+        {
+          "index": 14,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph discusses AI in medical diagnosis?",
+          "answer_key": "B"
+        },
+        {
+          "index": 15,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph mentions the cost and time of traditional drug development?",
+          "answer_key": "C"
+        },
+        {
+          "index": 16,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph addresses challenges in implementing AI in healthcare?",
+          "answer_key": "F"
+        },
+        {
+          "index": 17,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph describes virtual health assistants?",
+          "answer_key": "D"
+        },
+        {
+          "index": 18,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph discusses future requirements for AI integration?",
+          "answer_key": "G"
+        },
+        {
+          "index": 19,
+          "type": "sentence_completion_wordlist",
+          "prompt": "AI systems can analyze medical images with __________ accuracy.",
+          "answer_key": "remarkable",
+          "wordlist": ["remarkable", "limited", "questionable", "moderate"]
+        },
+        {
+          "index": 20,
+          "type": "sentence_completion_wordlist",
+          "prompt": "Drug discovery using AI is __________ faster than traditional methods.",
+          "answer_key": "significantly",
+          "wordlist": ["slightly", "significantly", "marginally", "barely"]
+        },
+        {
+          "index": 21,
+          "type": "sentence_completion_wordlist",
+          "prompt": "Privacy concerns are __________ when implementing AI in healthcare.",
+          "answer_key": "paramount",
+          "wordlist": ["irrelevant", "minor", "paramount", "negligible"]
+        },
+        {
+          "index": 22,
+          "type": "short_answer_reading",
+          "prompt": "Which company uses AI to identify Ebola treatments?",
+          "answer_key": "Atomwise",
+          "max_words": 1
+        },
+        {
+          "index": 23,
+          "type": "true_false_not_given",
+          "prompt": "AI can completely replace human healthcare providers.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 24,
+          "type": "true_false_not_given",
+          "prompt": "Google Health developed an AI system for breast cancer detection.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 25,
+          "type": "true_false_not_given",
+          "prompt": "All doctors trust AI diagnostic systems.",
+          "answer_key": "NOT GIVEN",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 26,
+          "type": "true_false_not_given",
+          "prompt": "Predictive analytics can identify disease risk before symptoms appear.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 27,
+          "type": "sentence_completion",
+          "prompt": "Future healthcare providers need education to work with __________.",
+          "answer_key": "AI systems"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Passage 3: Urban Planning in the 21st Century",
+      "passage_text": "A. As the global population continues to urbanize at an unprecedented rate, with projections suggesting that 68% of people will live in cities by 2050, urban planning faces challenges and opportunities unlike any previous era. Cities must accommodate population growth while addressing climate change, resource scarcity, technological disruption, and social inequality. The 21st-century urban planner must think holistically, integrating transportation, housing, environmental sustainability, and social equity into comprehensive strategies that create livable, resilient communities.\n\nB. Smart city technology represents one of the most transformative trends in modern urban planning. By deploying networks of sensors and leveraging big data analytics, cities can optimize everything from traffic flow to energy consumption. Barcelona's smart city initiatives, for example, include intelligent street lighting that adjusts based on pedestrian presence, smart parking systems that guide drivers to available spaces, and waste management sensors that optimize collection routes. These innovations reduce costs, minimize environmental impact, and improve quality of life for residents.\n\nC. Sustainable transportation has become a central focus of urban planning. Cities worldwide are investing in expanded public transit networks, protected bike lanes, and pedestrian-friendly infrastructure. Copenhagen has set a goal of becoming carbon-neutral by 2025, largely through transportation initiatives. The city has created over 390 kilometers of bike lanes, and 62% of residents commute by bicycle daily. Meanwhile, cities like Singapore are implementing congestion pricing to reduce traffic while funding public transportation improvements. Electric buses and car-sharing programs are becoming increasingly common, marking a shift away from private vehicle ownership.\n\nD. Green infrastructure is transforming the urban landscape in response to climate change. Rather than viewing vegetation as merely aesthetic, modern planners recognize plants as crucial infrastructure that provides multiple services. Green roofs absorb rainwater, reduce urban heat island effects, and provide habitats for wildlife. Singapore's Gardens by the Bay exemplifies this approach, featuring vertical gardens and tree-like structures that harvest rainwater and generate solar power. Similarly, cities are creating bioswales and rain gardens to manage stormwater naturally, reducing strain on aging drainage systems while beautifying neighborhoods.\n\nE. The concept of mixed-use development challenges traditional zoning that separates residential, commercial, and industrial areas. By integrating housing, offices, shops, and recreational spaces within walkable neighborhoods, cities can reduce commuting distances, support local businesses, and create vibrant community hubs. Portland, Oregon, has been a pioneer in this approach, with policies encouraging diverse land uses and compact development. This model supports the '15-minute city' vision, where residents can access most daily needs within a short walk or bike ride from home.\n\nF. Affordable housing remains one of urban planning's most persistent challenges. As cities become economic powerhouses, rising property values often displace long-time residents and essential workers. Vienna, Austria, has addressed this through social housing programs that provide quality accommodation for over 60% of residents at below-market rates. Other cities are experimenting with inclusionary zoning, which requires developers to include affordable units in new projects, and community land trusts, which separate land ownership from housing ownership to maintain long-term affordability.\n\nG. Participatory planning processes are giving residents greater voice in shaping their communities. Digital platforms enable broader civic engagement, allowing citizens to submit ideas, vote on proposals, and provide feedback on projects. Medellín, Colombia, transformed from one of the world's most dangerous cities to an innovation hub partly through inclusive planning that prioritized previously marginalized neighborhoods. Community involvement helps ensure that development reflects actual needs and builds social cohesion.\n\nH. Looking ahead, successful cities will be those that embrace adaptability. Climate change, technological advancement, and demographic shifts will continue to present new challenges. Urban planning must therefore focus not just on solving today's problems but on creating flexible systems that can evolve. This requires interdisciplinary collaboration, long-term thinking, and willingness to experiment with innovative solutions. The cities that thrive in the coming decades will be those that put people and planet at the center of planning decisions.",
+      "instructions": "Questions 28-40. Reading Passage 3 has eight paragraphs, A-H.",
+      "questions": [
+        {
+          "index": 28,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph mentions sustainable transportation?",
+          "answer_key": "C"
+        },
+        {
+          "index": 29,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph discusses smart city technology?",
+          "answer_key": "B"
+        },
+        {
+          "index": 30,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph addresses affordable housing challenges?",
+          "answer_key": "F"
+        },
+        {
+          "index": 31,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph describes citizen participation in planning?",
+          "answer_key": "G"
+        },
+        {
+          "index": 32,
+          "type": "matching_paragraphs",
+          "prompt": "Which paragraph talks about the future of urban planning?",
+          "answer_key": "H"
+        },
+        {
+          "index": 33,
+          "type": "sentence_completion",
+          "prompt": "By 2050, an estimated __________ of people will live in cities.",
+          "answer_key": "68%"
+        },
+        {
+          "index": 34,
+          "type": "sentence_completion",
+          "prompt": "Copenhagen aims to be carbon-neutral by __________.",
+          "answer_key": "2025"
+        },
+        {
+          "index": 35,
+          "type": "true_false_not_given",
+          "prompt": "Modern cities prioritize green spaces for environmental benefits.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 36,
+          "type": "true_false_not_given",
+          "prompt": "All cities have successfully implemented smart technology.",
+          "answer_key": "NOT GIVEN",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 37,
+          "type": "true_false_not_given",
+          "prompt": "Vienna provides social housing for most of its residents.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"]
+        },
+        {
+          "index": 38,
+          "type": "short_answer_reading",
+          "prompt": "What percentage of Copenhagen residents commute by bicycle?",
+          "answer_key": "62%",
+          "max_words": 1
+        },
+        {
+          "index": 39,
+          "type": "short_answer_reading",
+          "prompt": "Which city transformed from dangerous to innovative through inclusive planning?",
+          "answer_key": "Medellín",
+          "max_words": 1
+        },
+        {
+          "index": 40,
+          "type": "sentence_completion",
+          "prompt": "The '15-minute city' concept allows residents to access daily needs within a short __________.",
+          "answer_key": "walk or bike ride"
+        }
+      ]
+    }
+  ]
+}

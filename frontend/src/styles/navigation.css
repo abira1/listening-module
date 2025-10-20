@@ -1,0 +1,558 @@
+/* QTI-Style Navigation Bar CSS - Complete Implementation */
+
+/* ================================================
+   PREVIOUS/NEXT NAVIGATION BUTTONS (Main Controls)
+   Using nav-buttons.png sprite (112px × 56px)
+   ================================================ */
+[data-function~="next"],
+[data-function~="previous"] {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+    background: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/k44x4hg5_nav-buttons.png") no-repeat left top;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+[data-function~="next"] {
+    right: 0;
+}
+
+[data-function~="next"]:hover,
+[data-function~="next"]:focus {
+    background-position: right top;
+}
+
+[data-function~="previous"] {
+    right: 56px;
+    background-position: left bottom;
+}
+
+[data-function~="previous"]:hover,
+[data-function~="previous"]:focus {
+    background-position: right bottom;
+}
+
+/* Hide when disabled */
+[data-function~="previous"][disabled],
+[data-function~="next"][disabled] {
+    display: none;
+}
+
+/* ================================================
+   REVIEW CHECKBOX
+   ================================================ */
+#review-checkbox {
+    bottom: 0.85em;
+    display: block;
+    left: 0.5em;
+    position: absolute;
+    font-size: 0.9em;
+}
+
+#review-checkbox input[connect-function~="mark-for-review"] {
+    vertical-align: -0.15em;
+}
+
+#review-checkbox label {
+    cursor: pointer;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* ================================================
+   HOVER TOOLTIP (Page Identifier)
+   Shows in both views with status information
+   ================================================ */
+#pageIdentifier {
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    position: absolute;
+    font-size: 0.85em;
+    margin-bottom: 1em;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: #000;
+    z-index: 100;
+    bottom: 3.5em;
+    pointer-events: none;
+    display: none;
+    white-space: nowrap;
+}
+
+#pageIdentifier p {
+    margin: 0;
+    padding: 2px 0;
+    text-align: left;
+    font-weight: 500;
+}
+
+#pageIdentifier .tooltip-status {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 2px;
+}
+
+/* Status colors in tooltip */
+#pageIdentifier .status-current {
+    color: #007BFF;
+    font-weight: bold;
+}
+
+#pageIdentifier .status-completed {
+    color: #222;
+}
+
+#pageIdentifier .status-review {
+    color: #FFD700;
+}
+
+#pageIdentifier .status-unanswered {
+    color: #999;
+}
+
+/* Arrow pointing down to navigation item */
+#pageIdentifier span.tooltip-arrow {
+    width: 0;
+    height: 0;
+    line-height: 0;
+    border-left: 0.6em solid transparent;
+    border-right: 0.6em solid transparent;
+    border-top: 0.6em solid #fff;
+    position: absolute;
+    bottom: -0.6em;
+    left: 50%;
+    margin-left: -0.6em;
+    filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.1));
+}
+
+/* ================================================
+   NAVIGATION BAR CONTAINER
+   ================================================ */
+#navigation-bar {
+    margin-left: 5.3em;
+    margin-right: 8.3em;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-right: 30px;
+}
+
+/* MINIMISED VIEW STATE */
+#navigation-bar.minimised {
+    margin-bottom: 3px;
+    padding-top: 1.35em;
+}
+
+/* MAXIMISED VIEW STATE */
+#navigation-bar.maximised {
+    border: 1px solid #fff;
+    border-bottom: 0;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 1.0em;
+    background: rgba(255, 255, 255, 0.25);
+    -moz-border-radius: 0.5em 0.5em 0 0;
+    border-radius: 0.5em 0.5em 0 0;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ================================================
+   TEST PART AND LAYOUT
+   ================================================ */
+#navigation-bar [connect-class~=testPart] ul,
+#navigation-bar [connect-class~=testPart] li,
+#navigation-bar [connect-class~=testPart] a {
+    display: block;
+    float: left;
+}
+
+[connect-class~="testPart"] > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+[connect-class~="assessmentSection"] {
+    margin-bottom: 0.5em;
+}
+
+/* Section Label */
+.section-label {
+    display: block;
+    float: left;
+    clear: left;
+    font-weight: bold;
+    font-size: 0.85em;
+    color: #374151;
+    margin: 0 0 0.3em 0;
+    padding: 0.2em 0.5em;
+}
+
+/* Hide section labels in minimised view */
+#navigation-bar.minimised .section-label {
+    position: absolute;
+    display: block;
+    top: auto;
+    left: -100000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Question List within sections */
+#navigation-bar [connect-class~="assessmentSection"] > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+#navigation-bar [connect-class~="assessmentSection"] > ul li {
+    display: inline-block;
+    float: left;
+}
+
+/* ================================================
+   QUESTION BUTTON BASE STYLES (Default: Unanswered)
+   ================================================ */
+#navigation-bar [connect-class~=testPart] ul a {
+    overflow: hidden;
+    color: #fff;
+    position: relative;
+    display: block;
+    background-color: #000;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png");
+    text-align: center;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* ================================================
+   MINIMISED VIEW - QUESTION BUTTONS (Base)
+   ================================================ */
+#navigation-bar.minimised [connect-class~=testPart] ul a {
+    margin: 3px 1px 0.2em 0;
+    padding-left: 1em;
+    width: 1em;
+    height: 1em;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #000 !important;
+    border: 2px solid #000 !important;
+    border-radius: 50%;
+}
+
+/* Minimised - UNANSWERED (black circle) */
+#navigation-bar.minimised [connect-class~=testPart] ul a:not([connect-state~=completed]):not([connect-state~=current]) {
+    background-color: #000 !important;
+    background-image: none !important;
+    border-color: #000 !important;
+}
+
+/* Minimised - ANSWERED/Completed state (white circle with black number) */
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
+    background-color: #fff !important;
+    background-image: none !important;
+    border-color: #fff !important;
+}
+
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
+    color: #000 !important;
+    border-bottom: none !important;
+}
+
+/* MINIMISED - Current question as TRIANGLE (white triangle on blue) */
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current] {
+    width: 0;
+    height: 0;
+    z-index: 1;
+    margin: 0 -2px auto -2px;
+    padding: 0 1px 0 0;
+    border-left: 0.7em solid transparent;
+    background: none;
+    border-right: 0.7em solid transparent;
+    border-top: 1.2em solid #007BFF;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current]:hover,
+#navigation-bar.minimised [connect-class~=testPart] ul a[connect-state~=current]:focus {
+    border-top: 1.2em solid #0056b3;
+}
+
+/* MAXIMISED - Current question as BLUE BOX with white number and white underline */
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] {
+    background-color: #007BFF !important;
+    border-color: #007BFF !important;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] .question-number {
+    color: #fff !important;
+    border-bottom: 2px solid #fff !important;
+}
+
+/* ================================================
+   MAXIMISED VIEW - QUESTION BUTTONS (Base sizing)
+   ================================================ */
+#navigation-bar.maximised [connect-class~=testPart] ul a {
+    margin-right: 0.143em;
+    margin-bottom: 0.5em;
+    border: 1px solid black;
+    width: 1.6em;
+    height: 1.6em;
+    font-size: 14px;
+    -moz-background-size: contain;
+    background-size: contain;
+    line-height: 1.6em;
+    color: #fff;
+    font-weight: bold;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    /* Default background for unanswered - will be overridden by state classes */
+    background-color: #000;
+}
+
+/* Make triangle invisible in maximised view - show current state as blue box instead */
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] .question-number {
+    display: inline-block;
+}
+
+/* ================================================
+   QUESTION STATE INDICATORS (All Views)
+   ================================================ */
+
+/* Default state - Black box with white number (NO underline) - UNANSWERED */
+#navigation-bar [connect-class~=testPart] ul a .question-number {
+    border-bottom: none !important;
+    padding: 0 3px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    color: #fff !important;
+}
+
+/* UNANSWERED - Ensure black background for non-answered, non-current questions */
+#navigation-bar [connect-class~=testPart] ul a:not([connect-state~=completed]):not([connect-state~=current]) {
+    background-color: #000 !important;
+    border-color: #000 !important;
+    color: #fff !important;
+}
+
+#navigation-bar [connect-class~=testPart] ul a:not([connect-state~=completed]):not([connect-state~=current]) .question-number {
+    color: #fff !important;
+    border-bottom: none !important;
+}
+
+/* ================================================
+   CURRENT STATE - Blue button with white number and white underline
+   ================================================ */
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current] {
+    background-color: #007BFF !important;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
+    border-color: #007BFF !important;
+    color: #fff !important;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] {
+    background-color: #007BFF !important;
+    background-image: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/tspas01n_button.png") !important;
+    border: 1px solid #007BFF !important;
+}
+
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current] .question-number {
+    border-bottom: 2px solid #fff !important;
+    color: #fff !important;
+    padding: 0 3px;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=current] .question-number {
+    border-bottom: 2px solid #fff !important;
+    color: #fff !important;
+}
+
+/* Current state hover */
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current]:hover,
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current]:focus {
+    transform: scale(1.05);
+    background-color: #0056b3 !important;
+}
+
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current]:hover .question-number,
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=current]:focus .question-number {
+    border-bottom-color: #fff !important;
+    color: #fff !important;
+}
+
+/* ================================================
+   COMPLETED/ANSWERED STATE - White box with black number and black underline
+   ================================================ */
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
+    background-color: #fff !important;
+    background-image: none !important;
+    color: #000 !important;
+    border-color: #ddd !important;
+    border: 1px solid #ddd !important;
+}
+
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
+    border-bottom: 2px solid #000 !important;
+    color: #000 !important;
+    padding: 0 3px;
+    display: inline-block;
+}
+
+/* Ensure completed state takes priority in maximised view */
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) {
+    background-color: #fff !important;
+    background-image: none !important;
+    border: 1px solid #ddd !important;
+    color: #000 !important;
+}
+
+#navigation-bar.maximised [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]) .question-number {
+    color: #000 !important;
+    border-bottom: 2px solid #000 !important;
+}
+
+/* Marked for review - Circular border with yellow glow */
+#navigation-bar.maximised [connect-class~=testPart] a[connect-state~=marked-for-review],
+#navigation-bar.minimised [connect-class~=testPart] a[connect-state~=marked-for-review]:not([connect-state~=current]) {
+    -moz-border-radius: 50% !important;
+    border-radius: 50% !important;
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+/* Hover state for all questions (except completed) */
+#navigation-bar [connect-class~=testPart] ul a:not([connect-state~=completed]):hover,
+#navigation-bar [connect-class~=testPart] ul a:not([connect-state~=completed]):focus {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+/* Hover on completed questions - keep white background */
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):hover,
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):focus {
+    background-color: #f0f0f0 !important;
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):hover .question-number,
+#navigation-bar [connect-class~=testPart] ul a[connect-state~=completed]:not([connect-state~=current]):focus .question-number {
+    color: #000 !important;
+    border-bottom-color: #000 !important;
+}
+
+/* ================================================
+   VIEW TOGGLE CONTROLS
+   ================================================ */
+#navigation-bar .views {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+}
+
+#navigation-bar .minimise {
+    width: 28px;
+    height: 28px;
+    background: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/qkgf8kz2_iconMinimise.png") no-repeat left top;
+    display: block;
+    cursor: pointer;
+    border: none;
+    overflow: hidden;
+}
+
+#navigation-bar .maximise {
+    width: 28px;
+    height: 28px;
+    background: url("https://customer-assets.emergentagent.com/job_2032cb7a-30f1-4e6c-bb06-e6d26f39d0d0/artifacts/83opzicx_iconMaximise.png") no-repeat left top;
+    display: block;
+    cursor: pointer;
+    border: none;
+    overflow: hidden;
+}
+
+/* Hide buttons based on view state */
+#navigation-bar.minimised .minimise,
+#navigation-bar.maximised .maximise,
+#navigation-bar a.minimise span,
+#navigation-bar a.maximise span,
+#navigation-bar.minimised .section-label,
+#navigation-bar .question-label {
+    position: absolute;
+    display: block;
+    top: auto;
+    left: -100000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Question Label - Hidden visually but accessible to screen readers */
+.question-number {
+    position: relative;
+    z-index: 1;
+}
+
+/* Reader-only elements */
+.reader-only {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* ================================================
+   CLEARFIX FOR FLOATING ELEMENTS
+   ================================================ */
+#navigation-bar [connect-class~=testPart]:after,
+#navigation-bar [connect-class~=assessmentSection] > ul:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* ================================================
+   RESPONSIVE ADJUSTMENTS
+   ================================================ */
+@media (max-width: 768px) {
+    #navigation-bar {
+        margin-left: 3em;
+        margin-right: 6em;
+    }
+    
+    #navigation-bar.maximised [connect|class~=testPart] ul a {
+        width: 1.4em;
+        height: 1.4em;
+        line-height: 1.4em;
+        font-size: 12px;
+    }
+    
+    [data-function~="next"],
+    [data-function~="previous"] {
+        width: 48px;
+        height: 48px;
+    }
+    
+    [data-function~="previous"] {
+        right: 48px;
+    }
+}
