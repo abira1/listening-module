@@ -18,6 +18,7 @@ export function ExamTest() {
   const { isAuthenticated, user, loading: authLoading } = useAuth();
   const [currentScreen, setCurrentScreen] = useState('confirmDetails');
   const [exam, setExam] = useState(null);
+  const [fullExamData, setFullExamData] = useState(null);
   const [loading, setLoading] = useState(true);
   const audioRef = useRef(null);
 
@@ -27,8 +28,10 @@ export function ExamTest() {
       if (!isAuthenticated) {
         // Redirect to login if not authenticated
         navigate('/student');
-      } else if (user && user.status !== 'approved') {
-        // Only approved students can take exams
+      } else if (user && user.status && user.status !== 'active' && user.status !== 'approved') {
+        // For local auth system, status is 'active' by default
+        // For Firebase/other systems, status might be 'approved'
+        // Only redirect if status is explicitly something else (like 'pending')
         navigate('/waiting-approval');
       }
     }
@@ -38,7 +41,12 @@ export function ExamTest() {
     const loadExam = async () => {
       if (examId && isAuthenticated) {
         try {
-          const examData = await BackendService.getExam(examId);
+          // Load full exam data with sections and questions
+          const fullData = await BackendService.getExamWithSectionsAndQuestions(examId);
+          // Store full exam data for test components
+          setFullExamData(fullData);
+          // Extract exam object from the response
+          const examData = fullData.exam;
           setExam(examData);
           setLoading(false);
         } catch (error) {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Get backend URL from environment variable
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
 // Create axios instance with base configuration
 const api = axios.create({
@@ -16,6 +16,126 @@ const api = axios.create({
 const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
 
 export const BackendService = {
+  // ==================== LOCAL AUTHENTICATION ====================
+
+  // Student Login
+  studentLogin: async (userId, registrationNumber) => {
+    try {
+      const formData = new FormData();
+      formData.append('user_id', userId);
+      formData.append('registration_number', registrationNumber);
+
+      const response = await api.post('/auth/student-login', formData);
+      return response.data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw new Error(error.response?.data?.detail || 'Login failed');
+    }
+  },
+
+  // Student Logout
+  studentLogout: async (sessionToken) => {
+    try {
+      const response = await api.post('/auth/student/logout', { session_token: sessionToken });
+      return response.data;
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw new Error('Logout failed');
+    }
+  },
+
+  // Get Student Profile
+  getStudentProfile: async (sessionToken) => {
+    try {
+      const response = await api.get('/auth/student/profile', {
+        params: { session_token: sessionToken }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting profile:', error);
+      throw new Error('Failed to get profile');
+    }
+  },
+
+  // ==================== ADMIN STUDENT MANAGEMENT ====================
+
+  // Add Student
+  addStudent: async (formData) => {
+    try {
+      const response = await api.post('/auth/admin/students/add', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding student:', error);
+      throw new Error(error.response?.data?.detail || 'Failed to add student');
+    }
+  },
+
+  // Get All Students
+  getAdminStudents: async (status = null) => {
+    try {
+      const params = status ? { status } : {};
+      const response = await api.get('/auth/admin/students', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting students:', error);
+      throw new Error('Failed to get students');
+    }
+  },
+
+  // Get Student Details
+  getStudentDetails: async (userId) => {
+    try {
+      const response = await api.get(`/auth/admin/students/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting student details:', error);
+      throw new Error('Failed to get student details');
+    }
+  },
+
+  // Update Student Status
+  updateStudentStatus: async (userId, status) => {
+    try {
+      const formData = new FormData();
+      formData.append('status', status);
+
+      const response = await api.put(`/auth/admin/students/${userId}/status`, formData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating status:', error);
+      throw new Error('Failed to update status');
+    }
+  },
+
+  // Regenerate Student Credentials
+  regenerateStudentCredentials: async (userId, reason = '') => {
+    try {
+      const formData = new FormData();
+      formData.append('reason', reason);
+
+      const response = await api.post(`/auth/admin/students/${userId}/regenerate-credentials`, formData);
+      return response.data;
+    } catch (error) {
+      console.error('Error regenerating credentials:', error);
+      throw new Error('Failed to regenerate credentials');
+    }
+  },
+
+  // Delete Student
+  deleteStudent: async (userId) => {
+    try {
+      const response = await api.delete(`/auth/admin/students/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting student:', error);
+      throw new Error('Failed to delete student');
+    }
+  },
+
+  // ==================== EXAM OPERATIONS ====================
+
   // Exam operations
   createExam: async (examData) => {
     try {
@@ -524,6 +644,82 @@ export const BackendService = {
         return error.response.data;
       }
       throw new Error('Failed to validate JSON file');
+    }
+  },
+
+  // ============================================================================
+  // PHASE 3: EXAM SUBMISSION & GRADING
+  // ============================================================================
+
+  // Start a new exam submission
+  startSubmission: async (trackId, studentId) => {
+    try {
+      const response = await api.post('/submissions/start', {
+        track_id: trackId,
+        student_id: studentId
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error starting submission:', error);
+      throw new Error(error.response?.data?.detail || 'Failed to start exam');
+    }
+  },
+
+  // Save an answer (auto-save)
+  saveAnswer: async (submissionId, questionId, studentAnswer) => {
+    try {
+      const response = await api.post(`/submissions/${submissionId}/autosave`, {
+        question_id: questionId,
+        student_answer: studentAnswer
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error saving answer:', error);
+      throw new Error(error.response?.data?.detail || 'Failed to save answer');
+    }
+  },
+
+  // Submit exam and get grading results
+  submitExam: async (submissionId) => {
+    try {
+      const response = await api.post(`/submissions/${submissionId}/submit`);
+      return response.data;
+    } catch (error) {
+      console.error('Error submitting exam:', error);
+      throw new Error(error.response?.data?.detail || 'Failed to submit exam');
+    }
+  },
+
+  // Get submission results
+  getResults: async (submissionId) => {
+    try {
+      const response = await api.get(`/submissions/${submissionId}/results`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching results:', error);
+      throw new Error(error.response?.data?.detail || 'Failed to fetch results');
+    }
+  },
+
+  // Get submission details
+  getSubmissionDetails: async (submissionId) => {
+    try {
+      const response = await api.get(`/submissions/${submissionId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching submission details:', error);
+      throw new Error(error.response?.data?.detail || 'Failed to fetch submission');
+    }
+  },
+
+  // Get student's submission history
+  getStudentSubmissions: async (studentId) => {
+    try {
+      const response = await api.get(`/submissions/student/${studentId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching student submissions:', error);
+      throw new Error(error.response?.data?.detail || 'Failed to fetch submissions');
     }
   },
 };

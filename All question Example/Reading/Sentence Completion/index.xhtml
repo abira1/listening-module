@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:connect="http://connect.ucles.org.uk/ns/ConnectDeliveryEngine" xmlns:raphaelChart="http://connect.ucles.org.uk/ns/QTICharts" xmlns:sem="http://connect.ucles.org.uk/ns/QTIExtendedSemantics" connect:class="assessmentTest"><head><title>Sentence Completion</title><link href="css/jquery-ui.css" rel="stylesheet"/><link href="css/base.css" rel="stylesheet"/><link href="css/access.css" rel="stylesheet"/><link href="css/banner.css" rel="stylesheet"/><link href="css/navigation.css" rel="stylesheet"/><link href="css/tools.css" rel="stylesheet"/><link href="css/main.css" rel="stylesheet"/><link href="css/item.css" rel="stylesheet"/><link href="css/calc.css" rel="stylesheet"/><link href="css/chart.css" rel="stylesheet"/><link href="css/notepad.css" rel="stylesheet"/><link href="css/instructions.css" rel="stylesheet"/><link href="css/jquery.contextMenu.css" rel="stylesheet"/><link href="css/custom.css" rel="stylesheet"/><connect:timeLimits maxTime="1800"/><script src="js/jquery.js"/><script src="js/jquery-ui.js"/><script src="js/jquery.throttle-debounce.js"/><script src="js/ulib.js"/><script src="js/jxon.js"/><script src="js/biginteger.js"/><script src="js/raphael.js"/><script src="js/d3.js"/><script src="js/rangy-core.js"/><script src="js/rangy-classapplier.js"/><script src="js/rangy-selectionsaverestore.js"/><script src="js/rangy-serializer.js"/><script src="js/jquery.validate.js"/><script src="js/jquery.ui.position.js"/><script src="js/jquery.contextMenu.js"/><script src="js/notes.js"/><script src="js/jquery.jplayer.min.js"/><script src="js/jplayer.playlist.js"/><script type="text/javascript">
+    //
+    var qti = {};
+    qti.appScriptsLoad = true;
+    qti.preloadTestContents = true;
+    qti.inContextHelp = 2;
+    qti.setTextareaHeight = true;
+    qti.showCISForm = false;
+    qti.clearAllNotes = true;
+    //
+    </script><script src="js/qti.js"/><script data-main="js/app.js" src="js/require.js"/></head>
+    
+    <body class="loading">
+      
+    <div role="banner">
+      <div id="banner">
+        <div>
+          <img alt="IELTS" src="images/banner/IELTSlogo.png" height="60px" width="206px" class="ieltslogo"/>
+          <img alt="IELTS Partners" src="images/banner/IELTSpartners.jpg" class="ieltspartners"/>
+        </div>
+      </div>
+      <div id="test-banner">
+        
+        <p id="candidate">
+          
+          <span id="candidate-name-label">
+            Candidate name:
+          </span>
+          <strong aria-labelled-by="candidate-name-label" class="candidate-name">
+			XXXX XXXXXXX
+          </strong>
+          <span> - </span>
+          <span id="candidate-number-label">
+            Candidate number:
+          </span>
+          <strong aria-labelled-by="candidate-number-label" class="candidate-number">
+			123456
+          </strong>
+        </p>
+        <p id="timer">
+          <span class="reader-only" id="timer-label">
+            Time:
+          </span>
+          <span aria-labelled-by="timer-label" connect:function="timer">
+            <em>
+            </em>
+            <span>minutes left</span>
+          </span>
+        </p>
+        <ul id="banner-controls" role="toolbar"><li connect:class="floatingTool"><a href="#" connect:class="settingsLink">Settings</a></li><li connect:class="floatingTool"><a href="#" connect:class="helpLink">Help<span> </span></a></li><li connect:class="floatingTool"><a href="#" connect:class="lockLink">Hide</a></li></ul>
+      </div>
+    </div>
+  
+      <div role="navigation"><h1 class="reader-only">Navigation</h1><div class="maximised" id="navigation-bar"><div connect:class="testPart" connect:identifier="IELTSRELR_SAMPLE_132017"><ul><li connect:class="assessmentSection" connect:identifier="Sec2"><span class="section-label"/><ul><li connect:class="assessmentItemRef" connect:identifier="IELTSREL-IR2AC0025EVOB-0-0">
+    
+    <a href="test-content/IR2AC0025EVOB-0-0.xml.xhtml#IELTSREL-IR2AC0025EVOB-0-1">
+      <span class="question-label">Question </span>
+      <span class="question-number">
+        
+        
+                1
+            
+      </span>
+    </a>
+  
+    
+    <a href="test-content/IR2AC0025EVOB-0-0.xml.xhtml#IELTSREL-IR2AC0025EVOB-0-2">
+      <span class="question-label">Question </span>
+      <span class="question-number">
+        
+        
+                2
+            
+      </span>
+    </a>
+  
+    
+    <a href="test-content/IR2AC0025EVOB-0-0.xml.xhtml#IELTSREL-IR2AC0025EVOB-0-3">
+      <span class="question-label">Question </span>
+      <span class="question-number">
+        
+        
+                3
+            
+      </span>
+    </a>
+  
+    
+    <a href="test-content/IR2AC0025EVOB-0-0.xml.xhtml#IELTSREL-IR2AC0025EVOB-0-4">
+      <span class="question-label">Question </span>
+      <span class="question-number">
+        
+        
+                4
+            
+      </span>
+    </a>
+  
+    
+    <a href="test-content/IR2AC0025EVOB-0-0.xml.xhtml#IELTSREL-IR2AC0025EVOB-0-5">
+      <span class="question-label">Question </span>
+      <span class="question-number">
+        
+        
+                5
+            
+      </span>
+    </a>
+  </li></ul></li></ul><div class="views"><a title="switch view to navigation summary" class="minimise" href="#"><span>navigation summary</span> </a><a title="switch view to navigation details" class="maximise" href="#"><span>navigation details</span> </a></div></div></div><label id="review-checkbox"><input connect:function="mark-for-review" type="checkbox"/>
+        Review</label><a title="Previous Question" connect:function="previous"><span class="reader-only">Previous Question</span></a><a title="Next Question" href="#" connect:function="next"><span class="reader-only">Next Question</span></a></div><div role="main"/>
+    </body>
+  </html>

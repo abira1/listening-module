@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import FirebaseAuthService from '../../services/FirebaseAuthService';
 import { BackendService } from '../../services/BackendService';
 import { LogOut, User, BookOpen, CheckCircle, Clock, FileText, Award, HeadphonesIcon, BookIcon, PenToolIcon, TrophyIcon, BarChart3, ArrowRight, Star, Home, Settings, Bell, HelpCircle, Calendar } from 'lucide-react';
 import { ProgressChart } from './ProgressChart';
-import { ref, onValue, off } from 'firebase/database';
-import { database } from '../../config/firebase';
+import { StudentProfile } from './StudentProfile';
 
 export function StudentDashboard() {
   const navigate = useNavigate();
@@ -27,6 +25,21 @@ export function StudentDashboard() {
     return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
   };
 
+  // Helper function to get full photo URL
+  const getPhotoUrl = (photoPath) => {
+    if (!photoPath) return null;
+    // If it's already a full URL, return as-is
+    if (photoPath.startsWith('http://') || photoPath.startsWith('https://')) {
+      return photoPath;
+    }
+    // If it's a relative path, prepend the backend URL
+    if (photoPath.startsWith('/')) {
+      return `http://localhost:8000${photoPath}`;
+    }
+    // Otherwise, treat it as a relative path
+    return `http://localhost:8000/uploads/student_photos/${photoPath}`;
+  };
+
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/student');
@@ -34,7 +47,9 @@ export function StudentDashboard() {
     }
 
     if (user) {
-      if (user.status !== 'approved') {
+      // For local auth system, status is 'active' by default
+      // Only redirect to waiting approval if status is explicitly not 'active'
+      if (user.status && user.status !== 'active') {
         navigate('/waiting-approval');
         return;
       }
@@ -59,11 +74,24 @@ export function StudentDashboard() {
       }
       setExamStatuses(statuses);
 
-      if (user?.uid) {
-        const studentSubmissions = await FirebaseAuthService.getStudentSubmissions(user.uid);
-        setSubmissions(studentSubmissions);
-        const attemptedIds = new Set(studentSubmissions.map(sub => sub.examId));
-        setAttemptedExams(attemptedIds);
+      // Load student submissions from backend
+      if (user?.user_id) {
+        try {
+          const token = localStorage.getItem('student_token');
+          const response = await fetch('http://localhost:8000/api/students/me/submissions', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          if (response.ok) {
+            const studentSubmissions = await response.json();
+            setSubmissions(studentSubmissions);
+            const attemptedIds = new Set(studentSubmissions.map(sub => sub.exam_id || sub.examId));
+            setAttemptedExams(attemptedIds);
+          }
+        } catch (error) {
+          console.error('Error loading submissions:', error);
+        }
       }
 
       setLoading(false);
@@ -73,26 +101,32 @@ export function StudentDashboard() {
     }
   };
 
+  // Polling for submissions updates (local auth system)
   useEffect(() => {
-    if (!user?.uid) return;
-    const submissionsRef = ref(database, 'submissions');
-    const unsubscribe = onValue(submissionsRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const submissionsObj = snapshot.val();
-        const studentSubmissions = Object.keys(submissionsObj)
-          .filter(key => submissionsObj[key].studentUid === user.uid)
-          .map(key => ({ id: key, ...submissionsObj[key] }))
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setSubmissions(studentSubmissions);
-        const attemptedIds = new Set(studentSubmissions.map(sub => sub.examId));
-        setAttemptedExams(attemptedIds);
+    if (!user?.user_id) return;
+
+    const pollSubmissions = async () => {
+      try {
+        const token = localStorage.getItem('student_token');
+        const response = await fetch('http://localhost:8000/api/students/me/submissions', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const studentSubmissions = await response.json();
+          setSubmissions(studentSubmissions);
+          const attemptedIds = new Set(studentSubmissions.map(sub => sub.exam_id || sub.examId));
+          setAttemptedExams(attemptedIds);
+        }
+      } catch (error) {
+        console.error('Error polling submissions:', error);
       }
-    });
-    return () => {
-      off(submissionsRef);
-      unsubscribe();
     };
-  }, [user?.uid]);
+
+    const interval = setInterval(pollSubmissions, 5000);
+    return () => clearInterval(interval);
+  }, [user?.user_id]);
 
   useEffect(() => {
     if (exams.length === 0) return;
@@ -220,20 +254,37 @@ export function StudentDashboard() {
         {/* User Profile Section */}
         <div className="p-4 border-t">
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-            {user?.photoURL || user?.profile_picture ? (
-              <img 
-                src={user?.photoURL || user?.profile_picture} 
-                alt="Profile" 
-                className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover shadow-sm" 
-              />
-            ) : (
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center border-2 border-blue-500 shadow-sm">
-                <span className="text-white font-bold text-sm">{getUserInitials(user?.full_name || user?.name)}</span>
-              </div>
-            )}
+            {(() => {
+              // Only access user properties if user exists
+              if (!user) {
+                return (
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center border-2 border-blue-500 shadow-sm">
+                    <span className="text-white font-bold text-sm">?</span>
+                  </div>
+                );
+              }
+
+              const photoUrl = getPhotoUrl(user.photo_path);
+              return user.photo_path ? (
+                <img
+                  key={photoUrl}
+                  src={photoUrl}
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover shadow-sm"
+                  crossOrigin="anonymous"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center border-2 border-blue-500 shadow-sm">
+                  <span className="text-white font-bold text-sm">{getUserInitials(user.full_name || user.name)}</span>
+                </div>
+              );
+            })()}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{user?.full_name || user?.name}</p>
-              <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+              <p className="text-sm font-medium text-gray-900 truncate">{user?.full_name || user?.name || 'Student'}</p>
+              <p className="text-xs text-gray-500 truncate">{user?.email || 'Loading...'}</p>
             </div>
             <button
               onClick={handleLogout}
@@ -251,94 +302,7 @@ export function StudentDashboard() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Profile Section */}
           {showProfile || activeTab === 'profile' ? (
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-white rounded-2xl shadow-sm border p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Settings</h2>
-                
-                <div className="flex items-start gap-8 mb-8">
-                  {/* Profile Picture */}
-                  <div className="text-center">
-                    {user?.photoURL || user?.profile_picture ? (
-                      <img 
-                        src={user?.photoURL || user?.profile_picture} 
-                        alt="Profile" 
-                        className="w-32 h-32 rounded-full border-4 border-blue-500 mb-3 object-cover shadow-lg" 
-                      />
-                    ) : (
-                      <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-3 border-4 border-blue-500 shadow-lg">
-                        <span className="text-white font-bold text-5xl">{getUserInitials(user?.full_name || user?.name)}</span>
-                      </div>
-                    )}
-                    <p className="text-sm text-gray-500">Profile Picture</p>
-                  </div>
-
-                  {/* Profile Info */}
-                  <div className="flex-1 space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                      <div className="px-4 py-3 bg-gray-50 rounded-lg border">
-                        <p className="text-gray-900">{user?.full_name || user?.name || 'N/A'}</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                      <div className="px-4 py-3 bg-gray-50 rounded-lg border">
-                        <p className="text-gray-900">{user?.email || 'N/A'}</p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                        <div className="px-4 py-3 bg-gray-50 rounded-lg border">
-                          <p className="text-gray-900">{user?.phone || 'N/A'}</p>
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Roll Number</label>
-                        <div className="px-4 py-3 bg-gray-50 rounded-lg border">
-                          <p className="text-gray-900">{user?.roll_number || 'N/A'}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Institution</label>
-                      <div className="px-4 py-3 bg-gray-50 rounded-lg border">
-                        <p className="text-gray-900">{user?.institution || 'N/A'}</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                      <div className="px-4 py-3 bg-gray-50 rounded-lg border">
-                        <p className="text-gray-900">{user?.department || 'N/A'}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stats Section in Profile */}
-                <div className="border-t pt-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Progress</h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-blue-50 rounded-lg">
-                      <p className="text-3xl font-bold text-blue-600">{exams.length}</p>
-                      <p className="text-sm text-gray-600 mt-1">Available Tests</p>
-                    </div>
-                    <div className="text-center p-4 bg-green-50 rounded-lg">
-                      <p className="text-3xl font-bold text-green-600">{submissions.length}</p>
-                      <p className="text-sm text-gray-600 mt-1">Completed</p>
-                    </div>
-                    <div className="text-center p-4 bg-amber-50 rounded-lg">
-                      <p className="text-3xl font-bold text-amber-600">{avgPercentage}%</p>
-                      <p className="text-sm text-gray-600 mt-1">Average Score</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <StudentProfile />
           ) : activeTab === 'dashboard' ? (
             <>
               {/* Dashboard Content */}
@@ -354,12 +318,20 @@ export function StudentDashboard() {
                   <Star className="w-5 h-5 text-yellow-300 fill-yellow-300" />
                   <span className="text-sm font-medium text-yellow-300">Welcome Back!</span>
                 </div>
-                <h1 className="text-3xl font-bold mb-2">Hello, {user?.full_name?.split(' ')[0]}!</h1>
-                <p className="text-blue-100 mb-6">
-                  {submissions.length > 0 
-                    ? `You've completed ${submissions.length} test${submissions.length > 1 ? 's' : ''}. Keep up the great work!`
-                    : 'Ready to start your IELTS preparation journey?'}
-                </p>
+                {(() => {
+                  // Get the student's full name from available properties
+                  const fullName = user?.full_name || user?.name || 'Student';
+                  return (
+                    <>
+                      <h1 className="text-3xl font-bold mb-2">Hello, {fullName}!</h1>
+                      <p className="text-blue-100 mb-6">
+                        {submissions.length > 0
+                          ? `You've completed ${submissions.length} test${submissions.length > 1 ? 's' : ''}. Keep up the great work!`
+                          : 'Ready to start your IELTS preparation journey?'}
+                      </p>
+                    </>
+                  );
+                })()}
                 <div className="flex items-center gap-3">
                   <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
                     <p className="text-xs text-blue-100">Available Tests</p>

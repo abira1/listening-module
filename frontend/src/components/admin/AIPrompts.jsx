@@ -109,6 +109,10 @@ IMPORTANT RULES:
 - Audio URL is REQUIRED - Use format: "PASTE_YOUR_AUDIO_URL_HERE" as placeholder
 - For matching_draggable questions, use the nested format shown above with "questions" and "options" arrays
 - Identify question types carefully - look for keywords like "Choose from the box", "Match", "Complete the table"
+- CRITICAL: Every question MUST have an answer_key field (except writing_task)
+- CRITICAL: Every question MUST have a valid type field from the list above
+- If unsure about type, use "short_answer" as default
+- Do NOT use null for type or answer_key - use empty string "" if unknown
 
 AUDIO URL INSTRUCTIONS:
 The audio_url field is CRITICAL for listening tests. You should:
@@ -229,6 +233,10 @@ IMPORTANT RULES:
   * Questions 6-10: sentence_completion or true_false_not_given
   * Questions 11-13: matching_draggable or matching_features
 - Audio URL should be null for reading tests
+- CRITICAL: Every question MUST have an answer_key field
+- CRITICAL: Every question MUST have a valid type field from the list above
+- If unsure about type, use "sentence_completion" as default
+- Do NOT use null for type or answer_key - use empty string "" if unknown
 
 Now extract from this test:
 [PASTE YOUR PDF TEXT HERE]`,

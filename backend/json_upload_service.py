@@ -9,10 +9,25 @@ import json
 import logging
 from track_creation_service import TrackCreationService
 from question_validator import TrackValidator
-from firebase_service import FirebaseService
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
+
+
+# ============================================
+# CORS PREFLIGHT HANDLERS
+# ============================================
+
+@router.options("/import-from-json")
+async def options_import_json():
+    """Handle CORS preflight for import endpoint"""
+    return {}
+
+
+@router.options("/validate-json")
+async def options_validate_json():
+    """Handle CORS preflight for validate endpoint"""
+    return {}
 
 
 class JSONUploadHandler:
@@ -67,10 +82,8 @@ class JSONUploadHandler:
                 track_id = result["track_id"]
                 track_data = result["track"]
 
-                # Save track to Firebase using create_track method
-                FirebaseService.create_track(track_data)
-
-                logger.info(f"Track {track_id} created and saved to Firebase")
+                # Track data is saved to SQLite via TrackCreationService
+                logger.info(f"Track {track_id} created and saved to SQLite")
 
                 return {
                     "success": True,
@@ -99,18 +112,18 @@ class JSONUploadHandler:
 # API ENDPOINTS
 # ============================================
 
-@router.post("/api/tracks/import-from-json")
+@router.post("/import-from-json")
 async def import_track_from_json(file: UploadFile = File(...)):
     """
     Upload JSON file and create track
-    
+
     Supports:
     - File upload (JSON)
     - Auto type detection (18 types)
     - Auto batching by type
     - Validation
     - Firebase storage
-    
+
     Returns:
         {
             "success": bool,
@@ -126,10 +139,10 @@ async def import_track_from_json(file: UploadFile = File(...)):
             status_code=400,
             detail="File must be a JSON file (.json)"
         )
-    
+
     # Process file
     result = await JSONUploadHandler.process_json_file(file)
-    
+
     if not result["success"]:
         raise HTTPException(
             status_code=400,
@@ -138,15 +151,15 @@ async def import_track_from_json(file: UploadFile = File(...)):
                 "errors": result["errors"]
             }
         )
-    
+
     return result
 
 
-@router.post("/api/tracks/validate-json")
+@router.post("/validate-json")
 async def validate_json_file(file: UploadFile = File(...)):
     """
     Validate JSON file without creating track
-    
+
     Returns:
         {
             "is_valid": bool,
@@ -160,7 +173,7 @@ async def validate_json_file(file: UploadFile = File(...)):
     try:
         # Read file content
         content = await file.read()
-        
+
         # Parse JSON
         try:
             json_data = json.loads(content.decode('utf-8'))
@@ -170,10 +183,10 @@ async def validate_json_file(file: UploadFile = File(...)):
                 "errors": [f"Invalid JSON format: {str(e)}"],
                 "warnings": []
             }
-        
+
         # Validate
         validation = TrackValidator.validate_complete_track(json_data)
-        
+
         return {
             "is_valid": validation["is_valid"],
             "total_questions": validation["total_questions"],
@@ -182,7 +195,7 @@ async def validate_json_file(file: UploadFile = File(...)):
             "errors": validation["errors"],
             "warnings": validation["warnings"]
         }
-    
+
     except Exception as e:
         logger.error(f"Error validating JSON: {str(e)}")
         return {

@@ -1,17 +1,9 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileQuestion, Users, BarChart3, Settings, LogOut, X, ClipboardList, Upload, Library } from 'lucide-react';
-import { useAdminAuth } from '../../contexts/AdminAuthContext';
+import { Link, useLocation } from 'react-router-dom';
+import { LayoutDashboard, FileQuestion, Users, BarChart3, Settings, X, ClipboardList, Upload, Library } from 'lucide-react';
 
 export function Sidebar({ isOpen, setIsOpen }) {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { logout } = useAdminAuth();
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/admin/login');
-  };
 
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard className="w-5 h-5" /> },
@@ -19,6 +11,7 @@ export function Sidebar({ isOpen, setIsOpen }) {
     { name: 'AI Import', path: '/admin/ai-import', icon: <Upload className="w-5 h-5" /> },
     { name: 'Track Library', path: '/admin/tracks', icon: <Library className="w-5 h-5" /> },
     { name: 'Students', path: '/admin/students', icon: <Users className="w-5 h-5" /> },
+    { name: 'Teachers', path: '/admin/teachers', icon: <Users className="w-5 h-5" /> },
     { name: 'Submissions', path: '/admin/submissions', icon: <ClipboardList className="w-5 h-5" /> },
     { name: 'Analytics', path: '/admin/analytics', icon: <BarChart3 className="w-5 h-5" /> },
     { name: 'Settings', path: '/admin/settings', icon: <Settings className="w-5 h-5" /> },
@@ -62,15 +55,7 @@ export function Sidebar({ isOpen, setIsOpen }) {
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 border-t">
-          <button
-            onClick={handleLogout}
-            className="flex items-center w-full px-4 py-2 text-gray-700 rounded-md hover:bg-red-50 hover:text-red-700"
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="ml-3">Log out</span>
-          </button>
-        </div>
+        {/* No logout button - local desktop app with direct admin access */}
       </div>
     </>
   );

@@ -1,0 +1,70 @@
+{
+  "test_type": "listening",
+  "title": "IELTS Listening Practice Test",
+  "description": "Complete IELTS Listening test with 4 sections and 40 questions",
+  "duration_seconds": 2400,
+  "audio_url": "https://audio.jukehost.co.uk/F9irt6LcsYuP93ulaMo42JfXBEcABytV",
+  "sections": [
+    {
+      "index": 1,
+      "title": "Section 1",
+      "instructions": "Complete the notes below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.",
+      "questions": [
+        {"id": "q1", "type": "fill_gaps_short", "text": "Type of company: __________", "correctAnswers": ["consulting"]},
+        {"id": "q2", "type": "fill_gaps_short", "text": "Position: __________", "correctAnswers": ["manager"]},
+        {"id": "q3", "type": "fill_gaps_short", "text": "Location: near the __________", "correctAnswers": ["station"]},
+        {"id": "q4", "type": "fill_gaps_short", "text": "Preferred size of the area: __________ ft2", "correctAnswers": ["5000"]},
+        {"id": "q5", "type": "fill_gaps_short", "text": "Requirements: 24-hour __________", "correctAnswers": ["security"]},
+        {"id": "q6", "type": "fill_gaps_short", "text": "__________ on ground floor", "correctAnswers": ["parking"]},
+        {"id": "q7", "type": "fill_gaps_short", "text": "Preferred facilities: a (an) __________ to cook in", "correctAnswers": ["kitchen"]},
+        {"id": "q8", "type": "fill_gaps_short", "text": "a (an) __________ away from the workspace", "correctAnswers": ["gym"]},
+        {"id": "q9", "type": "fill_gaps_short", "text": "Daily exercise: a (an) __________", "correctAnswers": ["pool"]},
+        {"id": "q10", "type": "fill_gaps_short", "text": "Unnecessary: __________", "correctAnswers": ["cafeteria"]}
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Section 2",
+      "instructions": "Choose the correct letter, A, B or C.",
+      "questions": [
+        {"id": "q11", "type": "mcq_single", "text": "The reason why this island attracts so many tourists is that", "correctAnswers": ["A"], "options": ["A it's a good place to relax.", "B the transport is very convenient.", "C the ticket price is relatively low."]},
+        {"id": "q12", "type": "mcq_single", "text": "What is recommended to bring when you visit the island?", "correctAnswers": ["B"], "options": ["A a raincoat", "B a sun umbrella", "C a helmet"]},
+        {"id": "q13", "type": "mcq_single", "text": "What is the most popular attraction at the resort?", "correctAnswers": ["B"], "options": ["A the rose garden", "B the sunset", "C the freshwater pond"]},
+        {"id": "q14", "type": "mcq_single", "text": "What could possibly surprise visitors to the island?", "correctAnswers": ["B"], "options": ["A the size of the island", "B a wide range of wildlife", "C making new friends"]},
+        {"id": "q15", "type": "matching", "text": "Match the locations with their descriptions", "correctAnswers": ["A", "B", "C", "D", "E", "F"], "items": [{"label": "tourist centre"}, {"label": "mountain"}, {"label": "small theatre"}, {"label": "art museum"}, {"label": "pond"}, {"label": "ancient building"}], "options": [{"key": "A", "text": "old prison"}, {"key": "B", "text": "stunning view"}, {"key": "C", "text": "street art"}, {"key": "D", "text": "gallery"}, {"key": "E", "text": "gift shopping"}, {"key": "F", "text": "bird watching"}, {"key": "G", "text": "cycling"}, {"key": "H", "text": "maritime museum"}]}
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Section 3",
+      "instructions": "Choose the correct answers for questions 21-30",
+      "questions": [
+        {"id": "q21", "type": "matching", "text": "Match the characters with their features", "correctAnswers": ["A", "B", "C", "D"], "items": [{"label": "Rosy"}, {"label": "Flory"}, {"label": "Lizzie"}, {"label": "Estelle"}], "options": [{"key": "A", "text": "is deliberately cruel to other people."}, {"key": "B", "text": "acts with childish innocence."}, {"key": "C", "text": "resents previous events."}, {"key": "D", "text": "pays attention to appearance."}, {"key": "E", "text": "acts in a foolish way."}, {"key": "F", "text": "has insight into human nature."}]},
+        {"id": "q25", "type": "mcq_multiple", "text": "What are the speakers' opinions about the literature lectures? (Choose 2)", "correctAnswers": ["B", "C"], "options": ["A They are too noisy for virtual learning.", "B They are well structured.", "C There is insufficient time for discussion.", "D They always start punctually.", "E They are too shy to take part in discussions."]},
+        {"id": "q26", "type": "mcq_single", "text": "What are the speakers' opinions about the literature lectures?", "correctAnswers": ["B"], "options": ["A They are too noisy for virtual learning.", "B They are well structured.", "C There is insufficient time for discussion.", "D They always start punctually.", "E They are too shy to take part in discussions."]},
+        {"id": "q27", "type": "mcq_multiple", "text": "What improvements can be made in the near future? (Choose 2)", "correctAnswers": ["A", "B"], "options": ["A enhancing IT support", "B providing more computers", "C finding a good librarian", "D buying some new photocopying machines", "E becoming a good group leader"]},
+        {"id": "q28", "type": "mcq_single", "text": "What improvements can be made in the near future?", "correctAnswers": ["A"], "options": ["A enhancing IT support", "B providing more computers", "C finding a good librarian", "D buying some new photocopying machines", "E becoming a good group leader"]},
+        {"id": "q29", "type": "mcq_multiple", "text": "What do the speakers think of the group discussions? (Choose 2)", "correctAnswers": ["C", "E"], "options": ["A The class is too large.", "B It's easy to find time to meet.", "C Group sizes are suitable.", "D The class time is properly managed.", "E They find that the class is very effective."]},
+        {"id": "q30", "type": "mcq_single", "text": "What do the speakers think of the group discussions?", "correctAnswers": ["C"], "options": ["A The class is too large.", "B It's easy to find time to meet.", "C Group sizes are suitable.", "D The class time is properly managed.", "E They find that the class is very effective."]}
+      ]
+    },
+    {
+      "index": 4,
+      "title": "Section 4",
+      "instructions": "Complete the notes below. Write NO MORE THAN TWO WORDS for each answer.",
+      "questions": [
+        {"id": "q31", "type": "fill_gaps_short", "text": "During the Industrial Revolution people moved to cities to work in the __________", "correctAnswers": ["factories"]},
+        {"id": "q32", "type": "fill_gaps_short", "text": "In the 1850s, the culture was influenced greatly by __________ from different countries.", "correctAnswers": ["immigrants"]},
+        {"id": "q33", "type": "fill_gaps_short", "text": "Originally music reflected the work life of different __________ in those days.", "correctAnswers": ["communities"]},
+        {"id": "q34", "type": "fill_gaps_short", "text": "Different songs were created in the same __________ although people were from a variety of nations.", "correctAnswers": ["style"]},
+        {"id": "q35", "type": "fill_gaps_short", "text": "The songs written by the workers during this period mainly came from their feelings about harsh __________", "correctAnswers": ["conditions"]},
+        {"id": "q36", "type": "fill_gaps_short", "text": "The musical trends were led by __________ performers.", "correctAnswers": ["African American"]},
+        {"id": "q37", "type": "fill_gaps_short", "text": "During this period, some musical groups had expanded their popularity among __________", "correctAnswers": ["audiences"]},
+        {"id": "q38", "type": "fill_gaps_short", "text": "In the late 1870s, the __________ came into contact with these flourishing musical traditions.", "correctAnswers": ["mainstream"]},
+        {"id": "q39", "type": "fill_gaps_short", "text": "These musical genres still exert an influence on __________ culture.", "correctAnswers": ["modern"]},
+        {"id": "q40", "type": "fill_gaps_short", "text": "Enthusiastic fans are still collecting and keeping the __________ of music from those days.", "correctAnswers": ["recordings"]}
+      ]
+    }
+  ]
+}
+

@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Search, Filter, Edit, Trash2, Copy, Upload, MoreHorizontal, Volume2, PlayIcon, PauseIcon, Loader, AlertCircle, CheckCircle, Eye, EyeOff, BookOpen } from 'lucide-react';
 import { BackendService } from '../../services/BackendService';
 import { useToast } from '../common/Toast';
-import { useAdminAuth } from '../../contexts/AdminAuthContext';
 
 export function TestManagement() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,7 +13,9 @@ export function TestManagement() {
   const [newlyCreatedExamId, setNewlyCreatedExamId] = useState(null);
   const navigate = useNavigate();
   const { showToast, ToastContainer } = useToast();
-  const { user } = useAdminAuth();
+
+  // Get admin email from localStorage (set during login)
+  const adminEmail = localStorage.getItem('adminEmail') || 'admin';
 
   useEffect(() => {
     fetchExams();
@@ -119,11 +120,11 @@ export function TestManagement() {
 
   const handleStartTest = async (testId) => {
     try {
-      if (!user?.email) {
+      if (!adminEmail) {
         showToast('Admin email not found. Please login again.', 'error');
         return;
       }
-      const updatedExam = await BackendService.startExam(testId, user.email);
+      const updatedExam = await BackendService.startExam(testId, adminEmail);
       if (updatedExam) {
         setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_active: true, started_at: updatedExam.started_at } : exam));
         showToast('Test started successfully! Students can now take the test.', 'success');
@@ -137,11 +138,11 @@ export function TestManagement() {
   const handleStopTest = async (testId) => {
     if (window.confirm('Are you sure you want to stop this test? Students will no longer be able to take it.')) {
       try {
-        if (!user?.email) {
+        if (!adminEmail) {
           showToast('Admin email not found. Please login again.', 'error');
           return;
         }
-        const updatedExam = await BackendService.stopExam(testId, user.email);
+        const updatedExam = await BackendService.stopExam(testId, adminEmail);
         if (updatedExam) {
           setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_active: false, stopped_at: updatedExam.stopped_at } : exam));
           showToast('Test stopped successfully!', 'success');
@@ -156,10 +157,10 @@ export function TestManagement() {
   const handleToggleVisibility = async (testId, currentVisibility) => {
     const newVisibility = !currentVisibility;
     const action = newVisibility ? 'show' : 'hide';
-    
+
     if (window.confirm(`Are you sure you want to ${action} this test from students?`)) {
       try {
-        const updatedExam = await BackendService.toggleExamVisibility(testId, newVisibility, user?.email);
+        const updatedExam = await BackendService.toggleExamVisibility(testId, newVisibility, adminEmail);
         if (updatedExam) {
           setExams(exams.map((exam) => exam.id === testId ? { ...exam, is_visible: newVisibility } : exam));
           showToast(`Test ${newVisibility ? 'shown' : 'hidden'} successfully!`, 'success');

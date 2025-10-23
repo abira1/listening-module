@@ -1,0 +1,353 @@
+{
+  "test_type": "reading",
+  "title": "IELTS Reading Practice Test",
+  "description": "Complete IELTS Academic Reading test with 3 passages and 40 questions",
+  "duration_seconds": 3600,
+  "audio_url": null,
+  "sections": [
+    {
+      "index": 1,
+      "title": "Passage 1: Ancient SOCIEFIES Classification",
+      "passage_text": "A\nAlthough humans have established many types of societies throughout history sociologists and anthropologists tend to classify different societies according to the degree to which different groups within a society have unequal access to advantages such as resources, prestige or power, and usually refer to four basic types of societies. From least to most socially complex they are clans, tribes, chiefdoms and states.\nClan\nB\nThese are small-scale societies of hunters and gatherers, generally of fewer than 100 people, who move seasonally to exploit wild (undomesticated) food resources. Most surviving hunter-gatherer groups are of this kind, such as the Hadza of Tanzania of the San of southern Africa. Clan members are generally kinsfolk, related by descent or marriage. Clans lack formal leaders, so there are no marked economic differences or disparities in status among their members.\nC\nBecause clans are composed of mobile groups of hunter-gatherers, their sites consist mainly of seasonally occupied camps, and other smaller and more specialised sites. Among the latter are kill or butchery sites – locations where large mammals are killed and sometimes butchered-and work sites, where tools are made or other specific activities carried out. The base camp of such a group may give evidence of rather insubstantial dwellings or temporary shelters, along with the debris of residential occupation.\nTribe\nD\nThese are generally larger than mobile hunter-gatherer groups, but rarely number more than a few thousand, and their diet or subsistence is based largely on cultivated plants and domesticated animals. Typically, they have settled farmers, but they may be nomadic with a very different, mobile economy based on the intensive exploitation of livestock. These are generally multi-community societies, with the individual communities integrated into the large society through kinship ties. Although some tribes have officials and even a \"capital\" or seat of government, such officials lack the economic base necessary for effective use of power.\nE\nThe typical settlement pattern for tribes is one of settled agricultural homesteads or villages. Characteristically, no one settlement dominates any of the others in the region. Instead, the archaeologist finds evidence for isolated, permanently occupied houses or for permanent villages. Such villages may be made up of a collection of free-standing houses, like those of the first farms of the Danube valley in Europe. Or they may be clusters of buildings grouped together, for example, the pueblos of the American Southwest, and the early farming village or the small town of Catalhoyuk in modern Turkey.\nChiefdom\nF\nThese operate on the principle of ranking-differences in social status between people. Different lineages (a lineage is a group claiming descent from a common ancestor) are graded on a scale of prestige, and the senior lineage, and hence the society as a whole, is governed by a chief. Prestige and rank are determined by how closely related one is to the chief, and there is no true stratification into classes. The role of the chief is crucial.\nG\nOften, there is local specialization in craft products, and surpluses of these and of foodstuffs are periodically paid as an obligation to the chief. He uses these to maintain his retainers and may use them for redistribution to his subjects. The chiefdom generally has a center of power, often with temples, residences of the chief and his retainers, and craft specialists. Chiefdoms vary greatly in size, but the range is generally between about 5000 and 20,000 persons.\nEarly State\nH\nThese preserve many of the features of chiefdoms, but the ruler (perhaps a king or sometimes a queen) has explicit authority to establish laws and also to enforce them by the use of a standing army. Society no longer depends totally upon kin relationships: it is now stratified into different classes. Agricultural workers and the poorer urban dwellers form the lowest classes, with the craft specialists above, and the priests and kinsfolk of the ruler higher still. The functions of the ruler are often separated from those of the priest: the palace is distinguished from the temple. The society is viewed as a territory owned by the ruling lineage and populated by tenants who have an obligation to pay taxes. The central capital houses a bureaucratic administration of officials; one of their principal purposes is to collect revenue (often in the form of taxes and tolls) and distribute it to government, army and craft specialists. Many early states developed complex redistribution systems to support these essential services.\nI\nThis rather simple social typology, set out by Elman Service and elaborated by William Sanders and Joseph Marino, can be criticised, and it should not be used unthinkingly. Nevertheless, if we are seeking to talk about early societies, we must use words and hence concepts to do so. Service's categories provide a good framework to help organise our thoughts.",
+      "instructions": "Questions 1-13",
+      "questions": [
+        {
+          "index": 1,
+          "type": "true_false_not_given",
+          "prompt": "There's little economic difference between members of a clan.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 2,
+          "type": "true_false_not_given",
+          "prompt": "The farmers of a tribe grow a wide range of plants.",
+          "answer_key": "NOT GIVEN",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 3,
+          "type": "true_false_not_given",
+          "prompt": "One settlement is more important than any other settlements in a tribe.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 4,
+          "type": "true_false_not_given",
+          "prompt": "A member's status in a chiefdom is determined by how much land he owns.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 5,
+          "type": "true_false_not_given",
+          "prompt": "There are people who craft goods in chiefdoms.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 6,
+          "type": "true_false_not_given",
+          "prompt": "The king keeps the order of a state by keeping a military.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 7,
+          "type": "true_false_not_given",
+          "prompt": "Bureaucratic officers receive higher salaries than other members.",
+          "answer_key": "NOT GIVEN",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 8,
+          "type": "short_answer_reading",
+          "prompt": "What is made at the clan work sites?",
+          "answer_key": "tools",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 9,
+          "type": "short_answer_reading",
+          "prompt": "What is the other way of life tribes besides settled farming?",
+          "answer_key": "nomadic",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 10,
+          "type": "short_answer_reading",
+          "prompt": "How are Catalhoyuk's housing units arranged?",
+          "answer_key": "clusters",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 11,
+          "type": "short_answer_reading",
+          "prompt": "What does a chief give to his subjects as rewards besides crafted goods?",
+          "answer_key": "foodstuffs",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 12,
+          "type": "short_answer_reading",
+          "prompt": "What is the largest possible population of a chiefdom?",
+          "answer_key": "20,000",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 13,
+          "type": "short_answer_reading",
+          "prompt": "Which group of people is at the bottom of an early state but higher than the farmers?",
+          "answer_key": "craft specialists",
+          "options": null,
+          "wordlist": null
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Passage 2: The Development of Plastics",
+      "passage_text": "A\nWhen rubber was first commercially produced in Europe during the nineteenth century, it rapidly became a very important commodity, particularly in the fields of transportation and electricity. However, during the twentieth century a number of new synthetic materials, called plastics, superseded natural rubber in all but a few applications.\nB\nRubber is a polymer – a compound containing large molecules that are formed by the bonding of many smaller, simpler units, repeated over and over again. The same bonding principle – polymerisation – underlies the creation of a huge range of plastics by the chemical industry.\nC\nThe first plastic was developed as a result of a competition in the USA. In the 1860s, $10,000 was offered to anybody who could replace ivory – supplies of which were declining – with something equally good as a material for making billiard balls. The prize was won by John Wesley Hyatt with a material called celluloid. Celluloid was made by dissolving cellulose, a carbohydrate derived from plants, in a solution of camphor dissolved in ethanol. This new material rapidly found uses in the manufacture of products such as knife handles, detachable collars and cuffs, spectacle frames and photographic film. Without celluloid, the film industry could never have got off the ground at the end of the 19th century.\nD\nCelluloid can be repeatedly softened and reshaped by heat and is known as a thermoplastic. In 1907 Leo Baekeland, a Belgian chemist working in the USA invented a different kind of plastic by causing phenol and formaldehyde to react together. Baekeland called the material Bakelite, and it was the first of the thermosets – plastics that can be cast and moulded while hot but cannot be softened by heat and reshaped once they have set. Bakelite was a good insulator and was resistant to water, acids and moderate heat. With these properties, it was soon being used in the manufacture of switches, household items, such as knife handles, and electrical components for cars.\nE\nSoon chemists began looking for other small molecules that could be strung together to make polymers. In the 1930s, British chemists discovered that the gas ethylene would polymerise under heat and pressure to form a thermoplastic they called polythene. Polypropylene followed in the 1950s. both were used to make bottles, pipes and plastic bags. A small change in the starting material – replacing a hydrogen atom in ethylene with a chlorine atom – produced PVC (polyvinyl chloride), a hard, fireproof plastic suitable for drains and gutters. And by adding certain chemicals, a soft form of PVC could be produced, suitable as a substitute for rubber in items such as waterproof clothing. A closely related plastic was Teflon, as PTFE (polytetrafluoroethylene). This had a very low coefficient of friction, making it ideal for bearings, rollers, and non-stick frying pans. Polystyrene, developed during the 1930s in Germany, was a clear, glass-like material, used in food containers, domestic appliances and toys. Expanded polystyrene – a white, rigid foam – was widely used in packaging and insulation. Polyurethanes, also developed in Germany, found uses as adhesives, coatings, and – in the form of rigid foams – as insulation materials. They are all produced from chemicals derived from crude oil, which contains exactly the same elements – carbon and hydrogen – as many plastics.\nF\nThe first of the man-made fibres, nylon, was also created in the 1930s. Its inventor was a chemist called Wallace Carothers, who worked for the Du Pont company in the USA. He found that under the right conditions, two chemicals – hexamethylenediamine and adipic acid — would form a polymer that could be pumped out through holes and then stretched to form long glossy threads that could be woven like silk. Its first use was to make parachutes for the US armed forces in World War II. In the post-war years, nylon completely replaced silk in the manufacture of stockings. Subsequently, many other synthetic fibres joined nylon, including Orion, Acrilan and Terylene. Today most garments are made of a blend of natural fibres, such as cotton and wool, and man-made fibres that make fabrics easier to look after.\nG\nThe great strength of the plastic is its indestructibility. However, this quality is also something of a drawback: beaches all over the world, even on the remotest islands, are littered with plastic bottles that nothing can destroy. Nor is it very easy to recycle plastics, as different types of plastic are often used in the same items and call for different treatments. Plastics can be made biodegradable by incorporating into their structure a material such as starch, which is attacked by bacteria and causes the plastic to fall apart. Other materials can be incorporated that gradually decay in sunlight – although bottles made of such materials have to be stored in the dark, to ensure that they do not disintegrate before they have been used.",
+      "instructions": "Questions 14-26",
+      "questions": [
+        {
+          "index": 14,
+          "type": "table_completion",
+          "prompt": "Celluloid - Common use: Clothing and _________",
+          "answer_key": "photographic film",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 15,
+          "type": "table_completion",
+          "prompt": "_________ - Date of invention: 1907 - US - Property: can be cast and moulded but cannot be softened by heat",
+          "answer_key": "Bakelite",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 16,
+          "type": "table_completion",
+          "prompt": "Bakelite - Common use: _________, household items and car parts",
+          "answer_key": "switches",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 17,
+          "type": "table_completion",
+          "prompt": "Polythene - Original region: _________",
+          "answer_key": "Britain",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 18,
+          "type": "table_completion",
+          "prompt": "Rigid PVC - Property: _________",
+          "answer_key": "fireproof",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 19,
+          "type": "table_completion",
+          "prompt": "Polystyrene - Property: transparent and resembled to _________",
+          "answer_key": "glass",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 20,
+          "type": "table_completion",
+          "prompt": "Polyurethanes - Formation like _________",
+          "answer_key": "rigid foams",
+          "options": null,
+          "wordlist": null
+        },
+        {
+          "index": 21,
+          "type": "true_false_not_given",
+          "prompt": "The chemical structure of plastic is very different from that of rubber.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 22,
+          "type": "true_false_not_given",
+          "prompt": "John Wesley was a famous chemist.",
+          "answer_key": "NOT GIVEN",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 23,
+          "type": "true_false_not_given",
+          "prompt": "Celluloid and Bakelite react to heat in the same way.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 24,
+          "type": "true_false_not_given",
+          "prompt": "The mix of different varieties of plastic can make them less recyclable.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 25,
+          "type": "true_false_not_given",
+          "prompt": "Adding starch into plastic does not necessarily make plastic more durable.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 26,
+          "type": "true_false_not_given",
+          "prompt": "Some plastic containers have to be preserved in special conditions.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Passage 3: How should reading be taught?",
+      "passage_text": "A\nLearning to speak is automatic for almost all children, but learning to read requires elaborate instruction and conscious effort. Well aware of the difficulties, educators have given a great deal of thought to how they can best help children learn to read. No single method has triumphed. Indeed, heated arguments about the most appropriate form of reading instruction continue to polarize the teaching community.\nB\nThree general approaches have been tried. In one, called whole-word instruction, children learn by rote how to recognise at a glance a vocabulary of 50 to 100 words. Then they gradually acquire other words, often through seeing them used over and over again in the context of a story. Speakers of most languages learn the relationship between letters and the sounds associated with them (phonemes). That is, children are taught how to use their knowledge of the alphabet to sound out words. This procedure constitutes a second approach to teaching reading – phonics. Many schools have adopted a different approach: the whole-language method. The strategy here relies on the child's experience with the language. For example, students are offered engaging books and are encouraged to guess the words that they do not know by considering the context of the sentence or by looking for clues in the storyline and illustrations, rather than trying to sound them out. Many teachers adopted the whole-language approach because of its intuitive appeal. Making reading fun promises to keep children motivated, and learning to read depends more on what the student does than on what the teacher does. The presumed benefits of whole-language instruction – and the contrast to the perceived dullness of phonics – led to its growing acceptance across American during the 1990s and a movement away from phonics.\nC\nHowever, many linguists and psychologists objected strongly to the abandonment of phonics in American schools. Why was this so? In short, because research had clearly demonstrated that understanding how letters related to the component sounds in words is critically important in reading. This conclusion rests, in part, on knowledge of how experienced readers make sense of words on a page. Advocates of whole-language instruction have argued forcefully that people often derive meanings directly from print without ever determining the sound of the word. Some psychologists today accept this view, but most believe that reading is typically a process of rapidly sounding out words mentally. Compelling evidence for this comes from experiments which show that subjects often confuse homophones (words that sound the same, such as Jrose and 'rows5). This supports the idea that readers convert strings of letters to sounds.\nD\nIn order to evaluate different approaches to teaching reading, a number of experiments have been carried out, firstly with college students, then with school pupils. Investigators trained English-speaking college students to read using unfamiliar symbols such as Arabic letters (the phonics approach), while another group learned entire words associated with certain strings of Arabic letters (whole-word). Then both groups were required to read a new set of words constructed from the original characters. In general, readers who were taught the rules of phonics could read many more new words than those trained with a whole-word procedure. Classroom studies comparing phonics with either whole-word or whole-language instruction are also quite illuminating. One particularly persuasive study compared two programmes used in 20 first-grade classrooms. Half the students were offered traditional reading instruction, which included the use of phonics drills and applications. The other half were taught using an individualised method that drew from their experiences with languages; these children produce their own booklets of stories and developed sets of words to be recognised (common components of the whole-language approach). This study found that the first group scored higher at year's end on tests of reading and comprehension.\nE\nIf researchers are so convinced about the need for phonics instruction, why does the debate continue? Because the controversy is enmeshed in the philosophical differences between traditional and progressive (or new) approaches, differences that have divided educators for years. The progressive challenge the results of laboratory tests and classroom studies on the basis of a broad philosophical skepticism about the values of such research. They champion student-centred learned and teacher empowerment. Sadly, they fail to realise that these very admirable educational values are equally consistent with the teaching of phonics.\nF\nIf schools of education insisted that would-be reading teachers learned something about the vast research in linguistics and psychology that bears on reading, their graduates would be more eager to use phonics and would be prepared to do so effectively. They could allow their pupils to apply the principles of phonics while reading for pleasure. Using whole-language activities to supplement phonics instruction certainly helps to make reading fun and meaningful for children, so no one would want to see such tools discarded. Indeed, recent work has indicated that the combination of literature-based instruction and phonics is more powerful than either method used alone. Teachers need to strike a balance. But in doing so, we urge them to remember that reading must be grounded in a firm understanding of the connections between letters and sounds. Educators who deny this reality are neglecting decades of research. They are also neglecting the needs of their students.",
+      "instructions": "Questions 27-40",
+      "questions": [
+        {
+          "index": 27,
+          "type": "matching_headings",
+          "prompt": "Section B",
+          "answer_key": "iv",
+          "options": ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"],
+          "wordlist": null
+        },
+        {
+          "index": 28,
+          "type": "matching_headings",
+          "prompt": "Section C",
+          "answer_key": "i",
+          "options": ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"],
+          "wordlist": null
+        },
+        {
+          "index": 29,
+          "type": "matching_headings",
+          "prompt": "Section D",
+          "answer_key": "vii",
+          "options": ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"],
+          "wordlist": null
+        },
+        {
+          "index": 30,
+          "type": "matching_headings",
+          "prompt": "Section E",
+          "answer_key": "ii",
+          "options": ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"],
+          "wordlist": null
+        },
+        {
+          "index": 31,
+          "type": "matching_headings",
+          "prompt": "Section F",
+          "answer_key": "iii",
+          "options": ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"],
+          "wordlist": null
+        },
+        {
+          "index": 32,
+          "type": "true_false_not_given",
+          "prompt": "The whole-language approach relates letters to sounds.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 33,
+          "type": "true_false_not_given",
+          "prompt": "Many educators believe the whole-language approach to be the most interesting way to teach children to read.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 34,
+          "type": "true_false_not_given",
+          "prompt": "Research supports the theory that we read without linking words to sounds.",
+          "answer_key": "FALSE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 35,
+          "type": "true_false_not_given",
+          "prompt": "Research has shown that the whole-word approach is less effective than the whole-language approach.",
+          "answer_key": "NOT GIVEN",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 36,
+          "type": "true_false_not_given",
+          "prompt": "Research has shown that phonics is more successful than both the whole-word and whole-language approaches.",
+          "answer_key": "TRUE",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "wordlist": null
+        },
+        {
+          "index": 37,
+          "type": "summary_completion",
+          "prompt": "In the teaching community, _________ question the usefulness of research into methods of teaching reading.",
+          "answer_key": "E",
+          "options": ["A", "B", "C", "D", "E", "F", "G"],
+          "wordlist": null
+        },
+        {
+          "index": 38,
+          "type": "summary_completion",
+          "prompt": "These critics believe that _________ is incompatible with student-centred learning.",
+          "answer_key": "A",
+          "options": ["A", "B", "C", "D", "E", "F", "G"],
+          "wordlist": null
+        },
+        {
+          "index": 39,
+          "type": "summary_completion",
+          "prompt": "In the future, teachers need to be aware of _________ so that they understand the importance of phonics.",
+          "answer_key": "G",
+          "options": ["A", "B", "C", "D", "E", "F", "G"],
+          "wordlist": null
+        },
+        {
+          "index": 40,
+          "type": "summary_completion",
+          "prompt": "They should not, however, ignore the ideas of _________ which make reading enjoyable for learners.",
+          "answer_key": "C",
+          "options": ["A", "B", "C", "D", "E", "F", "G"],
+          "wordlist": null
+        }
+      ]
+    }
+  ]
+}

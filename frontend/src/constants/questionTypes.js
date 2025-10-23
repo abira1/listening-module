@@ -58,10 +58,20 @@ export const QUESTION_TYPES = {
   },
   
   // Reading (6)
-  'true_false_ng': { 
-    name: 'True/False/Not Given', 
+  'true_false_ng': {
+    name: 'True/False/Not Given',
     section: 'Reading',
     description: 'Determine if statements are True, False, or Not Given'
+  },
+  'true_false_not_given': {
+    name: 'True/False/Not Given',
+    section: 'Reading',
+    description: 'Determine if statements are True, False, or Not Given'
+  },
+  'short_answer_reading': {
+    name: 'Short Answer (Reading)',
+    section: 'Reading',
+    description: 'Write short answers (1-3 words) to reading questions'
   },
   'matching_headings': { 
     name: 'Matching Headings', 
@@ -110,6 +120,7 @@ export const PATH_TO_TYPE_MAP = {
   'Multiple Choice (more than one)': 'mcq_multiple',
   'True/False/Not Given': 'true_false_ng',
   'Identifying Information': 'true_false_ng',
+  'Short Answer': 'short_answer_reading',
   'Matching': 'matching',
   'Sentence Completion': 'sentence_completion',
   'Table Completion': 'table_completion',
@@ -141,6 +152,7 @@ export const QUESTION_COMPONENTS = {
   
   // Reading
   'true_false_ng': () => import('@/components/track-questions/reading/TrueFalseNotGiven'),
+  'true_false_not_given': () => import('@/components/track-questions/reading/TrueFalseNotGiven'),
   'matching_headings': () => import('@/components/track-questions/reading/MatchingHeadings'),
   'matching_features': () => import('@/components/track-questions/reading/MatchingFeatures'),
   'matching_endings': () => import('@/components/track-questions/reading/MatchingEndings'),

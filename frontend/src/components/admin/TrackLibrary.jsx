@@ -259,7 +259,7 @@ export function TrackLibrary() {
                 <div className="grid grid-cols-2 gap-2 mb-4 text-xs">
                   <div className="flex items-center gap-1 text-gray-600">
                     <CheckCircle className="w-4 h-4" />
-                    <span>{track.metadata?.question_count || 0} questions</span>
+                    <span>{track.total_questions || 0} questions</span>
                   </div>
                   <div className="flex items-center gap-1 text-gray-600">
                     <Clock className="w-4 h-4" />
@@ -284,7 +284,7 @@ export function TrackLibrary() {
                 {/* Actions */}
                 <div className="flex gap-2">
                   <button
-                    onClick={() => navigate(`/admin/tests/${track.exam_id}/questions`)}
+                    onClick={() => navigate(`/admin/tests/${track.id}/questions`)}
                     className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-1 text-sm font-medium transition-colors"
                   >
                     <Eye className="w-4 h-4" />

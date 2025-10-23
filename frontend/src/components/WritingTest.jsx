@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { BackendService } from '../services/BackendService';
 import FirebaseAuthService from '../services/FirebaseAuthService';
 import { useAuth } from '../contexts/AuthContext';
-import { Clock, User, HelpCircle, EyeOff } from 'lucide-react';
+import { Clock, User, HelpCircle, EyeOff, AlertCircle } from 'lucide-react';
+import QuestionErrorBoundary from './QuestionErrorBoundary';
+import { validateQuestion, logQuestionRender, logQuestionError, createFallbackRenderer, getSafePayloadValue } from '../utils/questionValidator';
 import HighlightManager from '../lib/HighlightManager';
 import '../styles/navigation.css';
 
@@ -303,9 +305,22 @@ export function WritingTest({ examId }) {
   }
 
   const isFinalTwoMinutes = timeRemaining <= 120 && timeRemaining > 0;
-  const currentWordCount = getWordCount(answers[currentQuestion?.index]);
-  const minWords = currentQuestion?.payload?.min_words || 150;
-  const isWordCountSufficient = currentWordCount >= minWords;
+
+  // Validate current question
+  let currentWordCount = 0;
+  let minWords = 150;
+  let isWordCountSufficient = false;
+
+  if (currentQuestion) {
+    const validation = validateQuestion(currentQuestion);
+    if (validation.isValid) {
+      currentWordCount = getWordCount(answers[currentQuestion?.index]);
+      minWords = getSafePayloadValue(currentQuestion.payload, 'min_words', 150);
+      isWordCountSufficient = currentWordCount >= minWords;
+    } else {
+      logQuestionError(currentQuestion, new Error(validation.errors.join('; ')), 'validation');
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-gray-50">
@@ -397,7 +412,7 @@ export function WritingTest({ examId }) {
             {/* Task Prompt */}
             <div className="mb-6 p-5 bg-blue-50 rounded-lg border-l-4 border-blue-500">
               <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
-                {currentQuestion?.payload?.prompt}
+                {currentQuestion ? getSafePayloadValue(currentQuestion.payload, 'prompt', 'Task prompt not available') : 'No task available'}
               </div>
             </div>
 

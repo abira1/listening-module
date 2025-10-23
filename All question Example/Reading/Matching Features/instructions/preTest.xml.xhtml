@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:connect="http://connect.ucles.org.uk/ns/ConnectDeliveryEngine" xml:lang="en">
+	<div role="application" class="nontest" data-section="true" data-sectionType="confirmDetails">
+		<div class="box1">
+			<h1 class="title hasicon"><img src="images/main/userCheck.png" width="48" height="48" alt=""/>Confirm your details</h1>
+			<div class="content">
+				<dl class="candidate-details row no-gutter">
+					<dt class="col-sm-auto">Name:</dt>
+					<dd class="col-sm-9" candidate-data="name"></dd>
+					<dt class="col-sm-auto">Date of birth:</dt>
+					<dd class="col-sm-9" candidate-data="dob"></dd>
+					<dt class="col-sm-auto">Candidate number:</dt>
+					<dd class="col-sm-9" candidate-data="id"></dd>
+				</dl>
+				<p class="info">If your details are not correct, please inform the invigilator.</p>
+				<div class="textCentre">
+					<input type="submit" data-confirm="1" value="My details are correct" class="button" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div role="application" class="nontest" data-section="true" data-sectionType="access">
+		<div class="box1">
+			<h1 class="title hasicon"><img src="images/main/access.png" width="48" height="48" alt=""/>Settings</h1>
+			<div class="content">
+				<p>If you wish, you can change these settings to make the test easier to read.</p>
+				<div data-accessControls="true">
+					<dl class="access">
+						<dt>Text size</dt>
+						<dd><input type="radio" name="textSize" id="t1" value="t1" data-textResize="1" /> <label for="t1">Standard</label></dd>
+						<dd><input type="radio" name="textSize" id="t2" value="t2" data-textResize="1.2" /> <label for="t2">Large</label></dd>
+						<dd><input type="radio" name="textSize" id="t3" value="t3" data-textResize="1.4" /> <label for="t3">Extra large</label></dd>
+					</dl>
+					<dl class="access">
+						<dt>Colours</dt>
+						<dd><input type="radio" name="colours" id="c1" value="c1" data-colourChange="1" /> <label for="c1">Standard</label></dd>
+						<dd><input type="radio" name="colours" id="c2" value="c2" data-colourChange="2" /> <label for="c2">Yellow on black</label></dd>
+						<dd><input type="radio" name="colours" id="c3" value="c3" data-colourChange="3" /> <label for="c3">Blue on white</label></dd>
+						<dd><input type="radio" name="colours" id="c4" value="c4" data-colourChange="4" /> <label for="c4">Blue on cream</label></dd>
+					</dl>
+					<dl class="access" id="access_screenRes">
+						<dt>Screen Resolution</dt>
+						<dd><input type="radio" name="screenRes" id="s1" value="s1" data-screenRes="0" /> <label for="s1">800 x 600</label></dd>
+						<dd><input type="radio" name="screenRes" id="s2" value="s2" data-screenRes="1" /> <label for="s2">1024 x 768</label></dd>
+						<dd><input type="radio" name="screenRes" id="s3" value="s3" data-screenRes="2" /> <label for="s3">1280 x 1024</label></dd>
+					</dl>
+				</div>
+				<div class="textCentre">
+					<input type="submit" value="OK" class="button" data-confirm="2" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div role="application" class="nontest" data-sectionType="access">
+		<div class="box1">
+			<h1 class="title">Help</h1>
+			<div class="content">
+				<div class="preTestInfo" data-instructionsControls="true">
+					<div data-accessControls="true" class="clearfix">
+						<div class="tab theme">
+							<ul class="tabs">
+								<li>
+									<a href="#tab0">Information</a>
+								</li>
+								<li>
+									<a href="#tab1">Test help</a>
+								</li>
+								<li>
+									<a href="#tab2">Task help</a>
+								</li>
+							</ul>
+						</div>
+						<div class="tabbed" connect:class="testInfo">
+							<div id="tab0" class="tabpanel">
+								<div class="instructionPanel">
+									<h2>INSTRUCTIONS TO CANDIDATES</h2>
+									<ul>
+										<li>Answer <b>all</b> questions.</li>
+										<li>You can change your answers at any time during the test.</li>
+									</ul>
+									<h2>INFORMATION FOR CANDIDATES</h2>
+									<ul>
+										<li>There are 40 questions in this test.</li>
+										<li>Each question carries one mark.</li>
+										<li>The test clock will show you when there are 10 minutes and 5 minutes remaining.</li>
+									</ul>
+								</div>
+							</div>
+							<div id="tab1" class="tabpanel">
+								<div class="instructionPanel">
+									<h2>At the top of the screen you can see:</h2>
+									<img src="images/instructions/screenCandidate.png" alt="candidate information" width="186" height="27" class="outline" />
+									<p>Your name and candidate number.</p>
+									<img src="images/instructions/screenClock.png" alt="candidate information" width="137" height="27" class="outline" />
+									<p>A clock, which tells you how much time you have left. When you hover over the time you can see the seconds.</p>
+									<hr />
+									<table>
+										<tr>
+											<td class="icon help">
+												<span class="toolbarButtonIcon noPointer">Help<span>&#160;</span></span>
+											</td>
+											<td>
+												<span>Click to view the help.</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="icon">
+												<span class="toolbarButtonIcon noPointer">Settings</span>
+											</td>
+											<td>
+												<span>Click to change your screen settings.</span>
+											</td>
+										</tr>
+										<!--<tr>
+											<td class="icon">
+												<span class="toolbarButtonIcon noPointer">Notepad</span>
+											</td>
+											<td>
+												<span>Click to open on-screen notepad (anything you write in the notepad will be deleted at the end of the test).</span>
+											</td>
+										</tr>-->
+										<tr>
+											<td class="icon lock">
+												<span class="toolbarButtonIcon noPointer">Hide</span>
+											</td>
+											<td>
+												<span>Click to hide the screen content temporarily.</span>
+											</td>
+										</tr>										
+									</table>
+									<hr />
+									<h2>Navigation</h2>
+									<p>At the bottom of the screen you can see the navigation bar</p>
+									<img src="images/instructions/screenNav.png" alt="navigation bar" width="640" height="53" class="outline" />
+									<p>Click on a number to go to that question.</p>
+									<table>
+										<tr>
+											<td><img src="images/navigation/next-question-button.png" alt="next question button" width="56" height="56" /></td>
+											<td>Click to go to the next question.</td>
+										</tr>									
+										<tr>
+											<td><img src="images/navigation/previous-question-button.png" alt="previous question button" width="56" height="56" /></td>
+											<td>Click to go to the previous question.</td>
+										</tr>
+										<tr>
+											<td><img src="images/instructions/screenReview.png" alt="review" width="68" height="21" class="outline" /></td>
+											<td>Click if you want to look at this question again later. The question number in the navigation bar will turn into a circle.</td>
+										</tr>
+										<tr>
+											<td><img src="images/navigation/iconMinimise.png" alt="minimise navigation" width="27" height="28" /></td>
+											<td>Click to make the navigation smaller.</td>
+										</tr>										
+										<tr>
+											<td><img src="images/navigation/iconMaximise.png" alt="maximise navigation" width="27" height="28" /></td>
+											<td>Click to make the navigation bigger.</td>
+										</tr>
+										<tr>
+											<td><img src="images/instructions/screenNavCurrent.png" alt="current question" width="44" height="43" class="outline" /></td>
+											<td>The blue highlighting shows the question you are looking at.</td>
+										</tr>										
+										<tr>
+											<td><img src="images/instructions/screenNavAnswered.png" alt="question answered" width="44" height="43" class="outline" /></td>
+											<td>The underlining shows that you have answered this question.</td>
+										</tr>										
+										<tr>
+											<td><img src="images/instructions/screenNavReview.png" alt="question marked for review" width="44" height="43" class="outline" /></td>
+											<td>The circle shows that you want to look at this question again (marked for review).</td>
+										</tr>
+										<tr>
+											<td><img src="images/instructions/screenNavNormal.png" alt="question marked for review" width="38" height="38" class="outline" /></td>
+											<td>The black highlighting shows that you have not answered the question.</td>
+										</tr>
+									</table>
+									<hr />
+									<h2>Highlighting</h2>
+									<table>	
+										<caption>To highlight something in the test:</caption>
+										<tr>
+											<th colspan="2">
+												<p>Select the text you want to highlight using the mouse.
+													<br /><b>Right click</b> over the text.
+												</p>
+												<img src="images/instructions/screenRightClick.png" alt="right click menu" width="265" height="106" class="outline" />
+											</th>
+										</tr>										
+										<tr>
+											<td><img src="images/instructions/screenRightHighlight.png" alt="highlight" width="120" height="21" class="outline" /></td>
+											<td>Click to highlight the text you have selected.</td>
+										</tr>										
+										<tr>
+											<td><img src="images/instructions/screenRightNotes.png" alt="notes" width="120" height="21" class="outline" /></td>
+											<td>Click to highlight the text you have selected and to add notes about what you have highlighted.</td>
+										</tr>
+									</table>
+									<hr />
+									<h2>Notes</h2>
+									<p>To close the notes click on X in the top right. To view the notes right-click on the highlighted text
+										(anything you write in Notes will be deleted at the end of the test).
+									</p>
+									<img src="images/instructions/screenNotes.png" alt="notes" width="265" height="317" class="outline" />
+									<p>You can locate those areas of highlighted text containing notes by hovering over each highlighted text. If a small orange box appears the highlighted text contains notes. </p>
+									<img src="images/instructions/screenNotesIcon.png" alt="notes" width="304" height="66" class="outline" />									
+									<p>To clear your highlighting right click on the highlighted text.</p>
+									<img src="images/instructions/screenRightClickHighlight.png" alt="right click menu" width="196" height="110" class="outline" />
+									<table>										
+										<tr>
+											<td><img src="images/instructions/screenRightClear.png" alt="clear" width="120" height="21" class="outline" /></td>
+											<td>Click to clear the highlighting. This will also clear any notes you have made.</td>
+										</tr>									
+										<tr>
+											<td><img src="images/instructions/screenRightClearAll.png" alt="clear" width="120" height="21" class="outline" /></td>
+											<td>Click to clear all highlighting including notes.</td>
+										</tr>
+									</table>
+									<hr />
+									<h2>Scrolling</h2>
+									<p>For longer texts, you may need to scroll to see all of the test.</p>
+								</div>
+							</div>
+							<div id="tab2" class="tabpanel">
+								<div class="instructionPanel contextHelp">
+									<p>To choose a question either click on the question number at the bottom of the screen or click on the question.</p>
+									<hr />
+									<div id="helpAccordion">
+										<h2>Multiple choice questions in an accordion</h2>
+										<p>Choose your question by clicking on it.</p>
+										<img src="images/instructions/IELTS-AcademicReading-ChoiceAccordion.png" alt="" width="590" height="280"  class="outline" />
+										<p>Click on the answer you think is right.</p>
+										<p>If you change your mind, click on a different answer.</p>
+										<p>If you want to leave the question unanswered, click on your answer again.</p>
+									</div>
+									<hr />
+									<div id="helpMultiChoice">
+										<h2>Multiple choice questions where there is more than one answer</h2>
+										<p>Some questions may ask you to select two or three options.
+										Please make sure you read the instructions and questions carefully.</p>
+										<img src="images/instructions/IELTS-AcademicReading-MultiChoice.png" alt="" width="569" height="224"  class="outline" />
+										<p>Click on the answers you think are right.</p>
+										<p>If you change your mind, click on a different answer.</p>
+										<p>If you want to leave the question unanswered, click on your answer again.</p>
+									</div>
+									<hr />
+									<div id="helpTextInline">
+										<h2>Gap fill questions</h2>
+										<p>To answer a question, click in the gap and write your answer. Some questions may ask you to write your answer in a table, flow-chart or diagram.</p>
+										<img src="images/instructions/IELTS-AcademicReading-GapFill.png" alt="" width="520" height="127"  class="outline" />
+									</div>
+									<hr />
+									<div id="helpTableMatch">
+										<h2>Matching questions using a table</h2>
+										<p>To select a question, click on the question number in the table. The row will become shaded.</p>
+										<img src="images/instructions/IELTS-AcademicReading-TableMatch1.png" alt="" class="outline" />
+										<p>Select the correct option by clicking on a space in the table. A tick will appear.</p>
+										<img src="images/instructions/IELTS-AcademicReading-TableMatch2.png" alt="" class="outline" />
+										<p>If you want to change your answer, click on another space.</p>
+										<p>If you want to leave the question unanswered, click on the space again.</p>
+									</div>
+									<div id="helpGapMatch">
+										<h2>Drag and drop questions</h2>
+										<img src="images/instructions/IELTS-AcademicReading-DragDrop1.png" alt="" width="100%" class="outline" />
+										<p>To answer a question, click on the answer and move it into the gap.</p>
+										<img src="images/instructions/IELTS-AcademicReading-DragDrop2.png" alt="" width="100%" class="outline" />
+										<p>If you want to change your answer, move another answer into the gap.</p>
+										<p>If you want to leave the question unanswered, move the answer back.</p>
+										<p>Don't forget! You may need to scroll to see all the Reading text and all the questions.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p class="preTestInfo">
+					<b>Your time will start when you click the 'Start' button below</b>
+				</p>
+				<div class="textCentre">
+					<input type="submit" data-confirm="1" value="Start" class="button" />
+				</div>
+			</div>
+		</div>
+	</div>
+</html>

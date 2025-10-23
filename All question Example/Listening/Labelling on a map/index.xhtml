@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:connect="http://connect.ucles.org.uk/ns/ConnectDeliveryEngine" xmlns:raphaelChart="http://connect.ucles.org.uk/ns/QTICharts" xmlns:sem="http://connect.ucles.org.uk/ns/QTIExtendedSemantics" connect:class="assessmentTest"><head><title>Plan/Map/Diagram Labelling</title><link href="css/jquery-ui.css" rel="stylesheet"/><link href="css/bootstrap.css" rel="stylesheet"/><link href="css/base.css" rel="stylesheet"/><link href="css/access.css" rel="stylesheet"/><link href="css/banner.css" rel="stylesheet"/><link href="css/navigation.css" rel="stylesheet"/><link href="css/tools.css" rel="stylesheet"/><link href="css/main.css" rel="stylesheet"/><link href="css/item.css" rel="stylesheet"/><link href="css/calc.css" rel="stylesheet"/><link href="css/chart.css" rel="stylesheet"/><link href="css/notepad.css" rel="stylesheet"/><link href="css/instructions.css" rel="stylesheet"/><link href="css/jquery.contextMenu.css" rel="stylesheet"/><link href="css/custom.css" rel="stylesheet"/><connect:timeLimits maxTime="259"/><script src="js/jquery.js"/><script src="js/jquery-ui.js"/><script src="js/jquery.throttle-debounce.js"/><script src="js/ulib.js"/><script src="js/jxon.js"/><script src="js/biginteger.js"/><script src="js/raphael.js"/><script src="js/d3.js"/><script src="js/qti.js"/><script src="js/rangy-core.js"/><script src="js/rangy-classapplier.js"/><script src="js/rangy-selectionsaverestore.js"/><script src="js/rangy-serializer.js"/><script src="js/jquery.validate.js"/><script src="js/jquery.ui.position.js"/><script src="js/jquery.contextMenu.js"/><script src="js/notes.js"/><script src="js/jquery.jplayer.min.js"/><script src="js/require.js"/><script type="text/javascript">
+          //
+		  requirejs.config({
+			baseUrl: "js"
+		  });
+          //
+        </script><script type="text/javascript">
+	//
+	qti.preloadTestContents = true;
+	qti.inContextHelp = 2;
+	qti.setTextareaHeight = true;	
+	qti.showCISForm = false;	
+	qti.clearAllNotes = true;	
+	//
+	</script><script id="mappingJs"/><script src="js/theme.js"/><script type="text/javascript">
+          //
+          // change to local mode
+            function gup(name) {
+              name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+              var regexS = "[\\?&amp;]"+name+"=([^&amp;#]*)",
+              regex = new RegExp( regexS ),
+              results = regex.exec( window.location.href );
+              if ( results == null ) {
+                return "";
+              } else {
+                return results[1];
+              }
+            }
+
+            var locationParam = gup("location"),
+            mappingScript = document.getElementById("mappingJs");
+            //if (locationParam === "local") {
+                mappingScript.setAttribute("src", "js/localMapping.js");
+            //} else {
+                //mappingScript.setAttribute("src", "js/serverMapping.js");
+            //}
+
+            if (qti.touchDeviceSupport) {
+              document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+              window.addEventListener('load', function() {
+                FastClick.attach(document.body);
+              }, false);
+            }
+          //
+        </script></head>
+    
+    <body>
+      
+    <div role="banner">
+      <div id="banner">
+        <div>
+          <img alt="IELTS" src="images/banner/IELTSlogo.png" height="60px" width="206px" class="ieltslogo"/>
+          <img alt="IELTS Partners" src="images/banner/IELTSpartners.jpg" class="ieltspartners"/>
+        </div>
+      </div>
+      <div id="test-banner">
+           
+        <p id="candidate">
+          
+          <span id="candidate-name-label">
+            Candidate name:
+          </span>
+          <strong aria-labelled-by="candidate-name-label" class="candidate-name">
+			XXXX XXXXXXX
+          </strong>
+          <span> - </span>
+          <span id="candidate-number-label">
+            Candidate number:
+          </span>
+          <strong aria-labelled-by="candidate-number-label" class="candidate-number">
+			123456
+          </strong>
+        </p>
+        <p id="timer">
+          <span class="reader-only" id="timer-label">
+            Time:
+          </span>
+          <span aria-labelled-by="timer-label" connect:function="timer">
+            <em>
+            </em>
+            <span>minutes left</span>
+          </span>
+        </p>   
+		<div id="audio-control">
+			<div id="slider"/>
+			<input type="hidden" id="amount"/>
+			<input value="test-content/Audio_ogg-1.ogg" type="hidden" id="main-audio-content"/>
+		</div>
+		<div id="audio-content"/>		
+        <ul id="banner-controls" role="toolbar"><li connect:class="floatingTool"><a href="#" connect:class="settingsLink">Settings</a></li><li connect:class="floatingTool"><a href="#" connect:class="helpLink">Help<span> </span></a></li><li connect:class="floatingTool"><a href="#" connect:class="lockLink">Hide</a></li></ul>
+      </div>
+	</div>
+        
+      <div role="navigation"><h1 class="reader-only">Navigation</h1><div class="maximised" id="navigation-bar"><div connect:class="testPart" connect:identifier="IELTSRELL_SAMPLE_82015"><ul><li connect:class="assessmentSection" connect:identifier="Sec2"><span class="section-label"/><ul><li connect:class="assessmentItemRef" connect:identifier="IELTSREL-UILI20003L8-0-0">
+    
+    <a class="subInteraction" href="test-content/UILI20003L8-0-0.xml.xhtml#IELTSREL-UILI20003L8-0-1" nav="IELTSREL-UILI20003L8-0-1_Gap1">
+      <span class="question-label">Question </span>
+      <span class="question-number">
+        
+        
+                1
+            
+      </span>
+    </a>
+  
+    
+    <a class="subInteraction" href="test-content/UILI20003L8-0-0.xml.xhtml#IELTSREL-UILI20003L8-0-1" nav="IELTSREL-UILI20003L8-0-1_Gap2">
+      <span class="question-label">Question </span>
+      <span class="question-number">
+        
+        
+                2
+            
+      </span>
+    </a>
+  
+    
+    <a class="subInteraction" href="test-content/UILI20003L8-0-0.xml.xhtml#IELTSREL-UILI20003L8-0-1" nav="IELTSREL-UILI20003L8-0-1_Gap3">
+      <span class="question-label">Question </span>
+      <span class="question-number">
+        
+        
+                3
+            
+      </span>
+    </a>
+  </li></ul></li></ul><div class="views"><a title="switch view to navigation summary" class="minimise" href="#"><span>navigation summary</span> </a><a title="switch view to navigation details" class="maximise" href="#"><span>navigation details</span> </a></div></div></div><label id="review-checkbox"><input connect:function="mark-for-review" type="checkbox"/>
+        Review</label><a title="Previous Question" connect:function="previous"><span class="reader-only">Previous Question</span></a><a title="Next Question" href="#" connect:function="next"><span class="reader-only">Next Question</span></a></div><div role="main"/>
+    </body>
+  </html>

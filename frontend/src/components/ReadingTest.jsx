@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BackendService } from '../services/BackendService';
 import FirebaseAuthService from '../services/FirebaseAuthService';
 import { useAuth } from '../contexts/AuthContext';
-import { Clock, User, HelpCircle, EyeOff } from 'lucide-react';
+import { Clock, User, HelpCircle, EyeOff, AlertCircle } from 'lucide-react';
 import { MatchingParagraphs } from './reading/MatchingParagraphs';
 import { SentenceCompletion } from './reading/SentenceCompletion';
 import { TrueFalseNotGiven } from './reading/TrueFalseNotGiven';
@@ -17,6 +17,8 @@ import { FlowchartCompletion } from './questions/FlowchartCompletion';
 import { MatchingSentenceEndings } from './questions/MatchingSentenceEndings';
 import { TableCompletion } from './questions/TableCompletion';
 import { MatchingFeatures } from './questions/MatchingFeatures';
+import QuestionErrorBoundary from './QuestionErrorBoundary';
+import { validateQuestion, logQuestionRender, logQuestionError, createFallbackRenderer, getSafePayloadValue, getSafeArray } from '../utils/questionValidator';
 import HighlightManager from '../lib/HighlightManager';
 import '../styles/navigation.css';
 
@@ -353,10 +355,19 @@ export function ReadingTest({ examId }) {
   };
 
   const renderQuestionComponent = (question) => {
-    const answer = answers[question.index] || '';
-    const onChange = (value) => handleAnswerChange(question.index, value);
+    try {
+      // Validate question structure
+      const validation = validateQuestion(question);
+      if (!validation.isValid) {
+        logQuestionError(question, new Error(validation.errors.join('; ')), 'validation');
+        return createFallbackRenderer(question, `Invalid question structure: ${validation.errors[0]}`);
+      }
 
-    switch (question.type) {
+      const answer = answers[question.index] || '';
+      const onChange = (value) => handleAnswerChange(question.index, value);
+      const payload = question.payload || {};
+
+      switch (question.type) {
       case 'matching_paragraphs':
         return <MatchingParagraphs question={question} answer={answer} onChange={onChange} />;
       case 'sentence_completion':
@@ -369,38 +380,45 @@ export function ReadingTest({ examId }) {
         return <TrueFalseNotGiven question={question} answer={answer} onChange={onChange} />;
       case 'short_answer_reading':
         return <ShortAnswerReading question={question} answer={answer} onChange={onChange} />;
-      case 'multiple_choice':
-        // Single answer multiple choice
-        return (
-          <div className="mb-6">
-            <div className="flex items-start gap-2">
-              <span className="font-semibold min-w-[3rem]">{question.index}.</span>
-              <div className="flex-1">
-                <p className="text-gray-700 mb-3">{question.payload.prompt}</p>
-                <div className="space-y-2">
-                  {question.payload.options.map((option, idx) => {
-                    const optionLabel = String.fromCharCode(65 + idx);
-                    return (
-                      <label key={idx} className="flex items-start gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
-                        <input
-                          type="radio"
-                          name={`question_${question.index}`}
-                          value={optionLabel}
-                          checked={answer === optionLabel}
-                          onChange={(e) => onChange(e.target.value)}
-                          className="mt-1"
-                        />
-                        <span className="text-gray-700">
-                          <span className="font-medium">{optionLabel}.</span> {option}
-                        </span>
-                      </label>
-                    );
-                  })}
+        case 'multiple_choice':
+          // Single answer multiple choice
+          const mcOptions = getSafeArray(payload, 'options');
+          if (mcOptions.length === 0) {
+            logQuestionError(question, new Error('No options available'), 'multiple_choice');
+            return createFallbackRenderer(question, 'Multiple choice question has no options');
+          }
+          return (
+            <QuestionErrorBoundary question={question} key={question.id}>
+              <div className="mb-6">
+                <div className="flex items-start gap-2">
+                  <span className="font-semibold min-w-[3rem]">{question.index}.</span>
+                  <div className="flex-1">
+                    <p className="text-gray-700 mb-3">{getSafePayloadValue(payload, 'prompt', 'Question prompt not available')}</p>
+                    <div className="space-y-2">
+                      {mcOptions.map((option, idx) => {
+                        const optionLabel = String.fromCharCode(65 + idx);
+                        return (
+                          <label key={idx} className="flex items-start gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                            <input
+                              type="radio"
+                              name={`question_${question.index}`}
+                              value={optionLabel}
+                              checked={answer === optionLabel}
+                              onChange={(e) => onChange(e.target.value)}
+                              className="mt-1"
+                            />
+                            <span className="text-gray-700">
+                              <span className="font-medium">{optionLabel}.</span> {option}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        );
+            </QuestionErrorBoundary>
+          );
       case 'multiple_choice_multiple':
         return <MultipleChoiceMultiple question={question} answer={answer} onChange={(idx, val) => handleAnswerChange(idx, val)} questionNum={question.index} />;
       case 'note_completion':
@@ -468,12 +486,13 @@ export function ReadingTest({ examId }) {
             />
           </div>
         );
-      default:
-        return (
-          <div className="mb-4 p-4 bg-gray-100 rounded">
-            <p className="text-gray-600">Unsupported question type: {question.type}</p>
-          </div>
-        );
+        default:
+          logQuestionError(question, new Error(`Unsupported question type: ${question.type}`), 'default');
+          return createFallbackRenderer(question, `Question type "${question.type}" is not supported`);
+      }
+    } catch (error) {
+      logQuestionError(question, error, 'renderQuestionComponent');
+      return createFallbackRenderer(question, `Error rendering question: ${error.message}`);
     }
   };
 

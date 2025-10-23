@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BackendService } from '../services/BackendService';
 import FirebaseAuthService from '../services/FirebaseAuthService';
 import { useAuth } from '../contexts/AuthContext';
-import { Clock, Volume2, ChevronLeft, ChevronRight, HelpCircle, EyeOff, User } from 'lucide-react';
+import { Clock, Volume2, ChevronLeft, ChevronRight, HelpCircle, EyeOff, User, AlertCircle } from 'lucide-react';
 import HighlightManager from '../lib/HighlightManager';
 import { MatchingDraggable } from './questions/MatchingDraggable';
 import { MultipleChoiceMultiple } from './questions/MultipleChoiceMultiple';
@@ -12,6 +12,8 @@ import { NoteCompletion } from './questions/NoteCompletion';
 import { TableCompletion } from './questions/TableCompletion';
 import { FlowchartCompletion } from './questions/FlowchartCompletion';
 import { SummaryCompletion } from './questions/SummaryCompletion';
+import QuestionErrorBoundary from './QuestionErrorBoundary';
+import { validateQuestion, logQuestionRender, logQuestionError, createFallbackRenderer, getSafePayloadValue, getSafeArray } from '../utils/questionValidator';
 import '../styles/navigation.css';
 
 export function ListeningTest({ examId, audioRef }) {
@@ -398,149 +400,211 @@ export function ListeningTest({ examId, audioRef }) {
   };
 
   const renderQuestion = (question) => {
-    const questionNum = question.index;
+    try {
+      // Validate question structure
+      const validation = validateQuestion(question);
+      if (!validation.isValid) {
+        logQuestionError(question, new Error(validation.errors.join('; ')), 'validation');
+        return createFallbackRenderer(question, `Invalid question structure: ${validation.errors[0]}`);
+      }
 
-    switch (question.type) {
-      case 'short_answer':
-        return (
-          <div 
-            key={question.id} 
-            className="mb-4" 
-            data-question-index={questionNum}
-            onClick={() => setCurrentQuestionIndex(questionNum)}
-          >
-            <div className="flex items-start gap-2">
-              <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
-              <div className="flex-1">
-                {renderPromptWithInlineInput(question.payload.prompt, questionNum)}
-                {question.payload.max_words && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    Maximum {question.payload.max_words} word(s)
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        );
+      const questionNum = question.index;
+      const payload = question.payload || {};
 
-      case 'multiple_choice':
-        return (
-          <div 
-            key={question.id} 
-            className="mb-6" 
-            data-question-index={questionNum}
-            onClick={() => setCurrentQuestionIndex(questionNum)}
-          >
-            <div className="flex items-start gap-2">
-              <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
-              <div className="flex-1">
-                <p className="text-gray-700 mb-3">{question.payload.prompt}</p>
-                <div className="space-y-2">
-                  {question.payload.options.map((option, idx) => {
-                    const optionLabel = String.fromCharCode(65 + idx); // A, B, C, D
-                    return (
-                      <label key={idx} className="flex items-start gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
-                        <input
-                          type="radio"
-                          name={`question_${questionNum}`}
-                          value={optionLabel}
-                          checked={answers[questionNum] === optionLabel}
-                          onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
-                          onFocus={() => setCurrentQuestionIndex(questionNum)}
-                          className="mt-1"
-                        />
-                        <span className="text-gray-700">
-                          <span className="font-medium">{optionLabel}.</span> {option}
-                        </span>
-                      </label>
-                    );
-                  })}
+      switch (question.type) {
+        case 'short_answer':
+          return (
+            <QuestionErrorBoundary question={question} key={question.id}>
+              <div
+                className="mb-4"
+                data-question-index={questionNum}
+                onClick={() => setCurrentQuestionIndex(questionNum)}
+              >
+                <div className="flex items-start gap-2">
+                  <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
+                  <div className="flex-1">
+                    {renderPromptWithInlineInput(getSafePayloadValue(payload, 'prompt', 'Question prompt not available'), questionNum)}
+                    {payload.max_words && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Maximum {payload.max_words} word(s)
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        );
+            </QuestionErrorBoundary>
+          );
 
-      case 'map_labeling':
-        return (
-          <div 
-            key={question.id} 
-            className="mb-4" 
-            data-question-index={questionNum}
-            onClick={() => setCurrentQuestionIndex(questionNum)}
-          >
-            <div className="flex items-start gap-2">
-              <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
-              <div className="flex-1">
-                <p className="text-gray-700 mb-2">{question.payload.prompt}</p>
-                <select
-                  value={answers[questionNum] || ''}
-                  onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
-                  onFocus={() => setCurrentQuestionIndex(questionNum)}
-                  className="w-32 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">---</option>
-                  {question.payload.options.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
+        case 'short_answer_reading':
+          return (
+            <QuestionErrorBoundary question={question} key={question.id}>
+              <div
+                className="mb-4"
+                data-question-index={questionNum}
+                onClick={() => setCurrentQuestionIndex(questionNum)}
+              >
+                <div className="flex items-start gap-2">
+                  <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
+                  <div className="flex-1">
+                    <p className="text-gray-700 mb-3">{getSafePayloadValue(payload, 'prompt', 'Question prompt not available')}</p>
+                    <input
+                      type="text"
+                      value={answers[questionNum] || ''}
+                      onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+                      onFocus={() => setCurrentQuestionIndex(questionNum)}
+                      placeholder="Type your answer here..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    {payload.max_words && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Maximum {payload.max_words} word(s)
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        );
+            </QuestionErrorBoundary>
+          );
 
-      case 'diagram_labeling':
-        return (
-          <div 
-            key={question.id} 
-            className="mb-4" 
-            data-question-index={questionNum}
-            onClick={() => setCurrentQuestionIndex(questionNum)}
-          >
-            <div className="flex items-start gap-2">
-              <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
-              <div className="flex-1">
-                {renderPromptWithInlineInput(question.payload.prompt, questionNum)}
-                {question.payload.max_words && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    Maximum {question.payload.max_words} word(s)
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'matching_draggable':
-        // For matching_draggable, we need to handle multiple questions within one component
-        const questions = question.payload?.questions || [];
-        const startIndex = question.index;
-        
-        // Create a sub-answers object for this matching group
-        const matchingAnswers = {};
-        questions.forEach((q, idx) => {
-          const qIndex = startIndex + idx;
-          if (answers[qIndex]) {
-            matchingAnswers[qIndex] = answers[qIndex];
+        case 'multiple_choice':
+          const options = getSafeArray(payload, 'options');
+          if (options.length === 0) {
+            logQuestionError(question, new Error('No options available'), 'multiple_choice');
+            return createFallbackRenderer(question, 'Multiple choice question has no options');
           }
-        });
-        
-        return (
-          <div 
-            key={question.id} 
-            className="mb-6" 
-            data-question-index={startIndex}
-          >
-            <MatchingDraggable
-              question={question}
-              answers={matchingAnswers}
-              onAnswerChange={handleAnswerChange}
-              questionStartIndex={startIndex}
-            />
-          </div>
-        );
+          return (
+            <QuestionErrorBoundary question={question} key={question.id}>
+              <div
+                className="mb-6"
+                data-question-index={questionNum}
+                onClick={() => setCurrentQuestionIndex(questionNum)}
+              >
+                <div className="flex items-start gap-2">
+                  <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
+                  <div className="flex-1">
+                    <p className="text-gray-700 mb-3">{getSafePayloadValue(payload, 'prompt', 'Question prompt not available')}</p>
+                    <div className="space-y-2">
+                      {options.map((option, idx) => {
+                        const optionLabel = String.fromCharCode(65 + idx); // A, B, C, D
+                        return (
+                          <label key={idx} className="flex items-start gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                            <input
+                              type="radio"
+                              name={`question_${questionNum}`}
+                              value={optionLabel}
+                              checked={answers[questionNum] === optionLabel}
+                              onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+                              onFocus={() => setCurrentQuestionIndex(questionNum)}
+                              className="mt-1"
+                            />
+                            <span className="text-gray-700">
+                              <span className="font-medium">{optionLabel}.</span> {option}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </QuestionErrorBoundary>
+          );
+
+        case 'map_labeling':
+          const mapOptions = getSafeArray(payload, 'options');
+          if (mapOptions.length === 0) {
+            logQuestionError(question, new Error('No options available'), 'map_labeling');
+            return createFallbackRenderer(question, 'Map labeling question has no options');
+          }
+          return (
+            <QuestionErrorBoundary question={question} key={question.id}>
+              <div
+                className="mb-4"
+                data-question-index={questionNum}
+                onClick={() => setCurrentQuestionIndex(questionNum)}
+              >
+                <div className="flex items-start gap-2">
+                  <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
+                  <div className="flex-1">
+                    <p className="text-gray-700 mb-2">{getSafePayloadValue(payload, 'prompt', 'Question prompt not available')}</p>
+                    <select
+                      value={answers[questionNum] || ''}
+                      onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+                      onFocus={() => setCurrentQuestionIndex(questionNum)}
+                      className="w-32 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">---</option>
+                      {mapOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </QuestionErrorBoundary>
+          );
+
+        case 'diagram_labeling':
+          return (
+            <QuestionErrorBoundary question={question} key={question.id}>
+              <div
+                className="mb-4"
+                data-question-index={questionNum}
+                onClick={() => setCurrentQuestionIndex(questionNum)}
+              >
+                <div className="flex items-start gap-2">
+                  <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
+                  <div className="flex-1">
+                    {renderPromptWithInlineInput(getSafePayloadValue(payload, 'prompt', 'Question prompt not available'), questionNum)}
+                    {payload.max_words && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Maximum {payload.max_words} word(s)
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </QuestionErrorBoundary>
+          );
+
+        case 'matching_draggable':
+          // For matching_draggable, we need to handle multiple questions within one component
+          const matchingQuestions = getSafeArray(payload, 'questions');
+          const matchingOptions = getSafeArray(payload, 'options');
+
+          if (matchingQuestions.length === 0 || matchingOptions.length === 0) {
+            logQuestionError(question, new Error('Missing questions or options'), 'matching_draggable');
+            return createFallbackRenderer(question, 'Matching question has missing questions or options');
+          }
+
+          const startIndex = question.index;
+
+          // Create a sub-answers object for this matching group
+          const matchingAnswers = {};
+          matchingQuestions.forEach((q, idx) => {
+            const qIndex = startIndex + idx;
+            if (answers[qIndex]) {
+              matchingAnswers[qIndex] = answers[qIndex];
+            }
+          });
+
+          return (
+            <QuestionErrorBoundary question={question} key={question.id}>
+              <div
+                className="mb-6"
+                data-question-index={startIndex}
+              >
+                <MatchingDraggable
+                  question={question}
+                  answers={matchingAnswers}
+                  onAnswerChange={handleAnswerChange}
+                  questionStartIndex={startIndex}
+                />
+              </div>
+            </QuestionErrorBoundary>
+          );
 
       case 'multiple_choice_multiple':
         return (
@@ -663,9 +727,9 @@ export function ListeningTest({ examId, audioRef }) {
 
       case 'summary_completion':
         return (
-          <div 
-            key={question.id} 
-            className="mb-4" 
+          <div
+            key={question.id}
+            className="mb-4"
             data-question-index={questionNum}
             onClick={() => setCurrentQuestionIndex(questionNum)}
           >
@@ -678,12 +742,49 @@ export function ListeningTest({ examId, audioRef }) {
           </div>
         );
 
-      default:
+      case 'true_false_ng':
+      case 'true_false_not_given':
+        const tfngOptions = ['TRUE', 'FALSE', 'NOT GIVEN'];
         return (
-          <div key={question.id} className="mb-4" data-question-index={questionNum}>
-            <p className="text-gray-500">Question type not supported: {question.type}</p>
-          </div>
+          <QuestionErrorBoundary question={question} key={question.id}>
+            <div
+              className="mb-4"
+              data-question-index={questionNum}
+              onClick={() => setCurrentQuestionIndex(questionNum)}
+            >
+              <div className="flex items-start gap-2">
+                <span className="font-semibold min-w-[3rem]">{questionNum}.</span>
+                <div className="flex-1">
+                  <p className="text-gray-700 mb-3">{getSafePayloadValue(payload, 'prompt', 'Question prompt not available')}</p>
+                  <div className="flex gap-2">
+                    {tfngOptions.map((option) => (
+                      <label key={option} className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`question_${questionNum}`}
+                          value={option}
+                          checked={answers[questionNum] === option}
+                          onChange={(e) => handleAnswerChange(questionNum, e.target.value)}
+                          onFocus={() => setCurrentQuestionIndex(questionNum)}
+                          className="w-4 h-4"
+                        />
+                        <span className="text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </QuestionErrorBoundary>
         );
+
+        default:
+          logQuestionError(question, new Error(`Unsupported question type: ${question.type}`), 'default');
+          return createFallbackRenderer(question, `Question type "${question.type}" is not supported`);
+      }
+    } catch (error) {
+      logQuestionError(question, error, 'renderQuestion');
+      return createFallbackRenderer(question, `Error rendering question: ${error.message}`);
     }
   };
 

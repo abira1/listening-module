@@ -1,89 +1,64 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
 import { Clock, CheckCircle, XCircle, RefreshCw, LogOut } from 'lucide-react';
-import FirebaseAuthService from '../../services/FirebaseAuthService';
-import { ref, onValue } from 'firebase/database';
-import { database } from '../../config/firebase';
+import { BackendService } from '../../services/BackendService';
 
 export function WaitingForApproval() {
   const navigate = useNavigate();
-  const { user, logout, loading: authLoading, refreshUserProfile } = useAuth();
   const [checking, setChecking] = useState(false);
-  const [status, setStatus] = useState('pending');
+  const [status, setStatus] = useState('active');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const isRedirecting = useRef(false);
 
+  // Load user from local session storage
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/student');
-      return;
-    }
+    try {
+      const studentData = sessionStorage.getItem('studentData');
+      const sessionToken = sessionStorage.getItem('studentSessionToken');
 
-    if (user && !isRedirecting.current) {
-      setStatus(user.status || 'pending');
-      
-      // If approved, redirect to dashboard
-      if (user.status === 'approved') {
+      if (!studentData || !sessionToken) {
+        navigate('/student');
+        return;
+      }
+
+      const userData = JSON.parse(studentData);
+      setUser(userData);
+      setStatus(userData.status || 'active');
+
+      // For local system, status is 'active' by default, so redirect to dashboard
+      if (userData.status === 'active' || !userData.status) {
         isRedirecting.current = true;
         navigate('/student/dashboard', { replace: true });
       }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      navigate('/student');
+    } finally {
+      setLoading(false);
     }
-  }, [user, authLoading, navigate]);
-
-  // Real-time status monitoring
-  useEffect(() => {
-    if (!user?.uid || isRedirecting.current) return;
-
-    // Set up real-time listener for student status
-    const studentRef = ref(database, `students/${user.uid}/status`);
-    
-    const unsubscribe = onValue(studentRef, async (snapshot) => {
-      if (snapshot.exists() && !isRedirecting.current) {
-        const newStatus = snapshot.val();
-        console.log('Status updated in real-time:', newStatus);
-        setStatus(newStatus);
-        
-        // Automatically redirect to dashboard when approved
-        if (newStatus === 'approved') {
-          isRedirecting.current = true;
-          
-          try {
-            // Update the user profile in AuthContext first
-            await refreshUserProfile();
-            
-            // Show success message briefly
-            setTimeout(() => {
-              navigate('/student/dashboard', { replace: true });
-            }, 1500);
-          } catch (error) {
-            console.error('Error refreshing profile:', error);
-            // Fallback: redirect anyway
-            setTimeout(() => {
-              navigate('/student/dashboard', { replace: true });
-            }, 1500);
-          }
-        }
-      }
-    });
-
-    // Cleanup listener on unmount
-    return () => unsubscribe();
-  }, [user?.uid, refreshUserProfile, navigate]);
+  }, [navigate]);
 
   const handleCheckStatus = async () => {
     setChecking(true);
     try {
-      // Refresh user profile from Firebase
-      const profile = await FirebaseAuthService.getStudentProfile(user.uid);
-      
-      if (profile && profile.status === 'approved') {
-        setStatus('approved');
-        // Refresh auth context
-        window.location.href = '/student/dashboard';
-      } else if (profile && profile.status === 'rejected') {
-        setStatus('rejected');
-      } else {
-        setStatus('pending');
+      const sessionToken = sessionStorage.getItem('studentSessionToken');
+      if (!sessionToken) {
+        navigate('/student');
+        return;
+      }
+
+      // Verify token with backend
+      const response = await BackendService.verifyStudentToken(sessionToken);
+
+      if (response && response.status) {
+        setStatus(response.status);
+
+        // If active or approved, redirect to dashboard
+        if (response.status === 'active' || response.status === 'approved') {
+          isRedirecting.current = true;
+          navigate('/student/dashboard', { replace: true });
+        }
       }
     } catch (error) {
       console.error('Error checking status:', error);
@@ -93,11 +68,21 @@ export function WaitingForApproval() {
   };
 
   const handleLogout = async () => {
-    await logout();
-    navigate('/');
+    try {
+      const sessionToken = sessionStorage.getItem('studentSessionToken');
+      if (sessionToken) {
+        await BackendService.studentLogout(sessionToken);
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      sessionStorage.removeItem('studentSessionToken');
+      sessionStorage.removeItem('studentData');
+      navigate('/student');
+    }
   };
 
-  if (authLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -170,51 +155,40 @@ export function WaitingForApproval() {
           </div>
 
           {/* Student Info */}
-          <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase mb-4">
-              Your Information
-            </h2>
-            <div className="space-y-3">
-              <div className="flex items-start">
-                <span className="text-sm font-medium text-gray-700 w-32">Name:</span>
-                <span className="text-sm text-gray-900">{user?.name}</span>
-              </div>
-              <div className="flex items-start">
-                <span className="text-sm font-medium text-gray-700 w-32">Email:</span>
-                <span className="text-sm text-gray-900">{user?.email}</span>
-              </div>
-              <div className="flex items-start">
-                <span className="text-sm font-medium text-gray-700 w-32">Phone:</span>
-                <span className="text-sm text-gray-900">{user?.phoneNumber}</span>
-              </div>
-              <div className="flex items-start">
-                <span className="text-sm font-medium text-gray-700 w-32">Institution:</span>
-                <span className="text-sm text-gray-900">{user?.institution}</span>
-              </div>
-              {user?.department && (
+          {user && (
+            <div className="bg-gray-50 rounded-lg p-6 mb-8">
+              <h2 className="text-sm font-semibold text-gray-500 uppercase mb-4">
+                Your Information
+              </h2>
+              <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-sm font-medium text-gray-700 w-32">Department:</span>
-                  <span className="text-sm text-gray-900">{user?.department}</span>
+                  <span className="text-sm font-medium text-gray-700 w-32">Name:</span>
+                  <span className="text-sm text-gray-900">{user.name}</span>
                 </div>
-              )}
-              {user?.rollNumber && (
                 <div className="flex items-start">
-                  <span className="text-sm font-medium text-gray-700 w-32">Roll Number:</span>
-                  <span className="text-sm text-gray-900">{user?.rollNumber}</span>
+                  <span className="text-sm font-medium text-gray-700 w-32">Email:</span>
+                  <span className="text-sm text-gray-900">{user.email}</span>
                 </div>
-              )}
-              <div className="flex items-start pt-2 border-t border-gray-200">
-                <span className="text-sm font-medium text-gray-700 w-32">Status:</span>
-                <span className={`text-sm font-semibold ${
-                  status === 'pending' ? 'text-yellow-600' :
-                  status === 'approved' ? 'text-green-600' :
-                  'text-red-600'
-                }`}>
-                  {status.charAt(0).toUpperCase() + status.slice(1)}
-                </span>
+                {user.institute && (
+                  <div className="flex items-start">
+                    <span className="text-sm font-medium text-gray-700 w-32">Institution:</span>
+                    <span className="text-sm text-gray-900">{user.institute}</span>
+                  </div>
+                )}
+                <div className="flex items-start pt-2 border-t border-gray-200">
+                  <span className="text-sm font-medium text-gray-700 w-32">Status:</span>
+                  <span className={`text-sm font-semibold ${
+                    status === 'pending' ? 'text-yellow-600' :
+                    status === 'active' ? 'text-green-600' :
+                    status === 'approved' ? 'text-green-600' :
+                    'text-red-600'
+                  }`}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Actions */}
           <div className="space-y-3">

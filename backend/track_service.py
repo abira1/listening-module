@@ -1,14 +1,15 @@
 """
 Track Management Service
-CRUD operations for tracks
+CRUD operations for tracks - SQLite Only
 """
 
 from fastapi import APIRouter, HTTPException, Depends, Query
 from pydantic import BaseModel
 from typing import List, Optional, Literal
 from datetime import datetime
-from motor.motor_asyncio import AsyncIOMotorDatabase
+import logging
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 # ============================================
@@ -45,31 +46,46 @@ async def get_all_tracks(
     - status: Filter by draft/published/archived
     """
     try:
-        from firebase_service import FirebaseService
+        from database import db
 
-        # Get tracks from Firebase
-        tracks = FirebaseService.get_all_tracks(track_type=track_type, status=status)
+        # Get tracks from SQLite
+        # Database schema: id, title, type, description, total_questions, total_sections, status, created_by, created_at, updated_at, metadata
+        query = "SELECT id, title, type, description, total_questions, total_sections, status, created_by, created_at, updated_at, metadata FROM tracks WHERE 1=1"
+        params = []
+
+        if track_type:
+            query += " AND type = ?"
+            params.append(track_type)
+
+        if status:
+            query += " AND status = ?"
+            params.append(status)
+
+        query += " ORDER BY created_at DESC"
+        tracks = db.execute(query, params).fetchall()
 
         # Format response
         return [
             {
-                "id": track["id"],
-                "track_type": track["track_type"],
-                "title": track["title"],
-                "description": track["description"],
-                "exam_id": track.get("exam_id"),
-                "status": track["status"],
-                "created_at": track["created_at"],
-                "created_by": track.get("created_by"),
-                "metadata": track.get("metadata", {}),
-                "tags": track.get("tags", []),
-                "source": track.get("source", "manual")
+                "id": track[0],
+                "track_type": track[2],  # Changed from "type" to "track_type" for frontend compatibility
+                "title": track[1],
+                "description": track[3] or "",
+                "total_questions": track[4] or 0,
+                "total_sections": track[5] or 0,
+                "status": track[6] or "draft",
+                "created_by": track[7],
+                "created_at": track[8],
+                "updated_at": track[9],
+                "metadata": track[10] or "{}",
+                "tags": [],
+                "source": "ai_import"  # Default to ai_import for newly created tracks
             }
             for track in tracks
         ]
 
     except Exception as e:
-        print(f"Error fetching tracks: {e}")
+        logger.error(f"Error fetching tracks: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -77,35 +93,31 @@ async def get_all_tracks(
 async def get_track(track_id: str):
     """Get single track with full details"""
     try:
-        from firebase_service import FirebaseService
+        from database import db
 
-        track = FirebaseService.get_track(track_id)
+        # Get track from SQLite
+        # Database schema: id, title, type, description, total_questions, total_sections, status, created_by, created_at, updated_at, metadata
+        track = db.execute("SELECT id, title, type, description, total_questions, total_sections, status, created_by, created_at, updated_at, metadata FROM tracks WHERE id = ?", (track_id,)).fetchone()
         if not track:
             raise HTTPException(status_code=404, detail="Track not found")
 
-        # Get associated exam details
-        exam = FirebaseService.get_exam(track.get("exam_id")) if track.get("exam_id") else None
-
         return {
-            "id": track["id"],
-            "track_type": track["track_type"],
-            "title": track["title"],
-            "description": track["description"],
-            "exam_id": track.get("exam_id"),
-            "status": track["status"],
-            "created_at": track["created_at"],
-            "updated_at": track.get("updated_at"),
-            "created_by": track.get("created_by"),
-            "metadata": track.get("metadata", {}),
-            "tags": track.get("tags", []),
-            "source": track.get("source", "manual"),
-            "exam_details": {
-                "published": exam.get("published") if exam else False,
-                "is_active": exam.get("is_active") if exam else False,
-                "submission_count": exam.get("submission_count") if exam else 0
-            } if exam else None
+            "id": track[0],
+            "track_type": track[2],  # Changed from "type" to "track_type" for frontend compatibility
+            "title": track[1],
+            "description": track[3] or "",
+            "total_questions": track[4] or 0,
+            "total_sections": track[5] or 0,
+            "status": track[6] or "draft",
+            "created_by": track[7],
+            "created_at": track[8],
+            "updated_at": track[9],
+            "metadata": track[10] or "{}",
+            "tags": [],
+            "source": "ai_import",  # Default to ai_import for newly created tracks
+            "exam_details": None
         }
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -119,40 +131,35 @@ async def update_track(
 ):
     """Update track metadata"""
     try:
-        from firebase_service import FirebaseService
+        from database import db
 
-        track = FirebaseService.get_track(track_id)
+        # Check if track exists
+        track = db.execute("SELECT * FROM tracks WHERE id = ?", (track_id,)).fetchone()
         if not track:
             raise HTTPException(status_code=404, detail="Track not found")
 
         # Build update
-        update_fields = {}
+        update_fields = []
+        params = []
 
         if update_data.title:
-            update_fields["title"] = update_data.title
+            update_fields.append("title = ?")
+            params.append(update_data.title)
         if update_data.description:
-            update_fields["description"] = update_data.description
+            update_fields.append("description = ?")
+            params.append(update_data.description)
         if update_data.status:
-            update_fields["status"] = update_data.status
-        if update_data.tags is not None:
-            update_fields["tags"] = update_data.tags
+            update_fields.append("status = ?")
+            params.append(update_data.status)
 
-        # Update track
-        updated_track = FirebaseService.update_track(track_id, update_fields)
+        if update_fields:
+            params.append(track_id)
+            query = f"UPDATE tracks SET {', '.join(update_fields)} WHERE id = ?"
+            db.execute(query, params)
+            db.commit()
 
-        # Also update exam title/description if changed
-        if update_data.title or update_data.description:
-            exam_update = {}
-            if update_data.title:
-                exam_update["title"] = update_data.title
-            if update_data.description:
-                exam_update["description"] = update_data.description
-
-            if track.get("exam_id"):
-                FirebaseService.update_exam(track["exam_id"], exam_update)
-        
         return {"success": True, "message": "Track updated successfully"}
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -166,15 +173,16 @@ async def delete_track(track_id: str):
     Does not delete underlying exam/sections/questions
     """
     try:
-        from firebase_service import FirebaseService
+        from database import db
 
-        track = FirebaseService.get_track(track_id)
+        # Check if track exists
+        track = db.execute("SELECT * FROM tracks WHERE id = ?", (track_id,)).fetchone()
         if not track:
             raise HTTPException(status_code=404, detail="Track not found")
 
-        # For now, just archive the track (soft delete)
-        # In a full implementation, we'd check mock_tests collection
-        FirebaseService.update_track(track_id, {"status": "archived"})
+        # Archive the track (soft delete)
+        db.execute("UPDATE tracks SET status = ? WHERE id = ?", ("archived", track_id))
+        db.commit()
 
         return {"success": True, "message": "Track archived successfully"}
 

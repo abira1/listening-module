@@ -44,16 +44,26 @@ export function Homepage() {
             </p>
           </div>
           
-          <button
-            onClick={() => navigate('/student')}
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg px-10 py-4 rounded-lg shadow-md hover:shadow-lg transition-all"
-          >
-            <BookOpenIcon className="w-6 h-6" />
-            Get Started
-          </button>
-          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => navigate('/student')}
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg px-10 py-4 rounded-lg shadow-md hover:shadow-lg transition-all"
+            >
+              <BookOpenIcon className="w-6 h-6" />
+              Student Login
+            </button>
+
+            <button
+              onClick={() => navigate('/teacher/login')}
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-lg px-10 py-4 rounded-lg shadow-md hover:shadow-lg transition-all"
+            >
+              <BookOpenIcon className="w-6 h-6" />
+              Teacher Login
+            </button>
+          </div>
+
           <p className="mt-6 text-sm text-gray-500">
-            Sign in with Google to access mock tests
+            Access your IELTS Academy account
           </p>
         </div>
       </section>
